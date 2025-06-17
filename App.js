@@ -1,0 +1,26 @@
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import OnboardingScreen from './components/OnboardingScreen';
+import LoginScreen from './components/LoginScreen';
+import HomeScreen from './components/HomeScreen';
+import MoodTrackerScreen from './components/MoodTrackerScreen';
+import DashboardScreen from './components/DashboardScreen';
+import MoodTransitionScreen from './components/MoodTransitionScreen';
+
+const Stack = createStackNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Onboarding" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="MoodTracker" component={MoodTrackerScreen} />
+        <Stack.Screen name="Dashboard" component={DashboardScreen} />
+        <Stack.Screen name="MoodTransition" component={MoodTransitionScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
