@@ -1,74 +1,92 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, ImageBackground, ActivityIndicator } from 'react-native';
+import { useFonts, Poppins_400Regular, Poppins_700Bold } from '@expo-google-fonts/poppins';
+
+const { width, height } = Dimensions.get('window');
 
 export default function OnboardingScreen({ navigation }) {
+  let [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
+
   return (
-    <View style={styles.container}>
-      <Image source={require('../assets/nwa logo s fundo.png')} style={styles.logo} />
-      <Text style={styles.title}>Monitore e organize seus hábitos em qualquer lugar</Text>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.replace('Login')}>
-        <Text style={styles.buttonText}>Avançar ➔</Text>
-      </TouchableOpacity>
-      <View style={styles.organicShape1} />
-      <View style={styles.organicShape2} />
-    </View>
+    <ImageBackground
+      source={require('../assets/background.png')} 
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+
+        <Image source={require('../assets/nwa logo s fundo.png')} style={styles.logo} />
+
+        <Text style={styles.title}>
+          Monitore e organize seus hábitos em qualquer lugar
+        </Text>
+
+        <TouchableOpacity style={styles.button} onPress={() => navigation.replace('Login')}>
+          <Text style={styles.buttonText}>Avançar ➔</Text>
+        </TouchableOpacity>
+
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    paddingTop: 200,
+    paddingLeft: 30,
   },
   logo: {
-    width: 100,
-    height: 100,
-    marginBottom: 30,
+    width: 110,
+    height: 110,
+    marginBottom: 10,
+    marginLeft: 0,
     resizeMode: 'contain',
   },
   title: {
-    fontSize: 22,
-    color: '#2e192e',
-    textAlign: 'center',
-    marginBottom: 40,
+    fontSize: 25,
+    color: '#413a4a',
+    textAlign: 'left',
     fontWeight: 'bold',
+    marginBottom: 20,
+    width: '90%',
+    alignSelf: 'flex-start',
+    marginLeft: 0,
+    fontFamily: 'Poppins_700Bold',
   },
   button: {
-    backgroundColor: '#2e192e',
-    paddingVertical: 16,
-    paddingHorizontal: 40,
-    borderRadius: 30,
-    marginTop: 20,
+    position: 'absolute',
+    bottom: 130,
+    right: -40,
+    backgroundColor: '#65688a',
+    paddingVertical: 18,
+    paddingHorizontal: 50,
+    borderRadius: 28,
     zIndex: 2,
+    elevation: 2,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 22,
+    fontFamily: 'Poppins_700Bold',
+    textAlign: 'left',
     fontWeight: 'bold',
   },
-  organicShape1: {
-    position: 'absolute',
-    top: -80,
-    left: -100,
-    width: 250,
-    height: 250,
-    backgroundColor: '#2e192e',
-    borderRadius: 200,
-    opacity: 0.15,
-    zIndex: 0,
-  },
-  organicShape2: {
-    position: 'absolute',
-    bottom: -80,
-    right: -100,
-    width: 250,
-    height: 250,
-    backgroundColor: '#2e192e',
-    borderRadius: 200,
-    opacity: 0.15,
-    zIndex: 0,
+  subtitle: {
+    fontFamily: 'Poppins_400Regular',
   },
 });

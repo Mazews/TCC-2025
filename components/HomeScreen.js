@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, ImageBackground } from 'react-native';
 
 export default function HomeScreen({ navigation }) {
-  // Array com os dias da semana em português
+  // Array com os dias da semana 
   const diasSemana = [
     'Domingo',
     'Segunda-feira',
@@ -12,82 +12,88 @@ export default function HomeScreen({ navigation }) {
     'Sexta-feira',
     'Sábado',
   ];
-  // Pega o dia da semana atual
+  // dia da semana atual
   const diaAtual = diasSemana[new Date().getDay()];
   return (
-    <View style={styles.container}>
-      {/* Top bar */}
-      <View style={styles.topBar}>
-        <TouchableOpacity>
-          <View style={styles.menuIcon}>
-            <View style={styles.menuLine} />
-            <View style={styles.menuLine} />
-            <View style={styles.menuLine} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Image source={require('../assets/nwa logo b.png')} style={styles.logo} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <View style={styles.profileIcon} />
-        </TouchableOpacity>
+    <ImageBackground
+      source={require('../assets/homebg.png')}
+      style={{ flex: 1 }}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+        {/* Top bar */}
+        <View style={styles.topBar}>
+          <TouchableOpacity>
+            <View style={styles.menuIcon}>
+              <View style={styles.menuLine} />
+              <View style={styles.menuLine} />
+              <View style={styles.menuLine} />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image source={require('../assets/nwa logo b.png')} style={styles.logo} />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <View style={styles.profileIcon} />
+          </TouchableOpacity>
+        </View>
+
+        {/* Search bar */}
+        <View style={styles.searchBar}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="pesquisar"
+            placeholderTextColor="#fff"
+          />
+          <Image source={require('../assets/search.png')} style={styles.searchIcon} />
+        </View>
+
+        {/* Dia da semana */}
+        <Text style={styles.dayText}>{diaAtual}</Text>
+
+        {/* Frase motivacional */}
+        <View style={styles.quoteCard}>
+          <Text style={styles.quoteText}>Carpe Diem.</Text>
+          <Text style={styles.quoteSubtext}>"aproveite o dia, viva o agora"</Text>
+        </View>
+
+        {/* Conteúdo diário */}
+        <Text style={styles.sectionTitle}>Meu conteúdo diário • Hoje</Text>
+        <View style={styles.dailyContentRow}>
+          <TouchableOpacity
+            style={styles.symptomCard}
+            onPress={() => navigation.navigate('MoodTracker')}
+          >
+            <Text style={styles.symptomText}>registre seus sintomas aqui!</Text>
+            <Text style={styles.plusIcon}>＋</Text>
+          </TouchableOpacity>
+          <View style={styles.emptyCard} />
+          <View style={styles.emptyCard} />
+        </View>
+
+        {/* Vícios */}
+        <Text style={styles.sectionTitle}>Vícios • Hoje</Text>
+        <View style={styles.addictionCard} />
+
+        {/* Barra de navegação inferior */}
+        <View style={styles.bottomBar}>
+          <Text style={styles.bottomBarItem}>home</Text>
+          <Text style={styles.bottomBarItem}>feed</Text>
+          <Image source={require('../assets/sun.png')} style={styles.bottomBarIcon} />
+          <TouchableOpacity onPress={() => navigation.navigate('MoodTransition')}>
+            <Text style={styles.bottomBarItem}>tracker</Text>
+          </TouchableOpacity>
+          <Text style={styles.bottomBarItem}>chat</Text>
+        </View>
       </View>
-
-      {/* Search bar */}
-      <View style={styles.searchBar}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="pesquisar"
-          placeholderTextColor="#fff"
-        />
-        <Text style={styles.searchIcon}>🔍</Text>
-      </View>
-
-      {/* Dia da semana */}
-      <Text style={styles.dayText}>{diaAtual}</Text>
-
-      {/* Frase motivacional */}
-      <View style={styles.quoteCard}>
-        <Text style={styles.quoteText}>Carpe Diem.</Text>
-        <Text style={styles.quoteSubtext}>"aproveite o dia, viva o agora"</Text>
-      </View>
-
-      {/* Conteúdo diário */}
-      <Text style={styles.sectionTitle}>Meu conteúdo diário • Hoje</Text>
-      <View style={styles.dailyContentRow}>
-        <TouchableOpacity
-          style={styles.symptomCard}
-          onPress={() => navigation.navigate('MoodTracker')}
-        >
-          <Text style={styles.symptomText}>registre seus sintomas aqui!</Text>
-          <Text style={styles.plusIcon}>＋</Text>
-        </TouchableOpacity>
-        <View style={styles.emptyCard} />
-        <View style={styles.emptyCard} />
-      </View>
-
-      {/* Vícios */}
-      <Text style={styles.sectionTitle}>Vícios • Hoje</Text>
-      <View style={styles.addictionCard} />
-
-      {/* Barra de navegação inferior */}
-      <View style={styles.bottomBar}>
-        <Text style={styles.bottomBarItem}>home</Text>
-        <Text style={styles.bottomBarItem}>feed</Text>
-        <Text style={[styles.bottomBarItem, styles.selectedBarItem]}>☀️</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('MoodTransition')}>
-          <Text style={styles.bottomBarItem}>tracker</Text>
-        </TouchableOpacity>
-        <Text style={styles.bottomBarItem}>chat</Text>
-      </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#2e192e',
+    backgroundColor: 'transparent',
     paddingTop: 40,
     paddingHorizontal: 18,
   },
@@ -125,7 +131,7 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#3a2340',
+    backgroundColor: '#5c6082',
     borderRadius: 18,
     paddingHorizontal: 16,
     marginBottom: 18,
@@ -137,9 +143,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   searchIcon: {
-    fontSize: 18,
-    color: '#fff',
+    width: 18,
+    height: 18,
     marginLeft: 8,
+    resizeMode: 'contain',
   },
   dayText: {
     color: '#fff',
@@ -149,6 +156,7 @@ const styles = StyleSheet.create({
   },
   quoteCard: {
     backgroundColor: '#23122a',
+    opacity: 0.4,
     borderRadius: 18,
     padding: 18,
     marginBottom: 18,
@@ -178,7 +186,8 @@ const styles = StyleSheet.create({
   },
   symptomCard: {
     flex: 1,
-    backgroundColor: '#3a2340',
+    backgroundColor: '#5c6082',
+    opacity: 0.7,
     borderRadius: 18,
     padding: 12,
     marginRight: 8,
@@ -199,13 +208,15 @@ const styles = StyleSheet.create({
   },
   emptyCard: {
     flex: 1,
-    backgroundColor: '#3a2340',
+    backgroundColor: '#5c6082',
+    opacity: 0.7,
     borderRadius: 18,
     marginLeft: 8,
     minHeight: 80,
   },
   addictionCard: {
-    backgroundColor: '#3a2340',
+    backgroundColor: '#5c6082',
+    opacity: 0.7,
     borderRadius: 18,
     minHeight: 50,
     marginBottom: 18,
@@ -213,7 +224,8 @@ const styles = StyleSheet.create({
   bottomBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#23122a',
+    backgroundColor: '#5c6082',
+    opacity: 0.7,
     borderRadius: 18,
     paddingVertical: 12,
     paddingHorizontal: 18,
@@ -231,5 +243,12 @@ const styles = StyleSheet.create({
   selectedBarItem: {
     fontWeight: 'bold',
     fontSize: 22,
+  },
+  bottomBarIcon: {
+    width: 38,
+    height: 38,
+    resizeMode: 'contain',
+    marginRight: 16,
+    marginLeft: 0,
   },
 });

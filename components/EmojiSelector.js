@@ -51,10 +51,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#2e192e',
+      borderColor: '#5c6082',
   },
   selected: {
-    backgroundColor: '#2e192e',
+    backgroundColor: '#5c6082',
   },
   emoji: {
     fontSize: 30,

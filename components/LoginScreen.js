@@ -1,53 +1,65 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ImageBackground } from 'react-native';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
   return (
-    <View style={styles.container}>
-      <Image source={require('../assets/nwa logo b.png')} style={styles.logo} />
-      <Text style={styles.subtitle}>faça login para começar</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="E-mail"
-        placeholderTextColor="#aaa"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        placeholderTextColor="#aaa"
-        secureTextEntry
-        value={senha}
-        onChangeText={setSenha}
-      />
-      <TouchableOpacity style={styles.button} onPress={() => navigation.replace('Home')}>
-        <Text style={styles.buttonText}>Entrar</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.buttonOutline} onPress={() => navigation.replace('Home')}>
-        <Text style={styles.buttonOutlineText}>Cadastrar</Text>
-      </TouchableOpacity>
-      <Text style={styles.socialText}>faça login com</Text>
-      <View style={styles.socialRow}>
-        <Text style={styles.socialIcon}>📘</Text>
-        <Text style={styles.socialIcon}>✈️</Text>
-        <Text style={styles.socialIcon}>🎵</Text>
+    <ImageBackground
+      source={require('../assets/loginbg.png')}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+        <Image source={require('../assets/nwa logo b.png')} style={styles.logo} />
+        <Text style={styles.subtitle}>faça login para começar</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="E-mail"
+          placeholderTextColor="#aaa"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Senha"
+          placeholderTextColor="#aaa"
+          secureTextEntry
+          value={senha}
+          onChangeText={setSenha}
+        />
+        <TouchableOpacity style={styles.button} onPress={() => navigation.replace('Home')}>
+          <Text style={styles.buttonText}>Entrar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.buttonOutline} onPress={() => navigation.replace('Home')}>
+          <Text style={styles.buttonOutlineText}>Cadastrar</Text>
+        </TouchableOpacity>
+        <Text style={styles.socialText}>faça login com</Text>
+        <View style={styles.socialRow}>
+          <Text style={styles.socialIcon}>📘</Text>
+          <Text style={styles.socialIcon}>✈️</Text>
+          <Text style={styles.socialIcon}>🎵</Text>
+        </View>
+        <View style={styles.organicShape1} />
       </View>
-      <View style={styles.organicShape1} />
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#2e192e',
+    backgroundColor: 'transparent',
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
+    paddingTop: 100,
   },
   logo: {
     width: 100,
@@ -78,7 +90,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonText: {
-    color: '#2e192e',
+    color: '#413a4a',
     fontSize: 18,
     fontWeight: 'bold',
   },
