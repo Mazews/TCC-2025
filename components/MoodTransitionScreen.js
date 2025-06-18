@@ -1,120 +1,89 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
 
 export default function MoodTransitionScreen({ navigation }) {
+  const hoje = new Date();
+  const dia = hoje.getDate().toString().padStart(2, '0');
+  const mes = (hoje.getMonth() + 1).toString().padStart(2, '0');
+  const ano = hoje.getFullYear();
   return (
-    <View style={styles.container}>
-      {/* Sidebar */}
-      <View style={styles.sidebar}>
-        <View style={styles.profileCircle}>
-          <Text style={styles.profileIcon}>👤</Text>
-        </View>
-      </View>
-      {/* Main content */}
-      <View style={styles.mainContent}>
-        <View style={styles.headerRow}>
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+    <ImageBackground
+      source={require('../assets/dashbg.png')}
+      style={{ flex: 1 }}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+        <View style={styles.mainContent}>
+          <View style={styles.headerRow}>
             <View style={styles.headerTitleBox}>
               <Text style={styles.headerTitle}>mood tracker</Text>
             </View>
+            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+              <View style={styles.menuIcon}>
+                <View style={styles.menuLine} />
+                <View style={styles.menuLine} />
+                <View style={styles.menuLine} />
+              </View>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.menuButton}>
-            <View style={styles.menuLine} />
-            <View style={styles.menuLine} />
-            <View style={styles.menuLine} />
+          <View style={styles.periodRow}>
+            <TouchableOpacity style={styles.periodButton}>
+              <Text style={styles.periodText}>{dia}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.periodButton}>
+              <Text style={styles.periodText}>{mes}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.periodButton}>
+              <Text style={styles.periodText}>{ano}</Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={styles.diaryButton} onPress={() => navigation.navigate('Dashboard')}>
+            <Text style={styles.diaryText}>DIÁRIO DE HUMOR</Text>
+          </TouchableOpacity>
+          <View style={styles.bottomRow}>
+            <TouchableOpacity style={styles.bottomButton}>
+              <Text style={styles.bottomText}>Dicas</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.bottomButton}>
+              <Text style={styles.bottomText}>Guia</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.bottomButton}>
+              <Text style={styles.bottomText}>Ajuda</Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={styles.helpButton} onPress={() => navigation.navigate('MoodTracker')}>
+            <Text style={styles.helpText}>REGISTRE SEU HUMOR</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.dashboardTitle}>Dashboard</Text>
-        <View style={styles.dividerRow}>
-          <View style={styles.dividerDiamond} />
-          <View style={styles.dividerLine} />
-          <View style={styles.dividerDiamond} />
-        </View>
-        {/* Botões Dia, Mês, Ano */}
-        <View style={styles.periodRow}>
-          <TouchableOpacity style={styles.periodButton}>
-            <Text style={styles.periodText}>Dia</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.periodButton}>
-            <Text style={styles.periodText}>Mes</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.periodButton}>
-            <Text style={styles.periodText}>Ano</Text>
-          </TouchableOpacity>
-        </View>
-        {/* Diário de Humor */}
-        <TouchableOpacity style={styles.diaryButton} onPress={() => navigation.navigate('Dashboard')}>
-          <Text style={styles.diaryText}>DIÁRIO DE HUMOR</Text>
-        </TouchableOpacity>
-        {/* Ilustração (placeholder) */}
-        <View style={styles.illustrationBox}>
-          {/* Aqui você pode colocar uma imagem ilustrativa */}
-          <Image source={require('../assets/motherhug.png')} style={styles.illustrationLarge} resizeMode="contain" />
-        </View>
-        {/* Dicas, Guia, Frases */}
-        <View style={styles.bottomRow}>
-          <TouchableOpacity style={styles.bottomButton}>
-            <Text style={styles.bottomText}>Dicas</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.bottomButton}>
-            <Text style={styles.bottomText}>Guia</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.bottomButton}>
-            <Text style={styles.bottomText}>Frases</Text>
-          </TouchableOpacity>
-        </View>
-        {/* Registre seu humor */}
-        <TouchableOpacity style={styles.helpButton} onPress={() => navigation.navigate('MoodTracker')}>
-          <Text style={styles.helpText}>REGISTRE SEU HUMOR</Text>
-        </TouchableOpacity>
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
-    backgroundColor: '#fff',
-  },
-  sidebar: {
-    width: 60,
-    backgroundColor: '#6e7f9c',
-    alignItems: 'center',
-    paddingTop: 40,
-  },
-  profileCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  profileIcon: {
-    fontSize: 24,
+    backgroundColor: 'transparent',
   },
   mainContent: {
     flex: 1,
     padding: 24,
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
   },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
-  },
-  headerSpacer: {
-    flex: 1,
+    justifyContent: 'space-between',
+    marginBottom: 40,
   },
   headerTitleBox: {
     backgroundColor: '#5c6082',
     borderRadius: 24,
-    paddingHorizontal: 28,
+    paddingHorizontal: 30,
     paddingVertical: 8,
-    alignSelf: 'center',
+    alignSelf: 'flex-start',
+    marginTop: 20,
+    right: -70,
   },
   headerTitle: {
     color: '#fff',
@@ -122,51 +91,26 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  menuButton: {
-    marginLeft: 'auto',
-    padding: 8,
+  menuIcon: {
+    width: 32,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 0,
+    marginTop: 20,
   },
   menuLine: {
-    width: 28,
-    height: 4,
-    backgroundColor: '#5c6082',
-    marginVertical: 2,
-    borderRadius: 2,
-  },
-  dashboardTitle: {
-    color: '#5c6082',
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginTop: 10,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  dividerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 16,
-  },
-  dividerDiamond: {
-    width: 16,
-    height: 16,
-    backgroundColor: 'transparent',
-    borderWidth: 3,
-    borderColor: '#5c6082',
-    transform: [{ rotate: '45deg' }],
-    marginHorizontal: 4,
-  },
-  dividerLine: {
-    flex: 1,
+    width: 22,
     height: 3,
     backgroundColor: '#5c6082',
-    marginHorizontal: 4,
+    marginVertical: 2,
     borderRadius: 2,
   },
   periodRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 18,
+    marginBottom: 40,
+    marginTop: 10,
   },
   periodButton: {
     flex: 1,
@@ -174,10 +118,11 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: '#5c6082',
     borderRadius: 24,
-    marginHorizontal: 8,
+    marginHorizontal: 16,
     paddingVertical: 18,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: -20
   },
   periodText: {
     color: '#5c6082',
@@ -192,20 +137,13 @@ const styles = StyleSheet.create({
     paddingVertical: 18,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 18,
+    marginBottom: 40,
+    marginTop: 10,
   },
   diaryText: {
     color: '#5c6082',
     fontSize: 22,
     fontWeight: 'bold',
-  },
-  illustrationBox: {
-    alignItems: 'center',
-    marginBottom: 18,
-  },
-  illustration: {
-    width: 220,
-    height: 180,
   },
   illustrationLarge: {
     width: 320,
@@ -215,6 +153,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 18,
+    marginTop: 200,
   },
   bottomButton: {
     flex: 1,
@@ -238,7 +177,7 @@ const styles = StyleSheet.create({
     paddingVertical: 18,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 8,
+    marginTop: 10,
   },
   helpText: {
     color: '#fff',

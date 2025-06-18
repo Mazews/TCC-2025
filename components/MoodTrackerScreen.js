@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EmojiSelector from './EmojiSelector';
 
@@ -31,29 +31,35 @@ export default function MoodTrackerScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Como está se sentindo hoje?</Text>
-      <EmojiSelector selected={selected} onSelect={handleSelect} />
-      <TextInput
-        style={styles.input}
-        placeholder="O que te fez sentir assim?"
-        placeholderTextColor="#aaa"
-        value={text}
-        onChangeText={setText}
-        multiline
-      />
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Enviar</Text>
-      </TouchableOpacity>
-      <View style={styles.organicShape1} />
-    </View>
+    <ImageBackground
+      source={require('../assets/registrobg.png')}
+      style={{ flex: 1 }}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+        <Text style={styles.title}>Como está se sentindo hoje?</Text>
+        <EmojiSelector selected={selected} onSelect={handleSelect} />
+        <TextInput
+          style={styles.input}
+          placeholder="O que te fez sentir assim?"
+          placeholderTextColor="#aaa"
+          value={text}
+          onChangeText={setText}
+          multiline
+        />
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Enviar</Text>
+        </TouchableOpacity>
+        <View style={styles.organicShape1} />
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
     alignItems: 'center',
     paddingTop: 60,
     position: 'relative',

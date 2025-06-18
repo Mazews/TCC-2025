@@ -18,7 +18,14 @@ export default function HomeScreen({ navigation }) {
     <ImageBackground
       source={require('../assets/homebg.png')}
       style={{ flex: 1 }}
-      resizeMode="cover"
+      imageStyle={{
+        top: -260,
+        left: 0,
+        width: 420,
+        height: 1400,
+        resizeMode: 'contain',
+      }}
+      
     >
       <View style={styles.container}>
         {/* Top bar */}
@@ -31,7 +38,7 @@ export default function HomeScreen({ navigation }) {
             </View>
           </TouchableOpacity>
           <TouchableOpacity>
-            <Image source={require('../assets/nwa logo b.png')} style={styles.logo} />
+            <Image source={require('../assets/nwa logo s fundo.png')} style={styles.logo} />
           </TouchableOpacity>
           <TouchableOpacity>
             <View style={styles.profileIcon} />
@@ -80,7 +87,7 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.bottomBarItem}>home</Text>
           <Text style={styles.bottomBarItem}>feed</Text>
           <Image source={require('../assets/sun.png')} style={styles.bottomBarIcon} />
-          <TouchableOpacity onPress={() => navigation.navigate('MoodTransition')}>
+          <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', marginTop: 5}} onPress={() => navigation.navigate('MoodTransition')}>
             <Text style={styles.bottomBarItem}>tracker</Text>
           </TouchableOpacity>
           <Text style={styles.bottomBarItem}>chat</Text>
@@ -94,7 +101,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'transparent',
-    paddingTop: 40,
+    paddingTop: 70,
     paddingHorizontal: 18,
   },
   topBar: {
@@ -108,11 +115,12 @@ const styles = StyleSheet.create({
     height: 32,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop:-30,
   },
   menuLine: {
     width: 22,
     height: 3,
-    backgroundColor: '#fff',
+    backgroundColor: '#2d304d',
     marginVertical: 2,
     borderRadius: 2,
   },
@@ -120,13 +128,15 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     resizeMode: 'contain',
+    marginTop:-40,
   },
   profileIcon: {
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#fff',
+    backgroundColor: '#5c6082',
     alignSelf: 'flex-end',
+    marginTop:-30,
   },
   searchBar: {
     flexDirection: 'row',
@@ -136,6 +146,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 18,
     height: 38,
+    marginTop:-10,
   },
   searchInput: {
     flex: 1,
@@ -155,8 +166,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   quoteCard: {
-    backgroundColor: '#23122a',
-    opacity: 0.4,
+    backgroundColor: 'rgba(23, 24, 55, 0.5)',
     borderRadius: 18,
     padding: 18,
     marginBottom: 18,
@@ -186,8 +196,7 @@ const styles = StyleSheet.create({
   },
   symptomCard: {
     flex: 1,
-    backgroundColor: '#5c6082',
-    opacity: 0.7,
+    backgroundColor: 'rgba(92, 96, 130, 0.5)',
     borderRadius: 18,
     padding: 12,
     marginRight: 8,
@@ -208,15 +217,13 @@ const styles = StyleSheet.create({
   },
   emptyCard: {
     flex: 1,
-    backgroundColor: '#5c6082',
-    opacity: 0.7,
+    backgroundColor: 'rgba(92, 96, 130, 0.5)',
     borderRadius: 18,
     marginLeft: 8,
     minHeight: 80,
   },
   addictionCard: {
-    backgroundColor: '#5c6082',
-    opacity: 0.7,
+    backgroundColor: 'rgba(92, 96, 130, 0.5)',
     borderRadius: 18,
     minHeight: 50,
     marginBottom: 18,
@@ -224,15 +231,15 @@ const styles = StyleSheet.create({
   bottomBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#5c6082',
-    opacity: 0.7,
+    backgroundColor: 'rgba(92, 96, 130, 0.6)',
     borderRadius: 18,
-    paddingVertical: 12,
-    paddingHorizontal: 18,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
     position: 'absolute',
     left: 10,
     right: 10,
     bottom: 18,
+    alignItems: 'center',
   },
   bottomBarItem: {
     color: '#fff',
