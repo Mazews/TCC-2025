@@ -41,13 +41,13 @@ export default function MoodTransitionScreen({ navigation }) {
             <Text style={styles.diaryText}>DIÁRIO DE HUMOR</Text>
           </TouchableOpacity>
           <View style={styles.bottomRow}>
-            <TouchableOpacity style={styles.bottomButton}>
+            <TouchableOpacity style={styles.bottomButton} onPress={() => navigation.navigate('Tips')}>
               <Text style={styles.bottomText}>Dicas</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.bottomButton}>
+            <TouchableOpacity style={styles.bottomButton} onPress={() => navigation.navigate('Guide')}>
               <Text style={styles.bottomText}>Guia</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.bottomButton}>
+            <TouchableOpacity style={styles.bottomButton} onPress={() => navigation.navigate('Help')}>
               <Text style={styles.bottomText}>Ajuda</Text>
             </TouchableOpacity>
           </View>
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 18,
-    marginTop: 200,
+    marginTop: 300,
   },
   bottomButton: {
     flex: 1,
