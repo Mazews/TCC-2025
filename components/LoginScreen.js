@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ImageBackground } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-
   return (
     <ImageBackground
       source={require('../assets/loginbg.png')}
@@ -14,34 +11,12 @@ export default function LoginScreen({ navigation }) {
       <View style={styles.container}>
         <Image source={require('../assets/nwa logo b.png')} style={styles.logo} />
         <Text style={styles.subtitle}>faça login para começar</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="E-mail"
-          placeholderTextColor="#aaa"
-          value={email}
-          onChangeText={setEmail}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Senha"
-          placeholderTextColor="#aaa"
-          secureTextEntry
-          value={senha}
-          onChangeText={setSenha}
-        />
-        <TouchableOpacity style={styles.button} onPress={() => navigation.replace('Home')}>
-          <Text style={styles.buttonText}>Entrar</Text>
+        <TouchableOpacity style={styles.buttonPrimary} onPress={() => navigation.navigate('Register')}>
+          <Text style={styles.buttonPrimaryText}>Cadastrar</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonOutline} onPress={() => navigation.replace('Home')}>
-          <Text style={styles.buttonOutlineText}>Cadastrar</Text>
+        <TouchableOpacity style={styles.buttonSecondary} onPress={() => navigation.navigate('SignIn')}>
+          <Text style={styles.buttonSecondaryText}>Entrar</Text>
         </TouchableOpacity>
-        <Text style={styles.socialText}>faça login com</Text>
-        <View style={styles.socialRow}>
-          <Text style={styles.socialIcon}>📘</Text>
-          <Text style={styles.socialIcon}>✈️</Text>
-          <Text style={styles.socialIcon}>🎵</Text>
-        </View>
-        <View style={styles.organicShape1} />
       </View>
     </ImageBackground>
   );
@@ -55,80 +30,51 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'relative',
-    paddingTop: 100,
+    paddingTop: 0,
   },
   logo: {
-    width: 100,
-    height: 100,
-    marginBottom: 20,
+    width: 120,
+    height: 120,
+    marginBottom: 40,
     resizeMode: 'contain',
   },
   subtitle: {
     color: '#fff',
-    fontSize: 16,
-    marginBottom: 20,
+    fontSize: 22,
+    marginBottom: 40,
+    fontWeight: '400',
+    textAlign: 'center',
   },
-  input: {
-    width: '80%',
+  buttonPrimary: {
     backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 14,
-    marginBottom: 12,
-    fontSize: 16,
-    color: '#2e192e',
-  },
-  button: {
-    backgroundColor: '#fff',
-    paddingVertical: 14,
-    paddingHorizontal: 60,
+    paddingVertical: 18,
+    paddingHorizontal: 70,
     borderRadius: 30,
-    marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 24,
+    shadowColor: '#000',
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
   },
-  buttonText: {
-    color: '#413a4a',
-    fontSize: 18,
+  buttonPrimaryText: {
+    color: '#7a8ca4',
+    fontSize: 26,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
-  buttonOutline: {
-    borderColor: '#fff',
-    borderWidth: 2,
-    paddingVertical: 14,
-    paddingHorizontal: 60,
+  buttonSecondary: {
+    backgroundColor: 'rgba(255,255,255,0.4)',
+    paddingVertical: 18,
+    paddingHorizontal: 70,
     borderRadius: 30,
-    marginBottom: 20,
+    marginBottom: 0,
   },
-  buttonOutlineText: {
+  buttonSecondaryText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 26,
     fontWeight: 'bold',
-  },
-  socialText: {
-    color: '#fff',
-    marginBottom: 8,
-  },
-  socialRow: {
-    flexDirection: 'row',
-    gap: 20,
-    marginBottom: 20,
-  },
-  socialIcon: {
-    fontSize: 28,
-    marginHorizontal: 10,
-  },
-  organicShape1: {
-    position: 'absolute',
-    top: -100,
-    left: -120,
-    width: 300,
-    height: 300,
-    backgroundColor: '#fff',
-    borderRadius: 200,
-    opacity: 0.07,
-    zIndex: 0,
+    textAlign: 'center',
   },
 });

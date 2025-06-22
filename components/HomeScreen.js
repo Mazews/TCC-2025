@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, ImageBackground } from 'react-native';
+import SideMenu from './SideMenu';
 
 export default function HomeScreen({ navigation }) {
   // Array com os dias da semana 
@@ -14,6 +15,42 @@ export default function HomeScreen({ navigation }) {
   ];
   // dia da semana atual
   const diaAtual = diasSemana[new Date().getDay()];
+
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  const handleMenuNavigate = (key) => {
+    setMenuVisible(false);
+    // Navegação básica, personalize conforme suas rotas
+    switch (key) {
+      case 'Profile':
+        navigation.navigate('Profile');
+        break;
+      case 'Tasks':
+        navigation.navigate('Tasks');
+        break;
+      case 'Activity':
+        navigation.navigate('Activity');
+        break;
+      case 'Config':
+        navigation.navigate('Config');
+        break;
+      case 'Guide':
+        navigation.navigate('Guide');
+        break;
+      case 'Support':
+        navigation.navigate('Support');
+        break;
+      case 'Terms':
+        navigation.navigate('Terms');
+        break;
+      case 'Logout':
+        // Adicione lógica de logout aqui
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <ImageBackground
       source={require('../assets/homebg.png')}
@@ -27,10 +64,15 @@ export default function HomeScreen({ navigation }) {
       }}
       
     >
+      <SideMenu
+        visible={menuVisible}
+        onClose={() => setMenuVisible(false)}
+        navigation={navigation}
+      />
       <View style={styles.container}>
         {/* Top bar */}
         <View style={styles.topBar}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setMenuVisible(true)}>
             <View style={styles.menuIcon}>
               <View style={styles.menuLine} />
               <View style={styles.menuLine} />
@@ -39,9 +81,6 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity>
             <Image source={require('../assets/nwa logo s fundo.png')} style={styles.logo} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={styles.profileIcon} />
           </TouchableOpacity>
         </View>
 
@@ -79,13 +118,13 @@ export default function HomeScreen({ navigation }) {
         </View>
 
         {/* Vícios */}
-        <Text style={styles.sectionTitle}>Vícios • Hoje</Text>
+        <Text style={styles.sectionTitle}>Tarefas • Hoje</Text>
         <View style={styles.addictionCard} />
 
         {/* Barra de navegação inferior */}
         <View style={styles.bottomBar}>
           <Text style={styles.bottomBarItem}>home</Text>
-          <Text style={styles.bottomBarItem}>feed</Text>
+          <Text style={styles.bottomBarItem}>Quotes</Text>
           <Image source={require('../assets/sun.png')} style={styles.bottomBarIcon} />
           <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', marginTop: 5}} onPress={() => navigation.navigate('MoodTransition')}>
             <Text style={styles.bottomBarItem}>tracker</Text>
@@ -129,14 +168,6 @@ const styles = StyleSheet.create({
     height: 38,
     resizeMode: 'contain',
     marginTop:-40,
-  },
-  profileIcon: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: '#5c6082',
-    alignSelf: 'flex-end',
-    marginTop:-30,
   },
   searchBar: {
     flexDirection: 'row',

@@ -10,6 +10,13 @@ import MoodTransitionScreen from './components/MoodTransitionScreen';
 import TipsScreen from './components/TipsScreen';
 import HelpScreen from './components/HelpScreen';
 import GuideScreen from './components/GuideScreen';
+import ProfileScreen from './components/ProfileScreen';
+import TasksScreen from './components/TasksScreen';
+import ActivityScreen from './components/ActivityScreen';
+import ConfigScreen from './components/ConfigScreen';
+import TermsScreen from './components/TermsScreen';
+import SignInScreen from './components/SignInScreen';
+import RegisterScreen from './components/RegisterScreen';
 
 const Stack = createStackNavigator();
 
@@ -26,6 +33,13 @@ export default function App() {
         <Stack.Screen name="Tips" component={TipsScreen} />
         <Stack.Screen name="Help" component={HelpScreen} />
         <Stack.Screen name="Guide" component={GuideScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="Tasks" component={TasksScreen} />
+        <Stack.Screen name="Activity" component={ActivityScreen} />
+        <Stack.Screen name="Config" component={ConfigScreen} />
+        <Stack.Screen name="Terms" component={TermsScreen} />
+        <Stack.Screen name="SignIn" component={SignInScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
