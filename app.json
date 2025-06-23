@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "demoapp4",
-    "slug": "demoapp4",
+    "name": "FeelFlow",
+    "slug": "FeelFlow",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,7 +21,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.anonymous.demoapp4"
+      "package": "com.anonymous.feelflow"
     },
     "web": {
       "favicon": "./assets/favicon.png"
