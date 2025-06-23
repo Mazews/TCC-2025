@@ -80,7 +80,7 @@ export default function HomeScreen({ navigation }) {
             </View>
           </TouchableOpacity>
           <TouchableOpacity>
-            <Image source={require('../assets/nwa logo s fundo.png')} style={styles.logo} />
+            <Image source={require('../assets/logo.png')} style={styles.logo} />
           </TouchableOpacity>
         </View>
 

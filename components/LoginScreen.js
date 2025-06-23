@@ -9,7 +9,7 @@ export default function LoginScreen({ navigation }) {
       resizeMode="cover"
     >
       <View style={styles.container}>
-        <Image source={require('../assets/nwa logo b.png')} style={styles.logo} />
+        <Image source={require('../assets/logo.png')} style={styles.logo} />
         <Text style={styles.subtitle}>faça login para começar</Text>
         <TouchableOpacity style={styles.buttonPrimary} onPress={() => navigation.navigate('Register')}>
           <Text style={styles.buttonPrimaryText}>Cadastrar</Text>

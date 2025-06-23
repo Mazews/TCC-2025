@@ -75,7 +75,7 @@ export default function SideMenu({ visible, onClose, onNavigate, navigation }) {
           ))}
         </View>
         <View style={styles.bottomLogoBox}>
-          <Image source={require('../assets/nwa logo b.png')} style={styles.bottomLogo} />
+          <Image source={require('../assets/logo.png')} style={styles.bottomLogo} />
         </View>
       </View>
     </Modal>

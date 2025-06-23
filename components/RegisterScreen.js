@@ -15,7 +15,7 @@ export default function RegisterScreen({ navigation }) {
       resizeMode="cover"
     >
       <View style={styles.topContent}>
-        <Image source={require('../assets/nwa logo b.png')} style={styles.logo} />
+        <Image source={require('../assets/logo.png')} style={styles.logo} />
         <Text style={styles.title}>Bem vindo (a)!</Text>
       </View>
       <View style={styles.card}>

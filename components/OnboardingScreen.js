@@ -22,7 +22,7 @@ export default function OnboardingScreen({ navigation }) {
     >
       <View style={styles.container}>
 
-        <Image source={require('../assets/nwa logo s fundo.png')} style={styles.logo} />
+        <Image source={require('../assets/logo.png')} style={styles.logo} />
 
         <Text style={styles.title}>
           Monitore e organize seus hábitos em qualquer lugar

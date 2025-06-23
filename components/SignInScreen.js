@@ -14,7 +14,7 @@ export default function SignInScreen({ navigation }) {
       resizeMode="cover"
     >
       <View style={styles.topContent}>
-        <Image source={require('../assets/nwa logo b.png')} style={styles.logo} />
+        <Image source={require('../assets/logo.png')} style={styles.logo} />
         <Text style={styles.title}>Bem vindo (a) de{"\n"}volta!</Text>
       </View>
       <View style={styles.card}>
