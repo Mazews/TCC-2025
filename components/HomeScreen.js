@@ -124,7 +124,7 @@ export default function HomeScreen({ navigation }) {
         {/* Barra de navegação inferior */}
         <View style={styles.bottomBar}>
           <Text style={styles.bottomBarItem}>home</Text>
-          <Text style={styles.bottomBarItem}>Quotes</Text>
+          <Text style={styles.bottomBarItem}>dash</Text>
           <Image source={require('../assets/sun.png')} style={styles.bottomBarIcon} />
           <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', marginTop: 5}} onPress={() => navigation.navigate('MoodTransition')}>
             <Text style={styles.bottomBarItem}>tracker</Text>
