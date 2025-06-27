@@ -1,11 +1,62 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ImageBackground, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ImageBackground, Dimensions, ActivityIndicator, Alert, Platform } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
 export default function SignInScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const API_BASE_URL =
+    Platform.OS === 'android'
+      ? 'https://backend-feelflow-core.onrender.com'
+      : 'https://backend-feelflow-core.onrender.com';
+
+  const handleLogin = async () => {
+    if (!email.trim() || !senha.trim()) {
+      Alert.alert('Erro', 'Por favor, preencha todos os campos');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      console.log('Enviando requisição para:', `${API_BASE_URL}/auth/login`);
+
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          email: email.trim().toLowerCase(),
+          password: senha,
+        }),
+      });
+
+      console.log('Status da resposta:', response.status);
+
+      const data = await response.json();
+      console.log('Resposta completa da API:', data);
+
+      if (!response.ok) {
+        throw new Error(data.msg || 'Erro na autenticação');
+      }
+
+      if (data.msg && data.msg.includes('sucesso')) {
+        navigation.replace('Home');
+      } else {
+        Alert.alert('Erro', data.msg || 'Credenciais inválidas');
+      }
+    } catch (error) {
+      console.error('Erro completo:', error);
+      Alert.alert('Erro', error.message || 'Erro de conexão com o servidor');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <ImageBackground
@@ -24,6 +75,9 @@ export default function SignInScreen({ navigation }) {
           placeholderTextColor="#aaa"
           value={email}
           onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          editable={!loading}
         />
         <TextInput
           style={styles.input}
@@ -32,14 +86,19 @@ export default function SignInScreen({ navigation }) {
           secureTextEntry
           value={senha}
           onChangeText={setSenha}
+          editable={!loading}
         />
       </View>
       <View style={styles.bottomRow}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={[styles.button, loading && { opacity: 0.7 }]} onPress={() => navigation.goBack()} disabled={loading}>
           <Text style={styles.buttonText}>voltar</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.replace('Home')}>
-          <Text style={styles.buttonText}>avançar</Text>
+        <TouchableOpacity style={[styles.button, loading && { opacity: 0.7 }]} onPress={handleLogin} disabled={loading}>
+          {loading ? (
+            <ActivityIndicator color="#fff" size="small" />
+          ) : (
+            <Text style={styles.buttonText}>avançar</Text>
+          )}
         </TouchableOpacity>
       </View>
     </ImageBackground>
