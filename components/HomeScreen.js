@@ -1,136 +1,78 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, ImageBackground } from 'react-native';
-import SideMenu from './SideMenu';
+import React from 'react';
+import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import CircularSlider from './CircularSlider';
 
 export default function HomeScreen({ navigation }) {
-  // Array com os dias da semana 
+  // Array com os dias da semana
   const diasSemana = [
-    'Domingo',
-    'Segunda-feira',
-    'Terça-feira',
-    'Quarta-feira',
-    'Quinta-feira',
-    'Sexta-feira',
-    'Sábado',
+    'domingo',
+    'segunda-feira',
+    'terça-feira',
+    'quarta-feira',
+    'quinta-feira',
+    'sexta-feira',
+    'sábado',
   ];
-  // dia da semana atual
-  const diaAtual = diasSemana[new Date().getDay()];
-
-  const [menuVisible, setMenuVisible] = useState(false);
-
-  const handleMenuNavigate = (key) => {
-    setMenuVisible(false);
-    // Navegação básica, personalize conforme suas rotas
-    switch (key) {
-      case 'Profile':
-        navigation.navigate('Profile');
-        break;
-      case 'Tasks':
-        navigation.navigate('Tasks');
-        break;
-      case 'Activity':
-        navigation.navigate('Activity');
-        break;
-      case 'Config':
-        navigation.navigate('Config');
-        break;
-      case 'Guide':
-        navigation.navigate('Guide');
-        break;
-      case 'Support':
-        navigation.navigate('Support');
-        break;
-      case 'Terms':
-        navigation.navigate('Terms');
-        break;
-      case 'Logout':
-        // Adicione lógica de logout aqui
-        break;
-      default:
-        break;
-    }
-  };
+  // Data atual
+  const dataAtual = new Date();
+  const diaSemana = diasSemana[dataAtual.getDay()];
+  const dia = String(dataAtual.getDate()).padStart(2, '0');
+  const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
+  const ano = dataAtual.getFullYear();
+  const dataFormatada = `${dia}-${mes}-${ano}`;
 
   return (
     <ImageBackground
-      source={require('../assets/homebg.png')}
+      source={require('../assets/plainbg.png')}
       style={{ flex: 1 }}
       imageStyle={{
-        top: -260,
+        resizeMode: 'cover',
+        width: '100%',
+        height: '100%',
+        top: 0,
         left: 0,
-        width: 420,
-        height: 1400,
-        resizeMode: 'contain',
       }}
-      
     >
-      <SideMenu
-        visible={menuVisible}
-        onClose={() => setMenuVisible(false)}
-        navigation={navigation}
-      />
       <View style={styles.container}>
-        {/* Top bar */}
-        <View style={styles.topBar}>
-          <TouchableOpacity onPress={() => setMenuVisible(true)}>
-            <View style={styles.menuIcon}>
-              <View style={styles.menuLine} />
-              <View style={styles.menuLine} />
-              <View style={styles.menuLine} />
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={require('../assets/logo.png')} style={styles.logo} />
-          </TouchableOpacity>
-        </View>
-
-        {/* Search bar */}
-        <View style={styles.searchBar}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="pesquisar"
-            placeholderTextColor="#fff"
-          />
-          <Image source={require('../assets/search.png')} style={styles.searchIcon} />
-        </View>
-
-        {/* Dia da semana */}
-        <Text style={styles.dayText}>{diaAtual}</Text>
-
-        {/* Frase motivacional */}
-        <View style={styles.quoteCard}>
-          <Text style={styles.quoteText}>Carpe Diem.</Text>
-          <Text style={styles.quoteSubtext}>"aproveite o dia, viva o agora"</Text>
-        </View>
-
-        {/* Conteúdo diário */}
-        <Text style={styles.sectionTitle}>Meu conteúdo diário • Hoje</Text>
-        <View style={styles.dailyContentRow}>
-          <TouchableOpacity
-            style={styles.symptomCard}
-            onPress={() => navigation.navigate('MoodTracker')}
-          >
-            <Text style={styles.symptomText}>registre seus sintomas aqui!</Text>
-            <Text style={styles.plusIcon}>＋</Text>
-          </TouchableOpacity>
-          <View style={styles.emptyCard} />
-          <View style={styles.emptyCard} />
-        </View>
-
-        {/* Vícios */}
-        <Text style={styles.sectionTitle}>Tarefas • Hoje</Text>
-        <View style={styles.addictionCard} />
-
-        {/* Barra de navegação inferior */}
-        <View style={styles.bottomBar}>
-          <Text style={styles.bottomBarItem}>home</Text>
-          <Text style={styles.bottomBarItem}>dash</Text>
-          <Image source={require('../assets/sun.png')} style={styles.bottomBarIcon} />
-          <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', marginTop: 5}} onPress={() => navigation.navigate('MoodTransition')}>
-            <Text style={styles.bottomBarItem}>tracker</Text>
-          </TouchableOpacity>
-          <Text style={styles.bottomBarItem}>chat</Text>
-        </View>
+        <Text style={styles.greeting}>Olá User :)</Text>
+        <Text style={styles.dateText}>hoje é {diaSemana},</Text>
+        <Text style={styles.dateText}>{dataFormatada}</Text>
+        <CircularSlider onPress={(key) => {
+          switch (key) {
+            case 'Profile':
+              navigation.navigate('Profile');
+              break;
+            case 'Tasks':
+              navigation.navigate('Tasks');
+              break;
+            case 'Activity':
+              navigation.navigate('Activity');
+              break;
+            case 'Dashboard':
+              navigation.navigate('Dashboard');
+              break;
+            case 'MoodTracker':
+              navigation.navigate('MoodTracker');
+              break;
+            case 'Config':
+              navigation.navigate('Config');
+              break;
+            case 'Guide':
+              navigation.navigate('Guide');
+              break;
+            case 'Support':
+              navigation.navigate('Help'); // Suporte direciona para HelpScreen
+              break;
+            case 'Terms':
+              navigation.navigate('Terms');
+              break;
+            case 'Logout':
+              // Adicione aqui a lógica de logout se necessário
+              break;
+            default:
+              break;
+          }
+        }} />
       </View>
     </ImageBackground>
   );
@@ -139,154 +81,23 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     backgroundColor: 'transparent',
     paddingTop: 70,
-    paddingHorizontal: 18,
   },
-  topBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 18,
-  },
-  menuIcon: {
-    width: 32,
-    height: 32,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop:-30,
-  },
-  menuLine: {
-    width: 22,
-    height: 3,
-    backgroundColor: '#2d304d',
-    marginVertical: 2,
-    borderRadius: 2,
-  },
-  logo: {
-    width: 38,
-    height: 38,
-    resizeMode: 'contain',
-    marginTop:-40,
-  },
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#5c6082',
-    borderRadius: 18,
-    paddingHorizontal: 16,
-    marginBottom: 18,
-    height: 38,
-    marginTop:-10,
-  },
-  searchInput: {
-    flex: 1,
+  greeting: {
     color: '#fff',
-    fontSize: 16,
-  },
-  searchIcon: {
-    width: 18,
-    height: 18,
-    marginLeft: 8,
-    resizeMode: 'contain',
-  },
-  dayText: {
-    color: '#fff',
-    fontSize: 22,
+    fontSize: 48,
     fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  quoteCard: {
-    backgroundColor: 'rgba(23, 24, 55, 0.5)',
-    borderRadius: 18,
-    padding: 18,
-    marginBottom: 18,
-  },
-  quoteText: {
-    color: '#fff',
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  quoteSubtext: {
-    color: '#bbaacc',
-    fontSize: 14,
-    fontStyle: 'italic',
-  },
-  sectionTitle: {
-    color: '#fff',
-    fontSize: 18,
-    marginTop: 10,
-    marginBottom: 8,
-    fontWeight: 'bold',
-  },
-  dailyContentRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 18,
-  },
-  symptomCard: {
-    flex: 1,
-    backgroundColor: 'rgba(92, 96, 130, 0.5)',
-    borderRadius: 18,
-    padding: 12,
-    marginRight: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: 80,
-  },
-  symptomText: {
-    color: '#fff',
-    fontSize: 14,
+    marginBottom: 16,
+    marginTop: 30,
     textAlign: 'center',
-    marginBottom: 8,
   },
-  plusIcon: {
+  dateText: {
     color: '#fff',
     fontSize: 28,
-    fontWeight: 'bold',
-  },
-  emptyCard: {
-    flex: 1,
-    backgroundColor: 'rgba(92, 96, 130, 0.5)',
-    borderRadius: 18,
-    marginLeft: 8,
-    minHeight: 80,
-  },
-  addictionCard: {
-    backgroundColor: 'rgba(92, 96, 130, 0.5)',
-    borderRadius: 18,
-    minHeight: 50,
-    marginBottom: 18,
-  },
-  bottomBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: 'rgba(92, 96, 130, 0.6)',
-    borderRadius: 18,
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    position: 'absolute',
-    left: 10,
-    right: 10,
-    bottom: 18,
-    alignItems: 'center',
-  },
-  bottomBarItem: {
-    color: '#fff',
-    fontSize: 16,
     textAlign: 'center',
-    flex: 1,
-  },
-  selectedBarItem: {
-    fontWeight: 'bold',
-    fontSize: 22,
-  },
-  bottomBarIcon: {
-    width: 38,
-    height: 38,
-    resizeMode: 'contain',
-    marginRight: 16,
-    marginLeft: 0,
+    marginBottom: 4,
   },
 });

@@ -6,7 +6,6 @@ import LoginScreen from './components/LoginScreen';
 import HomeScreen from './components/HomeScreen';
 import MoodTrackerScreen from './components/MoodTrackerScreen';
 import DashboardScreen from './components/DashboardScreen';
-import MoodTransitionScreen from './components/MoodTransitionScreen';
 import TipsScreen from './components/TipsScreen';
 import HelpScreen from './components/HelpScreen';
 import GuideScreen from './components/GuideScreen';
@@ -29,7 +28,6 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="MoodTracker" component={MoodTrackerScreen} />
         <Stack.Screen name="Dashboard" component={DashboardScreen} />
-        <Stack.Screen name="MoodTransition" component={MoodTransitionScreen} />
         <Stack.Screen name="Tips" component={TipsScreen} />
         <Stack.Screen name="Help" component={HelpScreen} />
         <Stack.Screen name="Guide" component={GuideScreen} />
