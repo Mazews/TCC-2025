@@ -5,12 +5,12 @@ import { PanGestureHandler } from 'react-native-gesture-handler';
 import { useAnimatedGestureHandler } from 'react-native-reanimated';
 
 const { width } = Dimensions.get('window');
-const RADIUS = width * 1; // aumenta o raio para espaçar mais os botões
+const RADIUS = width * 0.80; // reduz o raio para garantir que os botões fiquem visíveis
 const BUTTON_SIZE = 100;
 const BUTTONS = [
   { key: 'Profile', label: 'perfil' },
   { key: 'Tasks', label: 'tarefas' },
-  { key: 'Activity', label: 'atividade' },
+  { key: 'Activity', label: 'quotes' },
   { key: 'Dashboard', label: 'dash' }, // novo botão
   { key: 'MoodTracker', label: 'humor' },   // novo botão
   { key: 'Config', label: 'config' },
@@ -21,15 +21,25 @@ const BUTTONS = [
 ];
 
 export default function CircularSlider({ onPress }) {
-  const rotation = useSharedValue(0);
-  const angleStep = Math.PI / (BUTTONS.length - 1); // já usa o número de botões
+  // Encontrar o índice do botão 'humor'
+  const centerIndex = BUTTONS.findIndex(btn => btn.key === 'MoodTracker');
+  const angleStep = 2 * Math.PI / BUTTONS.length; // círculo completo
+  const initialRotation = -centerIndex * angleStep;
+  // Limites: centralizar o primeiro e o último botão
+  const minRotation = -((BUTTONS.length - 1) * angleStep);
+  const maxRotation = 0;
+
+  const rotation = useSharedValue(initialRotation);
 
   const gestureHandler = useAnimatedGestureHandler({
     onStart: (_, ctx) => {
       ctx.startRotation = rotation.value;
     },
     onActive: (event, ctx) => {
-      rotation.value = ctx.startRotation + event.translationX / 120;
+      let next = ctx.startRotation + event.translationX / 120;
+      // Limita o valor de rotação para não sumir botões
+      next = Math.max(minRotation, Math.min(maxRotation, next));
+      rotation.value = next;
     },
     onEnd: () => {
       rotation.value = withSpring(rotation.value, { damping: 15 });
@@ -42,7 +52,7 @@ export default function CircularSlider({ onPress }) {
         {BUTTONS.map((btn, idx) => {
           // Cada botão recebe um estilo animado para rotacionar junto com o slider
           const animatedStyle = useAnimatedStyle(() => {
-            const angle = Math.PI + idx * angleStep + rotation.value;
+            const angle = Math.PI / 2 + idx * angleStep + rotation.value; // começa do topo
             const x = RADIUS * Math.cos(angle);
             const y = RADIUS * Math.sin(angle);
             return {
@@ -66,7 +76,7 @@ export default function CircularSlider({ onPress }) {
             </Animated.View>
           );
         })}
-        <View style={[styles.centerCircle, { bottom: -50 + RADIUS - 38 }]}>
+        <View style={[styles.centerCircle, { bottom: -100 + RADIUS - 40 }]}>
           <Text style={styles.centerIcon}>🔍</Text>
         </View>
       </Animated.View>
@@ -79,7 +89,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: -220, // move o slider mais para baixo
+    bottom: -80, // move o slider mais para baixo
     height: width * 0.6,
     justifyContent: 'flex-end',
     alignItems: 'center',
@@ -110,7 +120,7 @@ const styles = StyleSheet.create({
   centerCircle: {
     position: 'absolute',
     left: width / 2 - 38,
-    bottom: 40 + RADIUS - 38,
+    bottom: 180, // valor fixo para ficar entre o slider e o limite da tela
     width: 76,
     height: 76,
     borderRadius: 38,

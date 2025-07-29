@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Dimensions }
 
 const { width } = Dimensions.get('window');
 
-export default function ActivityScreen({ navigation }) {
+export default function QuoteScreen({ navigation }) {
   // Simule notificações, pode ser um array vazio para testar a mensagem
   const notifications = [];
   return (

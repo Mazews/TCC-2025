@@ -11,7 +11,7 @@ import HelpScreen from './components/HelpScreen';
 import GuideScreen from './components/GuideScreen';
 import ProfileScreen from './components/ProfileScreen';
 import TasksScreen from './components/TasksScreen';
-import ActivityScreen from './components/ActivityScreen';
+import QuoteScreen from './components/QuoteScreen';
 import ConfigScreen from './components/ConfigScreen';
 import TermsScreen from './components/TermsScreen';
 import SignInScreen from './components/SignInScreen';
@@ -33,7 +33,7 @@ export default function App() {
         <Stack.Screen name="Guide" component={GuideScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Tasks" component={TasksScreen} />
-        <Stack.Screen name="Activity" component={ActivityScreen} />
+        <Stack.Screen name="Activity" component={QuoteScreen} />
         <Stack.Screen name="Config" component={ConfigScreen} />
         <Stack.Screen name="Terms" component={TermsScreen} />
         <Stack.Screen name="SignIn" component={SignInScreen} />

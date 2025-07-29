@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'transparent',
     alignItems: 'center',
-    paddingTop: 120, // aumenta o espaçamento do topo
+    paddingTop: 60,
     position: 'relative',
   },
   title: {

@@ -19,7 +19,7 @@ export default function HomeScreen({ navigation }) {
   const dia = String(dataAtual.getDate()).padStart(2, '0');
   const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
   const ano = dataAtual.getFullYear();
-  const dataFormatada = `${dia}-${mes}-${ano}`;
+  const dataFormatada = `${dia}/${mes}/${ano}`;
 
   return (
     <ImageBackground
@@ -67,7 +67,7 @@ export default function HomeScreen({ navigation }) {
               navigation.navigate('Terms');
               break;
             case 'Logout':
-              // Adicione aqui a lógica de logout se necessário
+              navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
               break;
             default:
               break;
