@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Image } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import { useAnimatedGestureHandler } from 'react-native-reanimated';
 
 const { width } = Dimensions.get('window');
-const RADIUS = width * 0.80; // reduz o raio para garantir que os botões fiquem visíveis
+const RADIUS = width * 0.70; // reduz o raio para garantir que os botões fiquem visíveis
 const BUTTON_SIZE = 100;
 const BUTTONS = [
   { key: 'Profile', label: 'perfil' },
@@ -77,7 +77,7 @@ export default function CircularSlider({ onPress }) {
           );
         })}
         <View style={[styles.centerCircle, { bottom: -100 + RADIUS - 40 }]}>
-          <Text style={styles.centerIcon}>🔍</Text>
+          <Image source={require('../assets/logo.png')} style={styles.centerLogo} resizeMode="contain" />
         </View>
       </Animated.View>
     </PanGestureHandler>
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: -80, // move o slider mais para baixo
+    bottom: -80, 
     height: width * 0.6,
     justifyContent: 'flex-end',
     alignItems: 'center',
@@ -115,15 +115,17 @@ const styles = StyleSheet.create({
     color: '#5c6082',
     fontSize: 16,
     fontWeight: 'bold',
+    fontFamily: 'Poppins',
+
     textAlign: 'center',
   },
   centerCircle: {
     position: 'absolute',
     left: width / 2 - 38,
-    bottom: 180, // valor fixo para ficar entre o slider e o limite da tela
+    bottom: 180, 
     width: 76,
     height: 76,
-    borderRadius: 38,
+    borderRadius: 40,
     backgroundColor: 'rgba(255,255,255,0.5)',
     alignItems: 'center',
     justifyContent: 'center',
@@ -133,5 +135,9 @@ const styles = StyleSheet.create({
   centerIcon: {
     fontSize: 36,
     color: '#5c6082',
+  },
+  centerLogo: {
+    width: 48,
+    height: 48,
   },
 }); 

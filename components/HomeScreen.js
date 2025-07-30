@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: 'transparent',
-    paddingTop: 70,
+    paddingTop: 250,
   },
   greeting: {
     color: '#fff',
@@ -93,11 +93,13 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     marginTop: 30,
     textAlign: 'center',
+    fontFamily: 'Poppins',
   },
   dateText: {
     color: '#fff',
     fontSize: 28,
     textAlign: 'center',
     marginBottom: 4,
+    fontFamily: 'Poppins',
   },
 });

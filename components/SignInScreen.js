@@ -121,7 +121,8 @@ const styles = StyleSheet.create({
   logo: {
     width: 110,
     height: 110,
-    marginBottom: 18,
+    marginBottom: 15,
+    marginTop: 100,
     resizeMode: 'contain',
   },
   title: {
@@ -129,7 +130,8 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: '400',
     textAlign: 'center',
-    marginBottom: 0,
+    marginBottom: 10,
+    fontFamily: 'Poppins',
   },
   card: {
     width: width > 500 ? 400 : width * 0.75,
@@ -150,6 +152,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#7a8ca4',
     fontWeight: '400',
+    fontFamily: 'Poppins',
   },
   bottomRow: {
     flexDirection: 'row',
@@ -176,5 +179,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     textTransform: 'lowercase',
+    fontFamily: 'Poppins',
   },
 }); 

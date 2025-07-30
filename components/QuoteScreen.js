@@ -1,31 +1,39 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Dimensions } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
+
+const QUOTES = [
+  'Carpe diem.',
+  'Acredite em você e tudo será possível.',
+  'Cada dia é uma nova oportunidade para recomeçar.',
+  'A persistência realiza o impossível.',
+  'Grandes coisas nunca vêm de zonas de conforto.',
+  'A felicidade não é algo pronto. Ela vem de suas próprias ações.',
+  'O sucesso é a soma de pequenos esforços, dia após dia.',
+  'Seja a mudança que você deseja ver no mundo.',
+  'Você é mais forte do que imagina.'
+];
 
 export default function QuoteScreen({ navigation }) {
-  // Simule notificações, pode ser um array vazio para testar a mensagem
-  const notifications = [];
+  const dailyQuote = useMemo(() => {
+    const idx = Math.floor(Math.random() * QUOTES.length);
+    return QUOTES[idx];
+  }, []);
+
   return (
     <ImageBackground
-      source={require('../assets/plainbg.png')}
+      source={require('../assets/quotebg.png')}
       style={styles.background}
       imageStyle={{ resizeMode: 'cover' }}
     >
-      <View style={styles.card}>
-        <Text style={styles.title}>Atividade</Text>
-        {notifications.length === 0 ? (
-          <Text style={styles.emptyText}>Tudo calmo por aqui</Text>
-        ) : (
-          notifications.map((note, idx) => (
-            <View key={idx} style={styles.noteBox}>
-              <Text style={styles.noteText}>{note}</Text>
-            </View>
-          ))
-        )}
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.backButtonText}>voltar</Text>
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Icon name="chevron-left" size={38} color="#fff" />
+      </TouchableOpacity>
+      <View style={styles.content}>
+        <Text style={styles.subtitle}>frase do dia</Text>
+        <Text style={styles.quoteText}>{dailyQuote}</Text>
       </View>
     </ImageBackground>
   );
@@ -34,57 +42,43 @@ export default function QuoteScreen({ navigation }) {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  card: {
-    width: width > 500 ? 380 : width * 0.55,
-    backgroundColor: 'rgba(255,255,255,0.5)',
-    borderRadius: 36,
-    paddingVertical: 60,
-    paddingHorizontal: 24,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.10,
-    shadowRadius: 18,
-    shadowOffset: { width: 0, height: 6 },
-    maxWidth: 400,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    color: '#2d304d',
-    marginBottom: 32,
-  },
-  emptyText: {
-    fontSize: 18,
-    color: '#5c6082',
-    marginBottom: 32,
-    textAlign: 'center',
-  },
-  noteBox: {
     width: '100%',
-    backgroundColor: 'rgba(255,255,255,0.75)',
-    borderRadius: 22,
-    padding: 18,
-    marginBottom: 16,
-  },
-  noteText: {
-    fontSize: 18,
-    color: '#2d304d',
+    height: '100%',
   },
   backButton: {
-    width: '60%',
-    backgroundColor: 'rgba(255,255,255,0.9)',
-    borderRadius: 32,
-    paddingVertical: 18,
-    alignItems: 'center',
-    alignSelf: 'center',
-    marginTop: 8,
+    position: 'absolute',
+    top: 36,
+    left: 18,
+    zIndex: 2,
+    padding: 8,
+    // Se houver texto, fonte Poppins
+    // fontFamily: 'Poppins',
   },
-  backButtonText: {
-    fontSize: 22,
-    color: '#2d304d',
-    fontWeight: '400',
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+  },
+  subtitle: {
+    fontSize: 32,
+    fontStyle: 'italic',
+    color: '#fff',
+    fontFamily: 'serif', // Mantém serifada
+    marginBottom: 18,
+    textAlign: 'center',
+    textTransform: 'lowercase',
+    opacity: 0.9,
+  },
+  quoteText: {
+    fontSize: 48,
+    color: '#fff',
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+    fontFamily: 'serif', // Mantém serifada
+    textAlign: 'center',
+    lineHeight: 56,
+    opacity: 0.98,
   },
 }); 
+

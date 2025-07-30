@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
     color: '#5c6082',
     fontSize: 16,
     marginBottom: 8,
+    fontFamily: 'Poppins',
   },
   form: {
     width: '100%',
@@ -156,6 +157,7 @@ const styles = StyleSheet.create({
     color: '#2d304d',
     marginBottom: 18,
     borderWidth: 0,
+    fontFamily: 'Poppins',
   },
   saveButton: {
     width: '80%',
@@ -170,6 +172,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#2d304d',
     fontWeight: 'bold',
+    fontFamily: 'Poppins',
   },
   backButton: {
     width: '80%',
@@ -183,5 +186,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#2d304d',
     fontWeight: '400',
+    fontFamily: 'Poppins',
   },
 }); 
