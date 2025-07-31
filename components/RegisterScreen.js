@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: '400',
     textAlign: 'center',
-   
     marginTop: 10,
     fontFamily: 'Poppins',
   },
