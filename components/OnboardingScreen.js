@@ -1,19 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, ImageBackground, ActivityIndicator } from 'react-native';
-import { useFonts, Poppins_400Regular, Poppins_700Bold } from '@expo-google-fonts/poppins';
+import { View, StyleSheet, TouchableOpacity, Image, Dimensions, ImageBackground } from 'react-native';
+import AppText from './AppText';
 
 const { width, height } = Dimensions.get('window');
 
 export default function OnboardingScreen({ navigation }) {
-  let [fontsLoaded] = useFonts({
-    Poppins_400Regular,
-    Poppins_700Bold,
-  });
-
-  if (!fontsLoaded) {
-    return <View />;
-  }
-
   return (
     <ImageBackground
       source={require('../assets/background.png')} 
@@ -21,17 +12,13 @@ export default function OnboardingScreen({ navigation }) {
       resizeMode="cover"
     >
       <View style={styles.container}>
-
         <Image source={require('../assets/logo.png')} style={styles.logo} />
-
-        <Text style={styles.title}>
+        <AppText style={styles.title}>
           Monitore e organize seus hábitos em qualquer lugar
-        </Text>
-
+        </AppText>
         <TouchableOpacity style={styles.button} onPress={() => navigation.replace('Login')}>
-          <Text style={styles.buttonText}>Avançar ➔</Text>
+          <AppText style={styles.buttonText}>Avançar ➔</AppText>
         </TouchableOpacity>
-
       </View>
     </ImageBackground>
   );
@@ -66,7 +53,7 @@ const styles = StyleSheet.create({
     width: '90%',
     alignSelf: 'flex-start',
     marginLeft: 0,
-    fontFamily: 'Poppins_700Bold',
+    fontFamily: 'Poppins',
   },
   button: {
     position: 'absolute',
@@ -82,11 +69,11 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 22,
-    fontFamily: 'Poppins_700Bold',
+    fontFamily: 'Poppins',
     textAlign: 'left',
     fontWeight: 'bold',
   },
   subtitle: {
-    fontFamily: 'Poppins_400Regular',
+    fontFamily: 'Poppins',
   },
 });

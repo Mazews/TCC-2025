@@ -1,29 +1,42 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Dimensions, Switch } from 'react-native';
+import { useTheme } from './ThemeContext';
+import AppText from './AppText';
 
 const { width } = Dimensions.get('window');
 
 export default function ConfigScreen({ navigation }) {
-  const [isDark, setIsDark] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+  const [isDark, setIsDark] = useState(theme.mode === 'dark');
+
+  useEffect(() => {
+    setIsDark(theme.mode === 'dark');
+  }, [theme]);
+
+  const handleSwitch = () => {
+    toggleTheme();
+    setIsDark((prev) => !prev);
+  };
+
   return (
     <ImageBackground
-      source={require('../assets/plainbg.png')}
-      style={styles.background}
+      source={theme.image}
+      style={[styles.background]}
       imageStyle={{ resizeMode: 'cover' }}
     >
-      <View style={styles.card}>
-        <Text style={styles.title}>Configurações</Text>
+      <View style={[styles.card, { backgroundColor: theme.card }]}> 
+        <AppText style={[styles.title, { color: theme.text }]}>Configurações</AppText>
         <View style={styles.switchRow}>
-          <Text style={styles.switchLabel}>Modo escuro</Text>
+          <AppText style={[styles.switchLabel, { color: theme.textSecondary }]}>Modo escuro</AppText>
           <Switch
             value={isDark}
-            onValueChange={setIsDark}
-            thumbColor={isDark ? '#2d304d' : '#fff'}
-            trackColor={{ false: '#ccc', true: '#2d304d' }}
+            onValueChange={handleSwitch}
+            thumbColor={isDark ? theme.switchThumb : theme.switchThumb}
+            trackColor={{ false: theme.switchTrack, true: theme.switchTrack }}
           />
         </View>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.backButtonText}>voltar</Text>
+        <TouchableOpacity style={[styles.backButton, { backgroundColor: theme.backButton }]} onPress={() => navigation.goBack()}>
+          <AppText style={[styles.backButtonText, { color: theme.text }]}>voltar</AppText>
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -38,7 +51,6 @@ const styles = StyleSheet.create({
   },
   card: {
     width: width > 500 ? 380 : width * 0.55,
-    backgroundColor: 'rgba(255,255,255,0.5)',
     borderRadius: 36,
     paddingVertical: 60,
     paddingHorizontal: 24,
@@ -52,7 +64,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: '#2d304d',
     marginBottom: 32,
   },
   switchRow: {
@@ -65,12 +76,10 @@ const styles = StyleSheet.create({
   },
   switchLabel: {
     fontSize: 20,
-    color: '#2d304d',
     fontWeight: '400',
   },
   backButton: {
     width: '60%',
-    backgroundColor: 'rgba(255,255,255,0.9)',
     borderRadius: 32,
     paddingVertical: 18,
     alignItems: 'center',
@@ -79,7 +88,6 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 22,
-    color: '#2d304d',
     fontWeight: '400',
   },
 }); 

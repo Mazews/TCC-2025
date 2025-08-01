@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ImageBackground, Dimensions, ActivityIndicator, Alert, Platform } from 'react-native';
+import AppText from './AppText';
 
 const { width } = Dimensions.get('window');
 
@@ -66,7 +67,7 @@ export default function SignInScreen({ navigation }) {
     >
       <View style={styles.topContent}>
         <Image source={require('../assets/logo.png')} style={styles.logo} />
-        <Text style={styles.title}>Bem vindo (a) de{"\n"}volta!</Text>
+        <AppText style={styles.title}>Bem vindo (a) de{"\n"}volta!</AppText>
       </View>
       <View style={styles.card}>
         <TextInput
@@ -91,13 +92,13 @@ export default function SignInScreen({ navigation }) {
       </View>
       <View style={styles.bottomRow}>
         <TouchableOpacity style={[styles.button, loading && { opacity: 0.7 }]} onPress={() => navigation.goBack()} disabled={loading}>
-          <Text style={styles.buttonText}>voltar</Text>
+          <AppText style={styles.buttonText}>voltar</AppText>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.button, loading && { opacity: 0.7 }]} onPress={handleLogin} disabled={loading}>
           {loading ? (
             <ActivityIndicator color="#fff" size="small" />
           ) : (
-            <Text style={styles.buttonText}>avançar</Text>
+            <AppText style={styles.buttonText}>avançar</AppText>
           )}
         </TouchableOpacity>
       </View>

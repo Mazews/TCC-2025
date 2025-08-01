@@ -1,8 +1,14 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Dimensions } from 'react-native';
+import { View, StyleSheet, ImageBackground, Dimensions, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import AppText from './AppText';
+import { useTheme } from './ThemeContext';
 
 const { width, height } = Dimensions.get('window');
+
+const getQuoteBg = (theme) => theme.mode === 'dark'
+  ? require('../assets/quotebgdark.png')
+  : require('../assets/quotebg.png');
 
 // Frases retiradas de https://www.ibnd.com.br/blog/frases-motivacionais-curtas-para-se-inspirar.html
 const QUOTES = [
@@ -60,16 +66,15 @@ const QUOTES = [
   'Memento Vivere.'
 ];
 
-// Função para gerar um índice "aleatório" baseado na data do dia
 function getDailyIndex(length) {
   const now = new Date();
   const seed = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
-  // Algoritmo simples de hash para gerar índice pseudo-aleatório
   let x = Math.sin(seed) * 10000;
   return Math.abs(Math.floor(x) % length);
 }
 
 export default function QuoteScreen({ navigation }) {
+  const { theme } = useTheme();
   const dailyQuote = useMemo(() => {
     const idx = getDailyIndex(QUOTES.length);
     return QUOTES[idx];
@@ -77,16 +82,16 @@ export default function QuoteScreen({ navigation }) {
 
   return (
     <ImageBackground
-      source={require('../assets/quotebg.png')}
+      source={getQuoteBg(theme)}
       style={styles.background}
       imageStyle={{ resizeMode: 'cover' }}
     >
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Icon name="chevron-left" size={38} color="#fff" />
+        <Icon name="chevron-left" size={38} color={theme.text} />
       </TouchableOpacity>
       <View style={styles.content}>
-        <Text style={styles.subtitle}>frase do dia</Text>
-        <Text style={styles.quoteText}>{dailyQuote}</Text>
+        <AppText style={[styles.subtitle, { color: theme.textSecondary }]}>frase do dia</AppText>
+        <AppText style={[styles.quoteText, { color: theme.text }]}>{dailyQuote}</AppText>
       </View>
     </ImageBackground>
   );
@@ -104,8 +109,6 @@ const styles = StyleSheet.create({
     left: 18,
     zIndex: 2,
     padding: 8,
-    // Se houver texto, fonte Poppins
-    // fontFamily: 'Poppins',
   },
   content: {
     flex: 1,
@@ -116,8 +119,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 32,
     fontStyle: 'italic',
-    color: '#fff',
-    fontFamily: 'serif', // Mantém serifada
+    fontFamily: 'serif',
     marginBottom: 18,
     textAlign: 'center',
     textTransform: 'lowercase',
@@ -125,10 +127,9 @@ const styles = StyleSheet.create({
   },
   quoteText: {
     fontSize: 48,
-    color: '#fff',
     fontWeight: 'bold',
     fontStyle: 'italic',
-    fontFamily: 'serif', // Mantém serifada
+    fontFamily: 'serif',
     textAlign: 'center',
     lineHeight: 56,
     opacity: 0.98,

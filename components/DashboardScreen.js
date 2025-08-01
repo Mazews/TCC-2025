@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BarChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
+import AppText from './AppText';
 
 const screenWidth = Dimensions.get('window').width - 20;
 
@@ -62,13 +63,13 @@ export default function DashboardScreen({ navigation }) {
           <Image source={require('../assets/arrow.png')} style={styles.backIcon} />
         </TouchableOpacity>
         <ScrollView style={styles.container}>
-          <Text style={styles.title}>Dashboard</Text>
+          <AppText style={styles.title}>Dashboard</AppText>
           <View style={styles.toggleRow}>
             <TouchableOpacity onPress={() => setView('week')}>
-              <Text style={[styles.toggle, view === 'week' && styles.selected]}>Semana</Text>
+              <AppText style={[styles.toggle, view === 'week' && styles.selected]}>Semana</AppText>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setView('month')}>
-              <Text style={[styles.toggle, view === 'month' && styles.selected]}>Mês</Text>
+              <AppText style={[styles.toggle, view === 'month' && styles.selected]}>Mês</AppText>
             </TouchableOpacity>
           </View>
           {view === 'month' ? (
@@ -132,12 +133,12 @@ export default function DashboardScreen({ navigation }) {
               />
             </View>
           )}
-          <Text style={styles.subtitle}>Registros recentes:</Text>
+          <AppText style={styles.subtitle}>Registros recentes:</AppText>
           {data.slice(-7).reverse().map((entry, idx) => (
             <View key={idx} style={styles.entry}>
-              <Text style={styles.entryDate}>{entry.date}</Text>
-              <Text style={styles.entryMoods}>{entry.moods.join(', ')}</Text>
-              <Text style={styles.entryNote}>{entry.note}</Text>
+              <AppText style={styles.entryDate}>{entry.date}</AppText>
+              <AppText style={styles.entryMoods}>{entry.moods.join(', ')}</AppText>
+              <AppText style={styles.entryNote}>{entry.note}</AppText>
             </View>
           ))}
         </ScrollView>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, Dimensions, KeyboardAvoidingView, Platform, ScrollView, ImageBackground } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, Image, Dimensions, KeyboardAvoidingView, Platform, ScrollView, ImageBackground } from 'react-native';
+import AppText from './AppText';
 
 const { width, height } = Dimensions.get('window');
 const isSmallScreen = width < 370;
@@ -42,7 +43,7 @@ export default function EditProfileScreen({ navigation }) {
               source={profilePic ? { uri: profilePic } : require('../assets/profile.png')}
               style={styles.profilePic}
             />
-            <Text style={styles.editPhotoText}>editar foto de perfil</Text>
+            <AppText style={styles.editPhotoText}>editar foto de perfil</AppText>
           </TouchableOpacity>
           <ScrollView contentContainerStyle={styles.form} keyboardShouldPersistTaps="handled">
             <TextInput
@@ -86,10 +87,10 @@ export default function EditProfileScreen({ navigation }) {
             />
           </ScrollView>
           <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-            <Text style={styles.saveButtonText}>salvar</Text>
+            <AppText style={styles.saveButtonText}>salvar</AppText>
           </TouchableOpacity>
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Text style={styles.backButtonText}>voltar</Text>
+            <AppText style={styles.backButtonText}>voltar</AppText>
           </TouchableOpacity>
         </View>
       </ImageBackground>

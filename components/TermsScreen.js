@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Dimensions, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import AppText from './AppText';
 
 const { width } = Dimensions.get('window');
 
@@ -13,12 +14,12 @@ export default function TermsScreen({ navigation }) {
       imageStyle={{ resizeMode: 'cover' }}
     >
       <View style={styles.card}>
-        <Text style={styles.title}>Termos de Privacidade</Text>
+        <AppText style={styles.title}>Termos de Privacidade</AppText>
         <ScrollView style={styles.scroll} contentContainerStyle={{paddingBottom: 20}}>
-          <Text style={styles.termsText}>{termsText}</Text>
+          <AppText style={styles.termsText}>{termsText}</AppText>
         </ScrollView>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.backButtonText}>voltar</Text>
+          <AppText style={styles.backButtonText}>voltar</AppText>
         </TouchableOpacity>
       </View>
     </ImageBackground>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import AppText from './AppText';
 
 const EMOJIS = [
   { label: 'Feliz', emoji: '😊' },
@@ -28,7 +29,7 @@ export default function EmojiSelector({ selected, onSelect }) {
           ]}
           onPress={() => onSelect(item.label)}
         >
-          <Text style={styles.emoji}>{item.emoji}</Text>
+          <AppText style={styles.emoji}>{item.emoji}</AppText>
         </TouchableOpacity>
       ))}
     </View>

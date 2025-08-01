@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import AppLoading from 'expo-app-loading';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import OnboardingScreen from './components/OnboardingScreen';
@@ -17,30 +18,51 @@ import TermsScreen from './components/TermsScreen';
 import SignInScreen from './components/SignInScreen';
 import RegisterScreen from './components/RegisterScreen';
 import EditProfileScreen from './components/EditProfileScreen';
+import { ThemeProvider } from './components/ThemeContext';
 
 const Stack = createStackNavigator();
 
 export default function App() {
+  //const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  //const loadFonts = useCallback(async () => {
+  //  await Font.loadAsync({
+  //    'Poppins': require('./assets/fonts/Poppins/Poppins-Regular.ttf'),
+
+  //  });
+  //  setFontsLoaded(true);
+  //}, []);
+
+  //useEffect(() => {
+    //loadFonts();
+  //}, []);
+
+  //if (!fontsLoaded) {
+  //  return <AppLoading />;
+  //}
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Onboarding" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="MoodTracker" component={MoodTrackerScreen} />
-        <Stack.Screen name="Dashboard" component={DashboardScreen} />
-        <Stack.Screen name="Tips" component={TipsScreen} />
-        <Stack.Screen name="Help" component={HelpScreen} />
-        <Stack.Screen name="Guide" component={GuideScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
-        <Stack.Screen name="Tasks" component={TasksScreen} />
-        <Stack.Screen name="Activity" component={QuoteScreen} />
-        <Stack.Screen name="Config" component={ConfigScreen} />
-        <Stack.Screen name="Terms" component={TermsScreen} />
-        <Stack.Screen name="SignIn" component={SignInScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <ThemeProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Onboarding" screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="MoodTracker" component={MoodTrackerScreen} />
+          <Stack.Screen name="Dashboard" component={DashboardScreen} />
+          <Stack.Screen name="Tips" component={TipsScreen} />
+          <Stack.Screen name="Help" component={HelpScreen} />
+          <Stack.Screen name="Guide" component={GuideScreen} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
+          <Stack.Screen name="Tasks" component={TasksScreen} />
+          <Stack.Screen name="Activity" component={QuoteScreen} />
+          <Stack.Screen name="Config" component={ConfigScreen} />
+          <Stack.Screen name="Terms" component={TermsScreen} />
+          <Stack.Screen name="SignIn" component={SignInScreen} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }

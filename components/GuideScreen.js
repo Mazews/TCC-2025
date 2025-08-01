@@ -1,34 +1,32 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
+import AppText from './AppText';
+import { useTheme } from './ThemeContext';
+
+const getGuideBg = (theme) => theme.mode === 'dark'
+  ? require('../assets/bgdark2.png')
+  : require('../assets/loginbg.png');
 
 export default function GuideScreen({ navigation }) {
+  const { theme } = useTheme();
   return (
     <ImageBackground
-      source={require('../assets/loginbg.png')}
+      source={getGuideBg(theme)}
       style={{ flex: 1 }}
       resizeMode="cover"
     >
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Guia do Usuário</Text>
-        <View style={styles.guideBox}>
-          <Text style={styles.guideTitle}>Como registrar seu humor</Text>
-          <Text style={styles.guideText}>
-            1. Toque no botão "REGISTRE SEU HUMOR" na tela principal do mood tracker.
-            {'\n'}2. Escolha as emoções que está sentindo no momento.
-            {'\n'}3. (Opcional) Escreva o que te fez sentir assim no campo de texto.
-            {'\n'}4. Toque em "Enviar" para salvar seu registro.
-          </Text>
+      <ScrollView contentContainerStyle={[styles.container, { backgroundColor: theme.card, opacity: 0.8 }]}> 
+        <AppText style={[styles.title, { color: theme.text }]}>Guia do Usuário</AppText>
+        <View style={[styles.guideBox, { backgroundColor: theme.background, opacity: 0.8 }]}> 
+          <AppText style={[styles.guideTitle, { color: theme.text }]}>Como registrar seu humor</AppText>
+          <AppText style={[styles.guideText, { color: theme.textSecondary }]}>1. Toque no botão "REGISTRE SEU HUMOR" na tela principal do mood tracker. {'\n'}2. Escolha as emoções que está sentindo no momento. {'\n'}3. Salve seu registro.</AppText>
         </View>
-        <View style={styles.guideBox}>
-          <Text style={styles.guideTitle}>Como visualizar o diário de humor</Text>
-          <Text style={styles.guideText}>
-            1. Toque no botão "DIÁRIO DE HUMOR" na tela principal do mood tracker.
-            {'\n'}2. Veja seus registros recentes e gráficos semanais/mensais.
-            {'\n'}3. Use os botões "Semana" e "Mês" para alternar a visualização dos dados.
-          </Text>
+        <View style={[styles.guideBox, { backgroundColor: theme.background, opacity: 0.8 }]}> 
+          <AppText style={[styles.guideTitle, { color: theme.text }]}>Como visualizar o diário de humor</AppText>
+          <AppText style={[styles.guideText, { color: theme.textSecondary }]}>1. Toque no botão "DIÁRIO DE HUMOR" na tela principal do mood tracker. {'\n'}2. Veja seus registros recentes e gráficos semanais/mensais.</AppText>
         </View>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
-          <Text style={styles.buttonText}>Voltar</Text>
+        <TouchableOpacity style={[styles.button, { backgroundColor: theme.switchThumb, opacity: 0.8 }]} onPress={() => navigation.goBack()}>
+          <AppText style={[styles.buttonText, { color: theme.text }]}>Voltar</AppText>
         </TouchableOpacity>
       </ScrollView>
     </ImageBackground>
@@ -39,19 +37,16 @@ const styles = StyleSheet.create({
   container: {
     padding: 24,
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.5)',
     flexGrow: 1,
   },
   title: {
     fontSize: 26,
-    color: '#2d3150',
     fontWeight: 'bold',
     marginBottom: 25,
     marginTop: 20,
     textAlign: 'center',
   },
   guideBox: {
-    backgroundColor: '#fff',
     borderRadius: 20,
     padding: 18,
     marginBottom: 18,
@@ -65,17 +60,14 @@ const styles = StyleSheet.create({
   guideTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#2d3150',
     marginBottom: 6,
   },
   guideText: {
     fontSize: 15,
-    color: '#2d3150',
     marginBottom: 8,
     lineHeight: 22,
   },
   button: {
-    backgroundColor: '#5c6082',
     borderRadius: 24,
     paddingVertical: 14,
     paddingHorizontal: 60,
@@ -83,7 +75,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   buttonText: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },

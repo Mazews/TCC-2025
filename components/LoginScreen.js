@@ -1,21 +1,28 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
+import AppText from './AppText';
+import { useTheme } from './ThemeContext';
+
+const getLoginBg = (theme) => theme.mode === 'dark'
+  ? require('../assets/bgdark2.png')
+  : require('../assets/loginbg.png');
 
 export default function LoginScreen({ navigation }) {
+  const { theme } = useTheme();
   return (
     <ImageBackground
-      source={require('../assets/loginbg.png')}
-      style={styles.background}
+      source={getLoginBg(theme)}
+      style={{ flex: 1 }}
       resizeMode="cover"
     >
       <View style={styles.container}>
         <Image source={require('../assets/logo.png')} style={styles.logo} />
-        <Text style={styles.subtitle}>faça login para começar</Text>
-        <TouchableOpacity style={styles.buttonPrimary} onPress={() => navigation.navigate('Register')}>
-          <Text style={styles.buttonPrimaryText}>Cadastrar</Text>
+        <AppText style={[styles.subtitle, { color: theme.text }]}>faça login para começar</AppText>
+        <TouchableOpacity style={[styles.buttonPrimary, { backgroundColor: theme.card }]} onPress={() => navigation.navigate('Register')}>
+          <AppText style={[styles.buttonPrimaryText, { color: theme.text }]}>Cadastrar</AppText>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonSecondary} onPress={() => navigation.navigate('SignIn')}>
-          <Text style={styles.buttonSecondaryText}>Entrar</Text>
+        <TouchableOpacity style={[styles.buttonPrimary, { backgroundColor: theme.card }]} onPress={() => navigation.navigate('SignIn')}>
+          <AppText style={[styles.buttonPrimaryText, { color: theme.text }]}>Entrar</AppText>
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -41,14 +48,12 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   subtitle: {
-    color: '#fff',
     fontSize: 22,
     marginBottom: 40,
     fontWeight: '400',
     textAlign: 'center',
   },
   buttonPrimary: {
-    backgroundColor: '#fff',
     paddingVertical: 18,
     paddingHorizontal: 70,
     borderRadius: 30,
@@ -59,20 +64,17 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
   },
   buttonPrimaryText: {
-    color: '#7a8ca4',
     fontSize: 26,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   buttonSecondary: {
-    backgroundColor: 'rgba(255,255,255,0.4)',
     paddingVertical: 18,
     paddingHorizontal: 70,
     borderRadius: 30,
     marginBottom: 0,
   },
   buttonSecondaryText: {
-    color: '#fff',
     fontSize: 26,
     fontWeight: 'bold',
     textAlign: 'center',

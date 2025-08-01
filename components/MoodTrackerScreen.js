@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ImageBackground, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EmojiSelector from './EmojiSelector';
+import AppText from './AppText';
 
 export default function MoodTrackerScreen({ navigation }) {
   const [selected, setSelected] = useState([]);
@@ -41,7 +42,7 @@ export default function MoodTrackerScreen({ navigation }) {
           <Image source={require('../assets/arrow.png')} style={styles.backIcon} />
         </TouchableOpacity>
         <View style={styles.container}>
-          <Text style={styles.title}>Como está se sentindo hoje?</Text>
+          <AppText style={styles.title}>Como está se sentindo hoje?</AppText>
           <EmojiSelector selected={selected} onSelect={handleSelect} />
           <TextInput
             style={styles.input}
@@ -52,7 +53,7 @@ export default function MoodTrackerScreen({ navigation }) {
             multiline
           />
           <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-            <Text style={styles.buttonText}>Enviar</Text>
+            <AppText style={styles.buttonText}>Enviar</AppText>
           </TouchableOpacity>
           <View style={styles.organicShape1} />
         </View>

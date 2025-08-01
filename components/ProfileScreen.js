@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, ScrollView, ImageBackground, Alert } from 'react-native';
+import AppText from './AppText';
 
 const { width, height } = Dimensions.get('window');
 const isSmallScreen = width < 370;
@@ -40,25 +41,25 @@ export default function ProfileScreen({ navigation }) {
             style={[styles.profileIcon, isSmallScreen && styles.profileIconSmall]}
           />
           <View style={styles.profileInfo}>
-            <Text style={[styles.profileName, isSmallScreen && styles.profileNameSmall]}>{profile.nome} {profile.sobrenome}</Text>
-            <Text style={[styles.profileDate, isSmallScreen && styles.profileDateSmall]}>entrou em {profile.dataEntrada}</Text>
-            <Text style={[styles.profileEmail]}>{profile.email}</Text>
-            <Text style={[styles.profileUsername]}>@{profile.username}</Text>
+            <AppText style={[styles.profileName, isSmallScreen && styles.profileNameSmall]}>{profile.nome} {profile.sobrenome}</AppText>
+            <AppText style={[styles.profileDate, isSmallScreen && styles.profileDateSmall]}>entrou em {profile.dataEntrada}</AppText>
+            <AppText style={[styles.profileEmail]}>{profile.email}</AppText>
+            <AppText style={[styles.profileUsername]}>@{profile.username}</AppText>
           </View>
         </View>
         <View style={styles.buttonList}>
           <TouchableOpacity style={[styles.button, isSmallScreen && styles.buttonSmall]} onPress={() => navigation.navigate('EditProfileScreen')}>
-            <Text style={[styles.buttonText, isSmallScreen && styles.buttonTextSmall]}>editar perfil</Text>
+            <AppText style={[styles.buttonText, isSmallScreen && styles.buttonTextSmall]}>editar perfil</AppText>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.button, isSmallScreen && styles.buttonSmall]} onPress={() => navigation.navigate('Config')}>
-            <Text style={[styles.buttonText, isSmallScreen && styles.buttonTextSmall]}>configurações</Text>
+            <AppText style={[styles.buttonText, isSmallScreen && styles.buttonTextSmall]}>configurações</AppText>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.button, isSmallScreen && styles.buttonSmall]} onPress={handleLogout}>
-            <Text style={[styles.buttonText, isSmallScreen && styles.buttonTextSmall]}>logout</Text>
+            <AppText style={[styles.buttonText, isSmallScreen && styles.buttonTextSmall]}>logout</AppText>
           </TouchableOpacity>
         </View>
         <TouchableOpacity style={[styles.backButton, isSmallScreen && styles.backButtonSmall]} onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, isSmallScreen && styles.backButtonTextSmall]}>voltar</Text>
+          <AppText style={[styles.backButtonText, isSmallScreen && styles.backButtonTextSmall]}>voltar</AppText>
         </TouchableOpacity>
       </View>
     </ImageBackground>

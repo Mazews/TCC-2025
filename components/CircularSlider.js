@@ -3,21 +3,22 @@ import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Image } from 'rea
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import { useAnimatedGestureHandler } from 'react-native-reanimated';
+import AppText from './AppText';
 
 const { width } = Dimensions.get('window');
 const RADIUS = width * 0.70; // reduz o raio para garantir que os botões fiquem visíveis
 const BUTTON_SIZE = 100;
 const BUTTONS = [
-  { key: 'Profile', label: 'perfil' },
-  { key: 'Tasks', label: 'tarefas' },
-  { key: 'Activity', label: 'quotes' },
-  { key: 'Dashboard', label: 'dash' }, // novo botão
-  { key: 'MoodTracker', label: 'humor' },   // novo botão
-  { key: 'Config', label: 'config' },
-  { key: 'Guide', label: 'guia' },
-  { key: 'Support', label: 'ajuda' },
-  { key: 'Terms', label: 'termos' },
-  { key: 'Logout', label: 'sair' },
+  { key: 'Profile', label: 'perfil', icon: require('../assets/profile.png') },
+  { key: 'Tasks', label: 'tarefas', icon: require('../assets/book.png') },
+  { key: 'Activity', label: 'quotes', icon: require('../assets/quotes.png') },
+  { key: 'Dashboard', label: 'dash', icon: require('../assets/dash.png') },
+  { key: 'MoodTracker', label: 'humor', icon: require('../assets/humor.png') },
+  { key: 'Config', label: 'config', icon: require('../assets/gear.png') },
+  { key: 'Guide', label: 'guia', icon: require('../assets/guide.png') },
+  { key: 'Support', label: 'ajuda', icon: require('../assets/warning.png') },
+  { key: 'Terms', label: 'termos', icon: require('../assets/book2.png') },
+  { key: 'Logout', label: 'sair', icon: require('../assets/logout.png') },
 ];
 
 export default function CircularSlider({ onPress }) {
@@ -71,7 +72,11 @@ export default function CircularSlider({ onPress }) {
                 onPress={() => onPress(btn.key)}
                 activeOpacity={0.8}
               >
-                <Text style={styles.buttonText}>{btn.label}</Text>
+                {btn.icon ? (
+                  <Image source={btn.icon} style={{ width: 38, height: 38, resizeMode: 'contain' }} />
+                ) : (
+                  <AppText style={styles.buttonText}>{btn.label}</AppText>
+                )}
               </TouchableOpacity>
             </Animated.View>
           );
@@ -103,12 +108,12 @@ const styles = StyleSheet.create({
     width: BUTTON_SIZE,
     height: BUTTON_SIZE,
     borderRadius: BUTTON_SIZE / 2,
-    backgroundColor: 'rgba(255,255,255,0.7)',
+    backgroundColor: 'rgba(255,255,255,0.8)',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
+    shadowColor: '#fff',
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
     elevation: 4,
   },
   buttonText: {

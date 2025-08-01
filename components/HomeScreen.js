@@ -1,9 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { View, StyleSheet, ImageBackground } from 'react-native';
 import CircularSlider from './CircularSlider';
+import { useTheme } from './ThemeContext';
+import AppText from './AppText';
 
 export default function HomeScreen({ navigation }) {
-  // Array com os dias da semana
+  const { theme } = useTheme();
+ 
   const diasSemana = [
     'domingo',
     'segunda-feira',
@@ -13,7 +16,7 @@ export default function HomeScreen({ navigation }) {
     'sexta-feira',
     'sábado',
   ];
-  // Data atual
+  
   const dataAtual = new Date();
   const diaSemana = diasSemana[dataAtual.getDay()];
   const dia = String(dataAtual.getDate()).padStart(2, '0');
@@ -23,7 +26,7 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <ImageBackground
-      source={require('../assets/plainbg.png')}
+      source={theme.image}
       style={{ flex: 1 }}
       imageStyle={{
         resizeMode: 'cover',
@@ -33,10 +36,12 @@ export default function HomeScreen({ navigation }) {
         left: 0,
       }}
     >
-      <View style={styles.container}>
-        <Text style={styles.greeting}>Olá User :)</Text>
-        <Text style={styles.dateText}>hoje é {diaSemana},</Text>
-        <Text style={styles.dateText}>{dataFormatada}</Text>
+      <View style={[styles.container, { backgroundColor: 'transparent' }]}> 
+        <AppText style={[styles.greeting, { color: theme.text }]}>Olá User :)</AppText>
+        <AppText style={[styles.dateText, { color: theme.text }]}>
+          hoje é {diaSemana},
+        </AppText>
+        <AppText style={[styles.dateText, { color: theme.text }]}>{dataFormatada}</AppText>
         <CircularSlider onPress={(key) => {
           switch (key) {
             case 'Profile':
@@ -61,7 +66,7 @@ export default function HomeScreen({ navigation }) {
               navigation.navigate('Guide');
               break;
             case 'Support':
-              navigation.navigate('Help'); // Suporte direciona para HelpScreen
+              navigation.navigate('Help'); 
               break;
             case 'Terms':
               navigation.navigate('Terms');
@@ -87,7 +92,6 @@ const styles = StyleSheet.create({
     paddingTop: 250,
   },
   greeting: {
-    color: '#fff',
     fontSize: 48,
     fontWeight: 'bold',
     marginBottom: 16,
@@ -96,7 +100,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
   },
   dateText: {
-    color: '#fff',
     fontSize: 28,
     textAlign: 'center',
     marginBottom: 4,
