@@ -23,23 +23,24 @@ import { ThemeProvider } from './components/ThemeContext';
 const Stack = createStackNavigator();
 
 export default function App() {
-  //const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [fontsLoaded, setFontsLoaded] = React.useState(false);
 
-  //const loadFonts = useCallback(async () => {
-  //  await Font.loadAsync({
-  //    'Poppins': require('./assets/fonts/Poppins/Poppins-Regular.ttf'),
+  if (!fontsLoaded) {
+    return (
+      <AppLoading
+        startAsync={() =>
+          Font.loadAsync({
+            'Poppins': require('./assets/fonts/Poppins/Poppins-Regular.ttf'),
+            'Poppins-Bold': require('./assets/fonts/Poppins/Poppins-Bold.ttf'),
+            // adicione outras variações se quiser
+          })
+        }
+        onFinish={() => setFontsLoaded(true)}
+        onError={console.warn}
+      />
+    );
+  }
 
-  //  });
-  //  setFontsLoaded(true);
-  //}, []);
-
-  //useEffect(() => {
-    //loadFonts();
-  //}, []);
-
-  //if (!fontsLoaded) {
-  //  return <AppLoading />;
-  //}
 
   return (
     <ThemeProvider>

@@ -41,23 +41,31 @@ export default function HelpScreen({ navigation }) {
     <ImageBackground
       source={getHelpBg(theme)}
       style={{ flex: 1 }}
+      imageStyle={{ opacity:1}}
       resizeMode="cover"
+      
     >
-      <ScrollView contentContainerStyle={[styles.container, { backgroundColor: theme.card, opacity: 0.8 }]}> 
-        <AppText style={[styles.title, { color: theme.text }]}>Contatos úteis para Saúde Mental</AppText>
+      <ScrollView contentContainerStyle={[styles.container]}> 
+        <AppText style={[styles.title, { color: theme.text }]}>
+          Contatos úteis para Saúde Mental
+        </AppText>
         {CONTACTS.map((contact, idx) => (
-          <View style={[styles.contactBox, { backgroundColor: theme.background, opacity: 0.8 }]} key={idx}>
-            <AppText style={[styles.contactName, { color: theme.text }]}>{contact.name}</AppText>
-            <AppText style={[styles.contactDesc, { color: theme.textSecondary }]}>{contact.description}</AppText>
-            {contact.phone ? (
-              <TouchableOpacity onPress={() => Linking.openURL(`tel:${contact.phone}`)}>
-                <AppText style={[styles.contactPhone, { color: theme.textSecondary }]}>Ligar: {contact.phone}</AppText>
-              </TouchableOpacity>
-            ) : null}
+          <View style={[styles.contactBox, { backgroundColor: theme.background, opacity: 0.5 }]} key={idx}>
+            <View style={{ opacity: 1 }}>
+              <AppText style={[styles.contactName, { color: theme.text }]}>{contact.name}</AppText>
+              <AppText style={[styles.contactDesc, { color: theme.textSecondary }]}>{contact.description}</AppText>
+              {contact.phone ? (
+                <TouchableOpacity onPress={() => Linking.openURL(`tel:${contact.phone}`)}>
+                  <AppText style={[styles.contactPhone, { color: theme.textSecondary }]}>Ligar: {contact.phone}</AppText>
+                </TouchableOpacity>
+              ) : null}
+            </View>
           </View>
         ))}
-        <TouchableOpacity style={[styles.button, { backgroundColor: theme.switchThumb, opacity: 0.8 }]} onPress={() => navigation.goBack()}>
-          <AppText style={[styles.buttonText, { color: theme.text }]}>Voltar</AppText>
+        <TouchableOpacity style={[styles.button, { backgroundColor: theme.switchThumb, opacity: 0.5 }]} onPress={() => navigation.goBack()}>
+          <View style={{ opacity: 1 }}>
+            <AppText style={[styles.buttonText, { color: theme.text }]}>Voltar</AppText>
+          </View>
         </TouchableOpacity>
       </ScrollView>
     </ImageBackground>
@@ -87,6 +95,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 4,
     elevation: 2,
+    opacity: 0.5,
   },
   contactName: {
     fontSize: 18,
@@ -108,9 +117,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 60,
     marginTop: 20,
     alignSelf: 'center',
+    opacity: 0.5,
   },
   buttonText: {
     fontSize: 18,
     fontWeight: 'bold',
   },
-}); 
+});

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Image} from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import { useAnimatedGestureHandler } from 'react-native-reanimated';
@@ -92,9 +92,9 @@ export default function CircularSlider({ onPress }) {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    left: 0,
+    left: 40, 
     right: 0,
-    bottom: -80, 
+    bottom: 150, 
     height: width * 0.6,
     justifyContent: 'flex-end',
     alignItems: 'center',
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     width: BUTTON_SIZE,
     height: BUTTON_SIZE,
     borderRadius: BUTTON_SIZE / 2,
-    backgroundColor: 'rgba(255,255,255,0.8)',
+    backgroundColor: 'rgba(255,255,255,0.5)',
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#fff',
@@ -145,4 +145,4 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
   },
-}); 
+});
