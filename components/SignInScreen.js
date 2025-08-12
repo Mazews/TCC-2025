@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ImageBackground, Dimensions, ActivityIndicator, Alert, Platform } from 'react-native';
+import AppText from './AppText';
 
 const { width } = Dimensions.get('window');
 
@@ -66,7 +67,7 @@ export default function SignInScreen({ navigation }) {
     >
       <View style={styles.topContent}>
         <Image source={require('../assets/logo.png')} style={styles.logo} />
-        <Text style={styles.title}>Bem vindo (a) de{"\n"}volta!</Text>
+        <AppText style={styles.title}>Bem vindo (a) de{"\n"}volta!</AppText>
       </View>
       <View style={styles.card}>
         <TextInput
@@ -91,13 +92,13 @@ export default function SignInScreen({ navigation }) {
       </View>
       <View style={styles.bottomRow}>
         <TouchableOpacity style={[styles.button, loading && { opacity: 0.7 }]} onPress={() => navigation.goBack()} disabled={loading}>
-          <Text style={styles.buttonText}>voltar</Text>
+          <AppText style={styles.buttonText}>voltar</AppText>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.button, loading && { opacity: 0.7 }]} onPress={handleLogin} disabled={loading}>
           {loading ? (
             <ActivityIndicator color="#fff" size="small" />
           ) : (
-            <Text style={styles.buttonText}>avançar</Text>
+            <AppText style={styles.buttonText}>avançar</AppText>
           )}
         </TouchableOpacity>
       </View>
@@ -121,7 +122,8 @@ const styles = StyleSheet.create({
   logo: {
     width: 110,
     height: 110,
-    marginBottom: 18,
+    marginBottom: 15,
+    marginTop: 100,
     resizeMode: 'contain',
   },
   title: {
@@ -129,7 +131,8 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: '400',
     textAlign: 'center',
-    marginBottom: 0,
+    marginBottom: 10,
+    fontFamily: 'Poppins',
   },
   card: {
     width: width > 500 ? 400 : width * 0.75,
@@ -150,6 +153,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#7a8ca4',
     fontWeight: '400',
+    fontFamily: 'Poppins',
   },
   bottomRow: {
     flexDirection: 'row',
@@ -176,5 +180,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     textTransform: 'lowercase',
+    fontFamily: 'Poppins',
   },
 }); 

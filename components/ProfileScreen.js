@@ -1,10 +1,33 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, ScrollView, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, ScrollView, ImageBackground, Alert } from 'react-native';
+import AppText from './AppText';
 
 const { width, height } = Dimensions.get('window');
 const isSmallScreen = width < 370;
 
 export default function ProfileScreen({ navigation }) {
+  // Mock de dados do perfil (substituir por dados reais da API futuramente)
+  const profile = {
+    nome: 'José Maria',
+    sobrenome: 'Silva',
+    email: 'jose@email.com',
+    username: 'josemaria',
+    dataEntrada: '01/01/2024',
+    profilePic: require('../assets/profile.png'),
+  };
+
+  const handleLogout = () => {
+    Alert.alert(
+      'Tem certeza que deseja sair?',
+      '',
+      [
+        { text: 'Não', style: 'cancel' },
+        { text: 'Sim', onPress: () => navigation.reset({ index: 0, routes: [{ name: 'Login' }] }) },
+      ],
+      { cancelable: true }
+    );
+  };
+
   return (
     <ImageBackground
       source={require('../assets/plainbg.png')}
@@ -14,24 +37,29 @@ export default function ProfileScreen({ navigation }) {
       <View style={[styles.card, isSmallScreen && styles.cardSmall]}>
         <View style={styles.profileHeader}>
           <Image
-            source={require('../assets/profile.png')}
+            source={profile.profilePic}
             style={[styles.profileIcon, isSmallScreen && styles.profileIconSmall]}
           />
           <View style={styles.profileInfo}>
-            <Text style={[styles.profileName, isSmallScreen && styles.profileNameSmall]}>José Maria Silva</Text>
-            <Text style={[styles.profileDate, isSmallScreen && styles.profileDateSmall]}>entrou em xx/xx/2025</Text>
+            <AppText style={[styles.profileName, isSmallScreen && styles.profileNameSmall]}>{profile.nome} {profile.sobrenome}</AppText>
+            <AppText style={[styles.profileDate, isSmallScreen && styles.profileDateSmall]}>entrou em {profile.dataEntrada}</AppText>
+            <AppText style={[styles.profileEmail]}>{profile.email}</AppText>
+            <AppText style={[styles.profileUsername]}>@{profile.username}</AppText>
           </View>
         </View>
         <View style={styles.buttonList}>
-          <TouchableOpacity style={[styles.button, isSmallScreen && styles.buttonSmall]}><Text style={[styles.buttonText, isSmallScreen && styles.buttonTextSmall]}>editar perfil</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, isSmallScreen && styles.buttonSmall]}><Text style={[styles.buttonText, isSmallScreen && styles.buttonTextSmall]}>meus dados</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, isSmallScreen && styles.buttonSmall]}><Text style={[styles.buttonText, isSmallScreen && styles.buttonTextSmall]}>minha ficha</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, isSmallScreen && styles.buttonSmall]}><Text style={[styles.buttonText, isSmallScreen && styles.buttonTextSmall]}>configurações</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, isSmallScreen && styles.buttonSmall]}><Text style={[styles.buttonText, isSmallScreen && styles.buttonTextSmall]}>ajuda</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, isSmallScreen && styles.buttonSmall]}><Text style={[styles.buttonText, isSmallScreen && styles.buttonTextSmall]}>logout</Text></TouchableOpacity>
+          <TouchableOpacity style={[styles.button, isSmallScreen && styles.buttonSmall]} onPress={() => navigation.navigate('EditProfileScreen')}>
+            <AppText style={[styles.buttonText, isSmallScreen && styles.buttonTextSmall]}>editar perfil</AppText>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.button, isSmallScreen && styles.buttonSmall]} onPress={() => navigation.navigate('Config')}>
+            <AppText style={[styles.buttonText, isSmallScreen && styles.buttonTextSmall]}>configurações</AppText>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.button, isSmallScreen && styles.buttonSmall]} onPress={handleLogout}>
+            <AppText style={[styles.buttonText, isSmallScreen && styles.buttonTextSmall]}>logout</AppText>
+          </TouchableOpacity>
         </View>
         <TouchableOpacity style={[styles.backButton, isSmallScreen && styles.backButtonSmall]} onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, isSmallScreen && styles.backButtonTextSmall]}>voltar</Text>
+          <AppText style={[styles.backButtonText, isSmallScreen && styles.backButtonTextSmall]}>voltar</AppText>
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -164,5 +192,18 @@ const styles = StyleSheet.create({
   },
   backButtonTextSmall: {
     fontSize: 15,
+  },
+  profileEmail: {
+    fontSize: 15,
+    color: '#5c6082',
+    marginTop: 2,
+    textAlign: 'left',
+  },
+  profileUsername: {
+    fontSize: 15,
+    color: '#5c6082',
+    marginTop: 2,
+    textAlign: 'left',
+    fontStyle: 'italic',
   },
 }); 

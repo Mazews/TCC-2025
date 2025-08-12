@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ImageBackground, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EmojiSelector from './EmojiSelector';
+import AppText from './AppText';
 
 export default function MoodTrackerScreen({ navigation }) {
   const [selected, setSelected] = useState([]);
@@ -36,21 +37,26 @@ export default function MoodTrackerScreen({ navigation }) {
       style={{ flex: 1 }}
       resizeMode="cover"
     >
-      <View style={styles.container}>
-        <Text style={styles.title}>Como está se sentindo hoje?</Text>
-        <EmojiSelector selected={selected} onSelect={handleSelect} />
-        <TextInput
-          style={styles.input}
-          placeholder="O que te fez sentir assim?"
-          placeholderTextColor="#aaa"
-          value={text}
-          onChangeText={setText}
-          multiline
-        />
-        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Enviar</Text>
+      <View style={{ flex: 1 }}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Home')}>
+          <Image source={require('../assets/arrow.png')} style={styles.backIcon} />
         </TouchableOpacity>
-        <View style={styles.organicShape1} />
+        <View style={styles.container}>
+          <AppText style={styles.title}>Como está se sentindo hoje?</AppText>
+          <EmojiSelector selected={selected} onSelect={handleSelect} />
+          <TextInput
+            style={styles.input}
+            placeholder="O que te fez sentir assim?"
+            placeholderTextColor="#aaa"
+            value={text}
+            onChangeText={setText}
+            multiline
+          />
+          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+            <AppText style={styles.buttonText}>Enviar</AppText>
+          </TouchableOpacity>
+          <View style={styles.organicShape1} />
+        </View>
       </View>
     </ImageBackground>
   );
@@ -104,5 +110,20 @@ const styles = StyleSheet.create({
     borderRadius: 200,
     opacity: 0.08,
     zIndex: 0,
+  },
+  backButton: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    zIndex: 100,
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    borderRadius: 30,
+    padding: 8,
+    elevation: 4,
+  },
+  backIcon: {
+    width: 32,
+    height: 32,
+    resizeMode: 'contain',
   },
 });

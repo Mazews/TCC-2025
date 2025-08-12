@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ImageBackground, Dimensions } from 'react-native';
+import AppText from './AppText';
 
 const { width } = Dimensions.get('window');
 
@@ -16,7 +17,7 @@ export default function RegisterScreen({ navigation }) {
     >
       <View style={styles.topContent}>
         <Image source={require('../assets/logo.png')} style={styles.logo} />
-        <Text style={styles.title}>Bem vindo (a)!</Text>
+        <AppText style={styles.title}>Bem vindo (a)!</AppText>
       </View>
       <View style={styles.card}>
         <TextInput
@@ -44,10 +45,10 @@ export default function RegisterScreen({ navigation }) {
       </View>
       <View style={styles.bottomRow}>
         <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
-          <Text style={styles.buttonText}>voltar</Text>
+          <AppText style={styles.buttonText}>voltar</AppText>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => navigation.replace('Home')}>
-          <Text style={styles.buttonText}>avançar</Text>
+          <AppText style={styles.buttonText}>avançar</AppText>
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -70,7 +71,8 @@ const styles = StyleSheet.create({
   logo: {
     width: 110,
     height: 110,
-    marginBottom: 18,
+    marginBottom: 15,
+    marginTop: 100,
     resizeMode: 'contain',
   },
   title: {
@@ -78,7 +80,8 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: '400',
     textAlign: 'center',
-    marginBottom: 0,
+    marginTop: 10,
+    fontFamily: 'Poppins',
   },
   card: {
     width: width > 500 ? 400 : width * 0.75,

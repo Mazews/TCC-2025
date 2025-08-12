@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image, Dimensions } from 'react-native';
+import AppText from './AppText';
+import { useTheme } from './ThemeContext';
 
 const menuItems = [
   { label: 'perfil', icon: require('../assets/profile.png'), key: 'Profile' },
@@ -13,7 +15,9 @@ const menuItems = [
 ];
 
 export default function SideMenu({ visible, onClose, onNavigate, navigation }) {
-  // navigation prop opcional para reset no logout
+  const { theme } = useTheme();
+  const { height } = Dimensions.get('window');
+
   const handleNavigate = (key) => {
     onClose();
     switch (key) {
@@ -58,9 +62,9 @@ export default function SideMenu({ visible, onClose, onNavigate, navigation }) {
       onRequestClose={onClose}
     >
       <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={onClose} />
-      <View style={styles.menuContainer}>
+      <View style={[styles.menuContainer, { backgroundColor: theme.card, borderColor: theme.textSecondary, borderWidth: 1 }]}> 
         <View style={styles.profileCircle}>
-          <Image source={require('../assets/profile.png')} style={styles.profileIcon} />
+          <Image source={require('../assets/profile.png')} style={[styles.profileIcon, { tintColor: theme.textSecondary }]} />
         </View>
         <View style={styles.menuList}>
           {menuItems.map((item) => (
@@ -69,8 +73,8 @@ export default function SideMenu({ visible, onClose, onNavigate, navigation }) {
               style={styles.menuItem}
               onPress={() => handleNavigate(item.key)}
             >
-              <Image source={item.icon} style={styles.menuIcon} />
-              <Text style={styles.menuLabel}>{item.label}</Text>
+              <Image source={item.icon} style={[styles.menuIcon, { tintColor: theme.textSecondary }]} />
+              <AppText style={[styles.menuLabel, { color: theme.text }]}>{item.label}</AppText>
             </TouchableOpacity>
           ))}
         </View>
@@ -100,7 +104,6 @@ const styles = StyleSheet.create({
     left: 0,
     width: 200,
     height: height,
-    backgroundColor: '#fffefb',
     borderTopRightRadius: 36,
     borderBottomRightRadius: 36,
     paddingTop: 24,
@@ -123,7 +126,6 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     resizeMode: 'contain',
-    tintColor: '#2d304d',
   },
   menuList: {
     flex: 1,
@@ -139,11 +141,9 @@ const styles = StyleSheet.create({
     height: 28,
     marginRight: 16,
     resizeMode: 'contain',
-    tintColor: '#2d304d',
   },
   menuLabel: {
     fontSize: 22,
-    color: '#2d304d',
     fontWeight: '400',
   },
   bottomLogoBox: {

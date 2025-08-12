@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Dimensions } from 'react-native';
+import AppText from './AppText';
 
 const { width } = Dimensions.get('window');
 
@@ -13,18 +14,18 @@ export default function TasksScreen({ navigation }) {
       imageStyle={{ resizeMode: 'cover' }}
     >
       <View style={styles.card}>
-        <Text style={styles.title}>Tarefas</Text>
+        <AppText style={styles.title}>Tarefas</AppText>
         {tasks.length === 0 ? (
-          <Text style={styles.emptyText}>Sem tarefas por hoje, descanse :)</Text>
+          <AppText style={styles.emptyText}>Sem tarefas por hoje, descanse :)</AppText>
         ) : (
           tasks.map((task, idx) => (
             <View key={idx} style={styles.taskBox}>
-              <Text style={styles.taskText}>{task}</Text>
+              <AppText style={styles.taskText}>{task}</AppText>
             </View>
           ))
         )}
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.backButtonText}>voltar</Text>
+          <AppText style={styles.backButtonText}>voltar</AppText>
         </TouchableOpacity>
       </View>
     </ImageBackground>
