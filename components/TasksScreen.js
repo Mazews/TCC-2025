@@ -1,38 +1,45 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Dimensions } from 'react-native';
 import AppText from './AppText';
+import { useTheme } from './ThemeContext';
 
 const { width } = Dimensions.get('window');
 
 export default function TasksScreen({ navigation }) {
+  const { theme } = useTheme();
   // Simule tarefas, pode ser um array vazio para testar a mensagem
   const tasks = [];
   return (
-    <ImageBackground
-      source={require('../assets/plainbg.png')}
-      style={styles.background}
-      imageStyle={{ resizeMode: 'cover' }}
-    >
-      <View style={styles.card}>
-        <AppText style={styles.title}>Tarefas</AppText>
-        {tasks.length === 0 ? (
-          <AppText style={styles.emptyText}>Sem tarefas por hoje, descanse :)</AppText>
-        ) : (
-          tasks.map((task, idx) => (
-            <View key={idx} style={styles.taskBox}>
-              <AppText style={styles.taskText}>{task}</AppText>
-            </View>
-          ))
-        )}
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <AppText style={styles.backButtonText}>voltar</AppText>
-        </TouchableOpacity>
-      </View>
-    </ImageBackground>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <ImageBackground
+        source={require('../assets/plainbg.png')}
+        style={styles.background}
+        imageStyle={{ resizeMode: 'cover' }}
+      >
+        <View style={styles.card}>
+          <AppText style={[styles.title, { color: theme.text }]}>Tarefas</AppText>
+          {tasks.length === 0 ? (
+            <AppText style={styles.emptyText}>Sem tarefas por hoje, descanse :)</AppText>
+          ) : (
+            tasks.map((task, idx) => (
+              <View key={idx} style={styles.taskBox}>
+                <AppText style={styles.taskText}>{task}</AppText>
+              </View>
+            ))
+          )}
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <AppText style={styles.backButtonText}>voltar</AppText>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   background: {
     flex: 1,
     justifyContent: 'center',
@@ -54,7 +61,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: '#2d304d',
     marginBottom: 32,
   },
   emptyText: {
@@ -88,4 +94,4 @@ const styles = StyleSheet.create({
     color: '#2d304d',
     fontWeight: '400',
   },
-}); 
+});

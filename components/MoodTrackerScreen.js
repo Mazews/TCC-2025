@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ImageBackground, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EmojiSelector from './EmojiSelector';
 import AppText from './AppText';
+import Icon from 'react-native-vector-icons/Feather';
+import { ThemeContext } from './ThemeContext';
+
 
 export default function MoodTrackerScreen({ navigation }) {
   const [selected, setSelected] = useState([]);
   const [text, setText] = useState('');
+  const { theme } = useContext(ThemeContext);
 
   const handleSelect = (label) => {
     setSelected((prev) =>
@@ -38,9 +42,9 @@ export default function MoodTrackerScreen({ navigation }) {
       resizeMode="cover"
     >
       <View style={{ flex: 1 }}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Home')}>
-          <Image source={require('../assets/arrow.png')} style={styles.backIcon} />
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Icon name="chevron-left" size={38} color={theme.text} />
+      </TouchableOpacity>
         <View style={styles.container}>
           <AppText style={styles.title}>Como está se sentindo hoje?</AppText>
           <EmojiSelector selected={selected} onSelect={handleSelect} />

@@ -4,6 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BarChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 import AppText from './AppText';
+import { ThemeContext } from './ThemeContext';
+import Icon from 'react-native-vector-icons/Feather';
 
 const screenWidth = Dimensions.get('window').width - 20;
 
@@ -36,7 +38,8 @@ function getMonthData(data) {
   };
 }
 
-export default function DashboardScreen({ navigation }) {
+function DashboardScreen({ navigation }) {
+  const { theme } = React.useContext(ThemeContext);
   const [data, setData] = useState([]);
   const [view, setView] = useState('week');
 
@@ -57,60 +60,29 @@ export default function DashboardScreen({ navigation }) {
   const monthChartWidth = 1600;
 
   return (
-    <ImageBackground source={require('../assets/registrobg.png')} style={{ flex: 1 }} resizeMode="cover">
-      <View style={{ flex: 1 }}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Home')}>
-          <Image source={require('../assets/arrow.png')} style={styles.backIcon} />
-        </TouchableOpacity>
-        <ScrollView style={styles.container}>
-          <AppText style={styles.title}>Dashboard</AppText>
-          <View style={styles.toggleRow}>
-            <TouchableOpacity onPress={() => setView('week')}>
-              <AppText style={[styles.toggle, view === 'week' && styles.selected]}>Semana</AppText>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setView('month')}>
-              <AppText style={[styles.toggle, view === 'month' && styles.selected]}>Mês</AppText>
-            </TouchableOpacity>
-          </View>
-          {view === 'month' ? (
-            <ScrollView horizontal showsHorizontalScrollIndicator={true} contentContainerStyle={{ alignItems: 'center' }}>
-              <View style={{ alignItems: 'center', width: monthChartWidth }}>
-                <BarChart
-                  data={{
-                    labels: monthData.labels,
-                    datasets: [{ data: monthData.data }],
-                  }}
-                  width={monthChartWidth}
-                  height={chartHeight}
-                  yAxisLabel=""
-                  chartConfig={{
-                    backgroundColor: 'rgba(255,255,255,0.85)',
-                    backgroundGradientFrom: 'rgba(255,255,255,0.85)',
-                    backgroundGradientTo: 'rgba(255,255,255,0.85)',
-                    decimalPlaces: 0,
-                    color: (opacity = 1) => `rgba(44, 62, 80, ${opacity})`,
-                    labelColor: () => '#2e192e',
-                    style: { borderRadius: 18 },
-                    propsForLabels: { fontSize: 13, fontWeight: 'bold' },
-                    propsForVerticalLabels: { fontSize: 13, fontWeight: 'bold' },
-                    barPercentage: 0.5,
-                    propsForBackgroundLines: { stroke: 'transparent' },
-                  }}
-                  style={{ marginVertical: 8, borderRadius: 18, alignSelf: 'center', backgroundColor: 'rgba(255,255,255,0.85)', shadowColor: '#2d3150', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.12, shadowRadius: 6, elevation: 3 }}
-                  showValuesOnTopOfBars={true}
-                  fromZero={true}
-                  withInnerLines={false}
-                />
-              </View>
-            </ScrollView>
-          ) : (
-            <View style={{ alignItems: 'center', width: '100%', marginLeft: -20 }}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Icon name="chevron-left" size={38} color={theme.text} />
+      </TouchableOpacity>
+      <ScrollView style={styles.container}>
+        <AppText style={[styles.title, { color: theme.text }]}>Dashboard</AppText>
+        <View style={styles.toggleRow}>
+          <TouchableOpacity onPress={() => setView('week')}>
+            <AppText style={[styles.toggle, view === 'week' && styles.selected]}>Semana</AppText>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setView('month')}>
+            <AppText style={[styles.toggle, view === 'month' && styles.selected]}>Mês</AppText>
+          </TouchableOpacity>
+        </View>
+        {view === 'month' ? (
+          <ScrollView horizontal showsHorizontalScrollIndicator={true} contentContainerStyle={{ alignItems: 'center' }}>
+            <View style={{ alignItems: 'center', width: monthChartWidth }}>
               <BarChart
                 data={{
-                  labels: weekData.labels,
-                  datasets: [{ data: weekData.data }],
+                  labels: monthData.labels,
+                  datasets: [{ data: monthData.data }],
                 }}
-                width={weekChartWidth}
+                width={monthChartWidth}
                 height={chartHeight}
                 yAxisLabel=""
                 chartConfig={{
@@ -132,20 +104,51 @@ export default function DashboardScreen({ navigation }) {
                 withInnerLines={false}
               />
             </View>
-          )}
-          <AppText style={styles.subtitle}>Registros recentes:</AppText>
-          {data.slice(-7).reverse().map((entry, idx) => (
-            <View key={idx} style={styles.entry}>
-              <AppText style={styles.entryDate}>{entry.date}</AppText>
-              <AppText style={styles.entryMoods}>{entry.moods.join(', ')}</AppText>
-              <AppText style={styles.entryNote}>{entry.note}</AppText>
-            </View>
-          ))}
-        </ScrollView>
-      </View>
-    </ImageBackground>
+          </ScrollView>
+        ) : (
+          <View style={{ alignItems: 'center', width: '100%', marginLeft: -20 }}>
+            <BarChart
+              data={{
+                labels: weekData.labels,
+                datasets: [{ data: weekData.data }],
+              }}
+              width={weekChartWidth}
+              height={chartHeight}
+              yAxisLabel=""
+              chartConfig={{
+                backgroundColor: 'rgba(255,255,255,0.85)',
+                backgroundGradientFrom: 'rgba(255,255,255,0.85)',
+                backgroundGradientTo: 'rgba(255,255,255,0.85)',
+                decimalPlaces: 0,
+                color: (opacity = 1) => `rgba(44, 62, 80, ${opacity})`,
+                labelColor: () => '#2e192e',
+                style: { borderRadius: 18 },
+                propsForLabels: { fontSize: 13, fontWeight: 'bold' },
+                propsForVerticalLabels: { fontSize: 13, fontWeight: 'bold' },
+                barPercentage: 0.5,
+                propsForBackgroundLines: { stroke: 'transparent' },
+              }}
+              style={{ marginVertical: 8, borderRadius: 18, alignSelf: 'center', backgroundColor: 'rgba(255,255,255,0.85)', shadowColor: '#2d3150', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.12, shadowRadius: 6, elevation: 3 }}
+              showValuesOnTopOfBars={true}
+              fromZero={true}
+              withInnerLines={false}
+            />
+          </View>
+        )}
+        <AppText style={[styles.subtitle, { color: theme.text }]}>Registros recentes:</AppText>
+        {data.slice(-7).reverse().map((entry, idx) => (
+          <View key={idx} style={styles.entry}>
+            <AppText style={styles.entryDate}>{entry.date}</AppText>
+            <AppText style={styles.entryMoods}>{entry.moods.join(', ')}</AppText>
+            <AppText style={styles.entryNote}>{entry.note}</AppText>
+          </View>
+        ))}
+      </ScrollView>
+    </View>
   );
 }
+
+export default DashboardScreen;
 
 const styles = StyleSheet.create({
   container: {
