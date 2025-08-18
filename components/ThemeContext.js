@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Appearance } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ThemeContext = createContext();
+export const ThemeContext = createContext();
 
 const THEME_KEY = 'APP_THEME';
 
@@ -10,13 +10,17 @@ const lightTheme = {
   mode: 'light',
   background: '#fff',
   card: 'rgba(255, 255, 255, 0.5)',
-  text: 'rgb(255, 255, 255)',
+  text: '#2d304d',
   font: 'Poppins',
-  textSecondary: 'rbga(255, 255, 255, 0.85)',
+  textSecondary: 'rgba(45, 48, 77, 0.85)',
   switchThumb: '#fff',
   switchTrack: '#ccc',
   backButton: 'rgba(255, 255, 255, 0.5)',
   image: require('../assets/plainbg.png'),
+  quoteImage: require('../assets/quotebg.png'),
+  registroImage: require('../assets/registrobg.png'),
+  guideImage: require('../assets/loginbg.png'),
+  helpImage: require('../assets/loginbg.png'),
 };
 
 const darkTheme = {
@@ -29,7 +33,11 @@ const darkTheme = {
   switchThumb: '#2d304d',
   switchTrack: '#444',
   backButton: 'rgba(30,32,50,0.9)',
-  image: require('../assets/bgdark.png'), 
+  image: require('../assets/bgdark.png'),
+  quoteImage: require('../assets/quotebgdark.png'),
+  registroImage: require('../assets/registrobgdark.png'),
+  guideImage: require('../assets/bgdark2.png'),
+  helpImage: require('../assets/bgdark2.png'),
 };
 
 export function ThemeProvider({ children }) {
@@ -64,3 +72,6 @@ export function ThemeProvider({ children }) {
 export function useTheme() {
   return useContext(ThemeContext);
 }
+
+// also export ThemeContext for direct use in components
+// ThemeContext is already exported at declaration: export const ThemeContext = createContext();

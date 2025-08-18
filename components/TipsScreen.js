@@ -8,33 +8,20 @@ export default function TipsScreen({ navigation }) {
   return (
     <ImageBackground
       source={theme.image}
-      style={{ flex: 1 }}
+      style={[styles.background, { backgroundColor: theme.background }]}
       resizeMode="cover"
     >
       <ScrollView contentContainerStyle={[styles.container, { backgroundColor: theme.card }]}> 
         <AppText style={[styles.title, { color: theme.text }]}>Dicas para Emoções Negativas</AppText>
-        <View style={[styles.tipBox, { backgroundColor: theme.background }]}>
-          <AppText style={[styles.emotion, { color: theme.text }]}>😢 Tristeza</AppText>
-          <AppText style={[styles.tip, { color: theme.textSecondary }]}>• Converse com alguém de confiança. {'\n'}• Escreva sobre seus sentimentos. {'\n'}• Ouça uma música que te acalme.</AppText>
-        </View>
-        <View style={[styles.tipBox, { backgroundColor: theme.background }]}>
-          <AppText style={[styles.emotion, { color: theme.text }]}>😠 Raiva</AppText>
-          <AppText style={[styles.tip, { color: theme.textSecondary }]}>• Pratique respiração profunda. {'\n'}• Faça uma caminhada. {'\n'}• Expresse sua raiva de forma saudável, como desenhar ou escrever.</AppText>
-        </View>
-        <View style={[styles.tipBox, { backgroundColor: theme.background }]}>
-          <AppText style={[styles.emotion, { color: theme.text }]}>😰 Ansiedade</AppText>
-          <AppText style={[styles.tip, { color: theme.textSecondary }]}>• Experimente técnicas de relaxamento, como meditação. {'\n'}• Foque no momento presente. {'\n'}• Fale sobre suas preocupações com alguém.</AppText>
-        </View>
-        <View style={[styles.tipBox, { backgroundColor: theme.background }]}>
-          <AppText style={[styles.emotion, { color: theme.text }]}>😳 Vergonha</AppText>
-          <AppText style={[styles.tip, { color: theme.textSecondary }]}>• Lembre-se de que todos cometem erros. {'\n'}• Seja gentil consigo mesmo. {'\n'}• Compartilhe seus sentimentos com alguém de confiança.</AppText>
-        </View>
-        <View style={[styles.tipBox, { backgroundColor: theme.background }]}>
-          <AppText style={[styles.emotion, { color: theme.text }]}>😩 Cansaço</AppText>
-          <AppText style={[styles.tip, { color: theme.textSecondary }]}>• Respeite seus limites e descanse. {'\n'}• Faça pequenas pausas durante o dia. {'\n'}• Pratique autocuidado.</AppText>
-        </View>
-        <TouchableOpacity style={[styles.button, { backgroundColor: theme.switchThumb }]} onPress={() => navigation.goBack()}>
-          <AppText style={[styles.buttonText, { color: theme.text }]}>Voltar</AppText>
+        {['😢 Tristeza', '😠 Raiva', '😰 Ansiedade', '😳 Vergonha', '😩 Cansaço'].map((emotion, index) => (
+          <View key={index} style={[styles.tipBox, { backgroundColor: theme.card, shadowColor: theme.shadow }]}
+          >
+            <AppText style={[styles.emotion, { color: theme.text }]}>{emotion}</AppText>
+            <AppText style={[styles.tip, { color: theme.textSecondary }]}>• Dica 1 para {emotion}. {'\n'}• Dica 2 para {emotion}. {'\n'}• Dica 3 para {emotion}.</AppText>
+          </View>
+        ))}
+        <TouchableOpacity style={[styles.button, { backgroundColor: theme.button }]} onPress={() => navigation.goBack()}>
+          <AppText style={[styles.buttonText, { color: theme.buttonText }]}>Voltar</AppText>
         </TouchableOpacity>
       </ScrollView>
     </ImageBackground>
@@ -42,6 +29,9 @@ export default function TipsScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+  },
   container: {
     padding: 24,
     alignItems: 'center',
@@ -59,7 +49,6 @@ const styles = StyleSheet.create({
     padding: 18,
     marginBottom: 18,
     width: '100%',
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 4,
@@ -85,4 +74,4 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-}); 
+});

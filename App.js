@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppLoading from 'expo-app-loading';
+import * as Font from 'expo-font';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack'; // atualizado
 import OnboardingScreen from './components/OnboardingScreen';
 import LoginScreen from './components/LoginScreen';
 import HomeScreen from './components/HomeScreen';
@@ -20,12 +21,11 @@ import EditProfileScreen from './components/EditProfileScreen';
 import { ThemeProvider } from './components/ThemeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [fontsLoaded, setFontsLoaded] = React.useState(false);
-  const [initialRoute, setInitialRoute] = React.useState('Login');
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [initialRoute, setInitialRoute] = useState('Login');
 
   useEffect(() => {
     const checkLogin = async () => {
@@ -49,7 +49,6 @@ export default function App() {
       />
     );
   }
-
 
   return (
     <ThemeProvider>

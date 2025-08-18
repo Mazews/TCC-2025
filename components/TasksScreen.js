@@ -3,12 +3,12 @@ import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Dimensions }
 import AppText from './AppText';
 import { useTheme } from './ThemeContext';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 export default function TasksScreen({ navigation }) {
   const { theme } = useTheme();
-  // Simule tarefas, pode ser um array vazio para testar a mensagem
   const tasks = [];
+
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       <ImageBackground
@@ -16,19 +16,19 @@ export default function TasksScreen({ navigation }) {
         style={styles.background}
         imageStyle={{ resizeMode: 'cover' }}
       >
-        <View style={styles.card}>
+        <View style={[styles.card, { backgroundColor: theme.card, shadowColor: theme.shadow }]}>
           <AppText style={[styles.title, { color: theme.text }]}>Tarefas</AppText>
           {tasks.length === 0 ? (
-            <AppText style={styles.emptyText}>Sem tarefas por hoje, descanse :)</AppText>
+            <AppText style={[styles.emptyText, { color: theme.textSecondary }]}>Sem tarefas por hoje, descanse :)</AppText>
           ) : (
             tasks.map((task, idx) => (
-              <View key={idx} style={styles.taskBox}>
-                <AppText style={styles.taskText}>{task}</AppText>
+              <View key={idx} style={[styles.taskBox, { backgroundColor: theme.card }]}>
+                <AppText style={[styles.taskText, { color: theme.text }]}>{task}</AppText>
               </View>
             ))
           )}
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <AppText style={styles.backButtonText}>voltar</AppText>
+          <TouchableOpacity style={[styles.backButton, { backgroundColor: theme.button }]} onPress={() => navigation.goBack()}>
+            <AppText style={[styles.backButtonText, { color: theme.buttonText }]}>voltar</AppText>
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -46,14 +46,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   card: {
-    width: width > 500 ? 380 : width * 0.55,
-    backgroundColor: 'rgba(255,255,255,0.5)',
+    width: width > 500 ? 380 : width * 0.85,
     borderRadius: 36,
-    paddingVertical: 60,
-    paddingHorizontal: 24,
+    paddingVertical: height * 0.05,
+    paddingHorizontal: width * 0.05,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.10,
+    shadowOpacity: 0.1,
     shadowRadius: 18,
     shadowOffset: { width: 0, height: 6 },
     maxWidth: 400,
@@ -65,24 +63,20 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 18,
-    color: '#5c6082',
     marginBottom: 32,
     textAlign: 'center',
   },
   taskBox: {
     width: '100%',
-    backgroundColor: 'rgba(255,255,255,0.75)',
     borderRadius: 22,
     padding: 18,
     marginBottom: 16,
   },
   taskText: {
     fontSize: 18,
-    color: '#2d304d',
   },
   backButton: {
     width: '60%',
-    backgroundColor: 'rgba(255,255,255,0.9)',
     borderRadius: 32,
     paddingVertical: 18,
     alignItems: 'center',
@@ -91,7 +85,6 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 22,
-    color: '#2d304d',
     fontWeight: '400',
   },
 });

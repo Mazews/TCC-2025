@@ -3,9 +3,7 @@ import { View, StyleSheet, ScrollView, TouchableOpacity, ImageBackground } from 
 import AppText from './AppText';
 import { useTheme } from './ThemeContext';
 
-const getGuideBg = (theme) => theme.mode === 'dark'
-  ? require('../assets/bgdark2.png')
-  : require('../assets/loginbg.png');
+const getGuideBg = (theme) => theme.guideImage || (theme.mode === 'dark' ? require('../assets/bgdark2.png') : require('../assets/loginbg.png'));
 
 export default function GuideScreen({ navigation }) {
   const { theme } = useTheme();
@@ -15,17 +13,17 @@ export default function GuideScreen({ navigation }) {
       style={{ flex: 1 }}
       resizeMode="cover"
     >
-      <ScrollView contentContainerStyle={[styles.container, { backgroundColor: theme.card, opacity: 0.8 }]}> 
+      <ScrollView contentContainerStyle={[styles.container]}> 
         <AppText style={[styles.title, { color: theme.text }]}>Guia do Usuário</AppText>
-        <View style={[styles.guideBox, { backgroundColor: theme.background, opacity: 0.8 }]}> 
+        <View style={[styles.guideBox, { backgroundColor: theme.card }]}> 
           <AppText style={[styles.guideTitle, { color: theme.text }]}>Como registrar seu humor</AppText>
           <AppText style={[styles.guideText, { color: theme.textSecondary }]}>1. Toque no botão "REGISTRE SEU HUMOR" na tela principal do mood tracker. {'\n'}2. Escolha as emoções que está sentindo no momento. {'\n'}3. Salve seu registro.</AppText>
         </View>
-        <View style={[styles.guideBox, { backgroundColor: theme.background, opacity: 0.8 }]}> 
+        <View style={[styles.guideBox, { backgroundColor: theme.card }]}> 
           <AppText style={[styles.guideTitle, { color: theme.text }]}>Como visualizar o diário de humor</AppText>
           <AppText style={[styles.guideText, { color: theme.textSecondary }]}>1. Toque no botão "DIÁRIO DE HUMOR" na tela principal do mood tracker. {'\n'}2. Veja seus registros recentes e gráficos semanais/mensais.</AppText>
         </View>
-        <TouchableOpacity style={[styles.button, { backgroundColor: theme.switchThumb, opacity: 0.8 }]} onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={[styles.button, { backgroundColor: theme.switchThumb }]} onPress={() => navigation.goBack()}>
           <AppText style={[styles.buttonText, { color: theme.text }]}>Voltar</AppText>
         </TouchableOpacity>
       </ScrollView>

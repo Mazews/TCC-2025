@@ -37,16 +37,16 @@ export default function MoodTrackerScreen({ navigation }) {
 
   return (
     <ImageBackground
-      source={require('../assets/registrobg.png')}
+      source={theme.registroImage}
       style={{ flex: 1 }}
       resizeMode="cover"
     >
       <View style={{ flex: 1 }}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+      <TouchableOpacity style={[styles.backButton, { backgroundColor: theme.backButton }]} onPress={() => navigation.goBack()}>
         <Icon name="chevron-left" size={38} color={theme.text} />
       </TouchableOpacity>
-        <View style={styles.container}>
-          <AppText style={styles.title}>Como está se sentindo hoje?</AppText>
+        <View style={[styles.container, { backgroundColor: 'transparent' }]}> 
+          <AppText style={[styles.title, { color: theme.text }]}>Como está se sentindo hoje?</AppText>
           <EmojiSelector selected={selected} onSelect={handleSelect} />
           <TextInput
             style={styles.input}

@@ -3,9 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, 
 import AppText from './AppText';
 import { useTheme } from './ThemeContext';
 
-const getHelpBg = (theme) => theme.mode === 'dark'
-  ? require('../assets/bgdark2.png')
-  : require('../assets/loginbg.png');
+const getHelpBg = (theme) => theme.helpImage || (theme.mode === 'dark' ? require('../assets/bgdark2.png') : require('../assets/loginbg.png'));
 
 const CONTACTS = [
   {
@@ -41,17 +39,16 @@ export default function HelpScreen({ navigation }) {
     <ImageBackground
       source={getHelpBg(theme)}
       style={{ flex: 1 }}
-      imageStyle={{ opacity:1}}
+      imageStyle={{ opacity: 1 }}
       resizeMode="cover"
-      
     >
       <ScrollView contentContainerStyle={[styles.container]}> 
         <AppText style={[styles.title, { color: theme.text }]}>
           Contatos úteis para Saúde Mental
         </AppText>
         {CONTACTS.map((contact, idx) => (
-          <View style={[styles.contactBox, { backgroundColor: theme.background, opacity: 0.5 }]} key={idx}>
-            <View style={{ opacity: 1 }}>
+          <View style={[styles.contactBox, { backgroundColor: theme.card }]} key={idx}>
+            <View>
               <AppText style={[styles.contactName, { color: theme.text }]}>{contact.name}</AppText>
               <AppText style={[styles.contactDesc, { color: theme.textSecondary }]}>{contact.description}</AppText>
               {contact.phone ? (
@@ -62,10 +59,8 @@ export default function HelpScreen({ navigation }) {
             </View>
           </View>
         ))}
-        <TouchableOpacity style={[styles.button, { backgroundColor: theme.switchThumb, opacity: 0.5 }]} onPress={() => navigation.goBack()}>
-          <View style={{ opacity: 1 }}>
-            <AppText style={[styles.buttonText, { color: theme.text }]}>Voltar</AppText>
-          </View>
+        <TouchableOpacity style={[styles.button, { backgroundColor: theme.switchThumb }]} onPress={() => navigation.goBack()}>
+          <AppText style={[styles.buttonText, { color: theme.text }]}>Voltar</AppText>
         </TouchableOpacity>
       </ScrollView>
     </ImageBackground>
