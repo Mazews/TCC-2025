@@ -1,70 +1,78 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ImageBackground, Dimensions, ActivityIndicator, Alert, Platform } from 'react-native';
 import AppText from './AppText';
+import { useTheme } from './ThemeContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width } = Dimensions.get('window');
+const getSignInBg = (theme) => theme.mode === 'dark'
+  ? require('../assets/bgdark2.png')
+  : require('../assets/loginbg.png');
 
 export default function SignInScreen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [loading, setLoading] = useState(false);
+    const { theme } = useTheme();
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+    const [loading, setLoading] = useState(false);
 
-  const API_BASE_URL =
-    Platform.OS === 'android'
-      ? 'https://backend-feelflow-core.onrender.com'
-      : 'https://backend-feelflow-core.onrender.com';
+    const API_BASE_URL =
+      Platform.OS === 'android'
+        ? 'https://backend-feelflow-core.onrender.com'
+        : 'https://backend-feelflow-core.onrender.com';
 
-  const handleLogin = async () => {
-    if (!email.trim() || !senha.trim()) {
-      Alert.alert('Erro', 'Por favor, preencha todos os campos');
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      console.log('Enviando requisição para:', `${API_BASE_URL}/auth/login`);
-
-      const response = await fetch(`${API_BASE_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({
-          email: email.trim().toLowerCase(),
-          password: senha,
-        }),
-      });
-
-      console.log('Status da resposta:', response.status);
-
-      const data = await response.json();
-      console.log('Resposta completa da API:', data);
-
-      if (!response.ok) {
-        throw new Error(data.msg || 'Erro na autenticação');
+    const handleLogin = async () => {
+      if (!email.trim() || !senha.trim()) {
+        Alert.alert('Erro', 'Por favor, preencha todos os campos');
+        return;
       }
 
-      if (data.msg && data.msg.includes('sucesso')) {
-        navigation.replace('Home');
-      } else {
-        Alert.alert('Erro', data.msg || 'Credenciais inválidas');
-      }
-    } catch (error) {
-      console.error('Erro completo:', error);
-      Alert.alert('Erro', error.message || 'Erro de conexão com o servidor');
-    } finally {
-      setLoading(false);
-    }
-  };
+      setLoading(true);
 
-  return (
-    <ImageBackground
-      source={require('../assets/loginbg.png')}
-      style={styles.background}
-      resizeMode="cover"
-    >
+      try {
+        console.log('Enviando requisição para:', `${API_BASE_URL}/auth/login`);
+
+        const response = await fetch(`${API_BASE_URL}/auth/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            email: email.trim().toLowerCase(),
+            password: senha,
+          }),
+        });
+
+        console.log('Status da resposta:', response.status);
+
+        const data = await response.json();
+        console.log('Resposta completa da API:', data);
+
+        if (!response.ok) {
+          throw new Error(data.msg || 'Erro na autenticação');
+        }
+
+        if (data.msg && data.msg.includes('sucesso')) {
+          // Salva o login para persistência
+          await AsyncStorage.setItem('userToken', data.token || email);
+          navigation.replace('Home');
+        } else {
+          Alert.alert('Erro', data.msg || 'Credenciais inválidas');
+        }
+      } catch (error) {
+        console.error('Erro completo:', error);
+        Alert.alert('Erro', error.message || 'Erro de conexão com o servidor');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    return (
+      <ImageBackground
+        source={getSignInBg(theme)}
+        style={styles.background}
+        resizeMode="cover"
+      >
       <View style={styles.topContent}>
         <Image source={require('../assets/logo.png')} style={styles.logo} />
         <AppText style={styles.title}>Bem vindo (a) de{"\n"}volta!</AppText>
@@ -141,7 +149,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 16,
     alignItems: 'center',
-    marginTop: 30,
+    marginTop: -10,
     marginBottom: 60,
   },
   input: {
@@ -170,9 +178,9 @@ const styles = StyleSheet.create({
     width: width > 500 ? 220 : '44%',
     backgroundColor: 'rgba(255,255,255,0.5)',
     borderRadius: 32,
-    paddingVertical: 18,
+    paddingVertical: 20,
     alignItems: 'center',
-    marginHorizontal: 12,
+    marginHorizontal: 10,
   },
   buttonText: {
     color: '#fff',
@@ -182,4 +190,4 @@ const styles = StyleSheet.create({
     textTransform: 'lowercase',
     fontFamily: 'Poppins',
   },
-}); 
+});

@@ -6,9 +6,7 @@ import { useTheme } from './ThemeContext';
 
 const { width, height } = Dimensions.get('window');
 
-const getQuoteBg = (theme) => theme.mode === 'dark'
-  ? require('../assets/quotebgdark.png')
-  : require('../assets/quotebg.png');
+const getQuoteBg = (theme) => theme.quoteImage || (theme.mode === 'dark' ? require('../assets/quotebgdark.png') : require('../assets/quotebg.png'));
 
 // Frases retiradas de https://www.ibnd.com.br/blog/frases-motivacionais-curtas-para-se-inspirar.html
 const QUOTES = [
@@ -82,7 +80,7 @@ export default function QuoteScreen({ navigation }) {
 
   return (
     <ImageBackground
-      source={getQuoteBg(theme)}
+  source={getQuoteBg(theme)}
       style={styles.background}
       imageStyle={{ resizeMode: 'cover' }}
     >
@@ -118,8 +116,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 32,
-    fontStyle: 'italic',
-    fontFamily: 'serif',
+  fontStyle: 'italic',
     marginBottom: 18,
     textAlign: 'center',
     textTransform: 'lowercase',
@@ -127,9 +124,9 @@ const styles = StyleSheet.create({
   },
   quoteText: {
     fontSize: 48,
+    fontFamily: 'serif',
     fontWeight: 'bold',
     fontStyle: 'italic',
-    fontFamily: 'serif',
     textAlign: 'center',
     lineHeight: 56,
     opacity: 0.98,

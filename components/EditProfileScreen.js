@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Image, Dimensions, KeyboardAvoidingView, Platform, ScrollView, ImageBackground } from 'react-native';
 import AppText from './AppText';
+import { ThemeContext } from './ThemeContext';
 
 const { width, height } = Dimensions.get('window');
 const isSmallScreen = width < 370;
 
-export default function EditProfileScreen({ navigation }) {
+function EditProfileScreen({ navigation }) {
+  const { theme } = React.useContext(ThemeContext);
   // Estados dos campos
   const [profilePic, setProfilePic] = useState(null); // Placeholder
   const [nome, setNome] = useState('');
@@ -33,11 +35,11 @@ export default function EditProfileScreen({ navigation }) {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ImageBackground
-        source={require('../assets/plainbg.png')}
-        style={styles.background}
+        source={theme.mode === 'dark' ? require('../assets/registrobgdark.png') : require('../assets/plainbg.png')}
+        style={[styles.background, { backgroundColor: theme.background }]}
         imageStyle={{ resizeMode: 'cover' }}
       >
-        <View style={[styles.card, isSmallScreen && styles.cardSmall]}>
+        <View style={[styles.card, isSmallScreen && styles.cardSmall, { backgroundColor: theme.card }]}> 
           <TouchableOpacity style={styles.profilePicContainer} onPress={handlePickImage}>
             <Image
               source={profilePic ? { uri: profilePic } : require('../assets/profile.png')}
@@ -47,57 +49,56 @@ export default function EditProfileScreen({ navigation }) {
           </TouchableOpacity>
           <ScrollView contentContainerStyle={styles.form} keyboardShouldPersistTaps="handled">
             <TextInput
-              style={styles.input}
+              style={[styles.input, { color: theme.text }]}
               placeholder="nome"
-              placeholderTextColor="#5c6082"
+              placeholderTextColor={theme.textSecondary}
               value={nome}
               onChangeText={setNome}
             />
             <TextInput
-              style={styles.input}
+              style={[styles.input, { color: theme.text }]}
               placeholder="sobrenome"
-              placeholderTextColor="#5c6082"
+              placeholderTextColor={theme.textSecondary}
               value={sobrenome}
               onChangeText={setSobrenome}
             />
             <TextInput
-              style={styles.input}
+              style={[styles.input, { color: theme.text }]}
               placeholder="senha"
-              placeholderTextColor="#5c6082"
+              placeholderTextColor={theme.textSecondary}
               value={senha}
               onChangeText={setSenha}
               secureTextEntry
             />
             <TextInput
-              style={styles.input}
+              style={[styles.input, { color: theme.text }]}
               placeholder="email"
-              placeholderTextColor="#5c6082"
+              placeholderTextColor={theme.textSecondary}
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
               autoCapitalize="none"
             />
             <TextInput
-              style={styles.input}
+              style={[styles.input, { color: theme.text }]}
               placeholder="nome de usuário"
-              placeholderTextColor="#5c6082"
+              placeholderTextColor={theme.textSecondary}
               value={username}
               onChangeText={setUsername}
               autoCapitalize="none"
             />
           </ScrollView>
-          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-            <AppText style={styles.saveButtonText}>salvar</AppText>
+          <TouchableOpacity style={[styles.saveButton, { backgroundColor: theme.button }]} onPress={handleSave}>
+            <AppText style={[styles.saveButtonText, { color: theme.buttonText }]}>salvar</AppText>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <AppText style={styles.backButtonText}>voltar</AppText>
+          <TouchableOpacity style={[styles.backButton, { backgroundColor: theme.button }]} onPress={() => navigation.goBack()}>
+            <AppText style={[styles.backButtonText, { color: theme.buttonText }]}>voltar</AppText>
           </TouchableOpacity>
         </View>
       </ImageBackground>
     </KeyboardAvoidingView>
   );
 }
-
 const styles = StyleSheet.create({
   background: {
     flex: 1,
@@ -189,4 +190,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontFamily: 'Poppins',
   },
-}); 
+});
+
+export default EditProfileScreen;

@@ -1,9 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Dimensions, Switch } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Dimensions, Switch, ImageBackground } from 'react-native';
 import { useTheme } from './ThemeContext';
 import AppText from './AppText';
+import plainbg from '../assets/plainbg.png';
+import loginbg from '../assets/loginbg.png';
+import registrobg from '../assets/registrobg.png';
+import quotebg from '../assets/quotebg.png';
+import bgdark from '../assets/bgdark.png';
+import bgdark2 from '../assets/bgdark2.png';
+import registrobgdark from '../assets/registrobgdark.png';
+import quotebgdark from '../assets/quotebgdark.png';
 
 const { width } = Dimensions.get('window');
+
+function getBackground(theme, screen) {
+  if (theme.mode === 'dark') {
+    switch (screen) {
+      case 'login': return bgdark;
+      case 'registro': return registrobgdark;
+      case 'quote': return quotebgdark;
+      case 'dashboard': return bgdark2;
+      default: return bgdark;
+    }
+  } else {
+    switch (screen) {
+      case 'login': return loginbg;
+      case 'registro': return registrobg;
+      case 'quote': return quotebg;
+      case 'dashboard': return plainbg;
+      default: return plainbg;
+    }
+  }
+}
 
 export default function ConfigScreen({ navigation }) {
   const { theme, toggleTheme } = useTheme();
@@ -18,10 +46,12 @@ export default function ConfigScreen({ navigation }) {
     setIsDark((prev) => !prev);
   };
 
+  const backgroundImage = getBackground(theme, 'dashboard');
+
   return (
     <ImageBackground
-      source={theme.image}
-      style={[styles.background]}
+      source={backgroundImage}
+      style={[styles.container, { backgroundColor: theme.background }]}
       imageStyle={{ resizeMode: 'cover' }}
     >
       <View style={[styles.card, { backgroundColor: theme.card }]}> 
@@ -44,7 +74,7 @@ export default function ConfigScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  background: {
+  container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -90,4 +120,4 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '400',
   },
-}); 
+});

@@ -1,25 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, StyleSheet, ScrollView, Dimensions, ImageBackground, TouchableOpacity } from 'react-native';
 import AppText from './AppText';
+import { ThemeContext } from './ThemeContext';
 
 const { width } = Dimensions.get('window');
 
 const termsText = `Bem-vindo ao nosso aplicativo!\n\nSua privacidade é importante para nós.\n\n- Não compartilhamos seus dados pessoais com terceiros.\n- Suas informações são usadas apenas para melhorar sua experiência no app.\n- Você pode solicitar a exclusão dos seus dados a qualquer momento.\n\nAo continuar usando o app, você concorda com estes termos.`;
 
-export default function TermsScreen({ navigation }) {
+function TermsScreen({ navigation }) {
+  const { theme } = useContext(ThemeContext);
   return (
     <ImageBackground
-      source={require('../assets/plainbg.png')}
-      style={styles.background}
+      source={theme.mode === 'dark' ? require('../assets/registrobgdark.png') : require('../assets/plainbg.png')}
+      style={[styles.background, { backgroundColor: theme.background }]}
       imageStyle={{ resizeMode: 'cover' }}
     >
-      <View style={styles.card}>
-        <AppText style={styles.title}>Termos de Privacidade</AppText>
+      <View style={[styles.card, { backgroundColor: theme.card }]}> 
+        <AppText style={[styles.title, { color: theme.text }]}>Termos de Privacidade</AppText>
         <ScrollView style={styles.scroll} contentContainerStyle={{paddingBottom: 20}}>
-          <AppText style={styles.termsText}>{termsText}</AppText>
+          <AppText style={[styles.termsText, { color: theme.textSecondary }]}>{termsText}</AppText>
         </ScrollView>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <AppText style={styles.backButtonText}>voltar</AppText>
+        <TouchableOpacity style={[styles.backButton, { backgroundColor: theme.button }]} onPress={() => navigation.goBack()}>
+          <AppText style={[styles.backButtonText, { color: theme.buttonText }]}>voltar</AppText>
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -75,5 +77,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: '#2d304d',
     fontWeight: '400',
-  },
-}); 
+},
+});
+
+export default TermsScreen;

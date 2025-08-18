@@ -18,9 +18,6 @@ export default function LoginScreen({ navigation }) {
       <View style={styles.container}>
         <Image source={require('../assets/logo.png')} style={styles.logo} />
         <AppText style={[styles.subtitle, { color: theme.text }]}>faça login para começar</AppText>
-        <TouchableOpacity style={[styles.buttonPrimary, { backgroundColor: theme.card }]} onPress={() => navigation.navigate('Register')}>
-          <AppText style={[styles.buttonPrimaryText, { color: theme.text }]}>Cadastrar</AppText>
-        </TouchableOpacity>
         <TouchableOpacity style={[styles.buttonPrimary, { backgroundColor: theme.card }]} onPress={() => navigation.navigate('SignIn')}>
           <AppText style={[styles.buttonPrimaryText, { color: theme.text }]}>Entrar</AppText>
         </TouchableOpacity>
@@ -79,4 +76,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  
 });

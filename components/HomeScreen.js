@@ -4,7 +4,12 @@ import CircularSlider from './CircularSlider';
 import { useTheme } from './ThemeContext';
 import AppText from './AppText';
 import Icon from 'react-native-vector-icons/Feather';
-import plainbg from '../assets/plainbg.png';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const getHomeBg = (theme) => theme.mode === 'dark'
+  ? require('../assets/bgdark.png')
+  : require('../assets/plainbg.png');
+
 
 export default function HomeScreen({ navigation }) {
   const { theme } = useTheme();
@@ -27,16 +32,15 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <ImageBackground
-      source={plainbg}
-      style={styles.bg}
+      source={getHomeBg(theme)}
+      style={[styles.bg, { backgroundColor: theme.background }]}
       imageStyle={styles.bgImage}
     >
-      <View style={styles.overlay} />
       {/* Header */}
-      <View style={styles.header}>
+  <View style={[styles.header, { backgroundColor: 'transparent' }]}>
         <View style={styles.headerLeft}>
-          <AppText style={styles.greeting}>Olá User :)</AppText>
-          <AppText style={styles.dateText}>hoje é {diaSemana}, {dataFormatada}</AppText>
+          <AppText style={[styles.greeting, { color: theme.text }]}>Olá User :)</AppText>
+          <AppText style={[styles.dateText, { color: theme.textSecondary }]}>hoje é {diaSemana}, {dataFormatada}</AppText>
         </View>
         <View style={styles.headerRight}>
           <TouchableOpacity style={styles.iconCircle}>
@@ -46,7 +50,7 @@ export default function HomeScreen({ navigation }) {
       </View>
 
       {/* Search Bar */}
-      <View style={styles.floatingCard}>
+      <View style={[styles.floatingCard, { backgroundColor: theme.card }]}>
         <Icon name="search" size={20} color="#fff" style={{ marginRight: 8, opacity: 0.7 }} />
         <TextInput
           placeholder="Pesquisar..."
@@ -56,7 +60,7 @@ export default function HomeScreen({ navigation }) {
       </View>
 
       {/* Card de destaque do dia */}
-      <View style={[styles.floatingCard, styles.featuredCard]}>
+      <View style={[styles.floatingCard, styles.featuredCard, { backgroundColor: theme.card }]}>
         <View style={{ flex: 1 }}>
           <AppText style={styles.featuredTitle}>Frase do Dia</AppText>
           <AppText style={styles.featuredDesc}>Descubra algo novo e interessante</AppText>
@@ -67,11 +71,11 @@ export default function HomeScreen({ navigation }) {
         </View>
       </View>
 
-      {/* CircularSlider estilizado */}
+      {/* CircularSlider  estilizado */}
       <View style={styles.sliderContainer}>
         <CircularSlider
           style={styles.slider}
-          onPress={(key) => {
+          onPress={async (key) => {
             switch (key) {
               case 'Profile':
                 navigation.navigate('Profile');
@@ -101,7 +105,8 @@ export default function HomeScreen({ navigation }) {
                 navigation.navigate('Terms');
                 break;
               case 'Logout':
-                navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
+                await AsyncStorage.removeItem('userToken');
+                navigation.replace('SignIn');
                 break;
               default:
                 break;

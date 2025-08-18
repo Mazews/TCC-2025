@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppLoading from 'expo-app-loading';
+import * as Font from 'expo-font';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack'; // atualizado
 import OnboardingScreen from './components/OnboardingScreen';
 import LoginScreen from './components/LoginScreen';
 import HomeScreen from './components/HomeScreen';
@@ -16,14 +17,23 @@ import QuoteScreen from './components/QuoteScreen';
 import ConfigScreen from './components/ConfigScreen';
 import TermsScreen from './components/TermsScreen';
 import SignInScreen from './components/SignInScreen';
-import RegisterScreen from './components/RegisterScreen';
 import EditProfileScreen from './components/EditProfileScreen';
 import { ThemeProvider } from './components/ThemeContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [fontsLoaded, setFontsLoaded] = React.useState(false);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [initialRoute, setInitialRoute] = useState('Login');
+
+  useEffect(() => {
+    const checkLogin = async () => {
+      const token = await AsyncStorage.getItem('userToken');
+      setInitialRoute(token ? 'Home' : 'SignIn');
+    };
+    checkLogin();
+  }, []);
 
   if (!fontsLoaded) {
     return (
@@ -32,7 +42,6 @@ export default function App() {
           Font.loadAsync({
             'Poppins': require('./assets/fonts/Poppins/Poppins-Regular.ttf'),
             'Poppins-Bold': require('./assets/fonts/Poppins/Poppins-Bold.ttf'),
-            // adicione outras variações se quiser
           })
         }
         onFinish={() => setFontsLoaded(true)}
@@ -41,11 +50,10 @@ export default function App() {
     );
   }
 
-
   return (
     <ThemeProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Onboarding" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName={initialRoute} screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Onboarding" component={OnboardingScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
@@ -61,7 +69,6 @@ export default function App() {
           <Stack.Screen name="Config" component={ConfigScreen} />
           <Stack.Screen name="Terms" component={TermsScreen} />
           <Stack.Screen name="SignIn" component={SignInScreen} />
-          <Stack.Screen name="Register" component={RegisterScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </ThemeProvider>
