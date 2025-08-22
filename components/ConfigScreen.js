@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   card: {
-    width: width > 500 ? 380 : width * 0.55,
+    width: width > 500 ? 380 : width * 0.65,
     borderRadius: 36,
     paddingVertical: 60,
     paddingHorizontal: 24,

@@ -1,7 +1,15 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import AppText from './AppText';
 import Icon from 'react-native-vector-icons/Feather';
+import { useTheme } from './ThemeContext';
+import {wp,RF, hp } from './responsive'; 
+
+const { width } = Dimensions.get('window');
+
+// Tamanho do botão proporcional à tela
+const BUTTON_SIZE = wp(23);  
+const ICON_SIZE = BUTTON_SIZE * 0.3; 
 
 const BUTTONS = [
   { key: 'Profile', label: 'perfil', icon: 'user' },
@@ -17,6 +25,7 @@ const BUTTONS = [
 ];
 
 export default function CircularSlider({ onPress }) {
+  const { theme } = useTheme();
   return (
     <ScrollView
       horizontal
@@ -26,12 +35,12 @@ export default function CircularSlider({ onPress }) {
       {BUTTONS.map((btn) => (
         <View key={btn.key} style={styles.buttonWrapper}>
           <TouchableOpacity
-            style={styles.button}
+            style={[styles.button, { backgroundColor: theme.card }]}
             onPress={() => onPress(btn.key)}
             activeOpacity={0.8}
           >
-            <Icon name={btn.icon} size={32} color="#fff" />
-            <AppText style={styles.buttonLabel}>{btn.label}</AppText>
+            <Icon name={btn.icon} size={ICON_SIZE} color={theme.text} />
+            <AppText style={[styles.buttonLabel, { color: theme.text }]}>{btn.label}</AppText>
           </TouchableOpacity>
         </View>
       ))}
@@ -43,40 +52,30 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    gap: 20,
+    paddingVertical: hp(0),
+    paddingHorizontal: wp(4),
+    gap: 10,
   },
   buttonWrapper: {
     alignItems: 'center',
     justifyContent: 'center',
+    marginHorizontal: wp(2),
   },
   button: {
-    width: 80,
-    height: 80,
-    borderRadius: 24,
-    backgroundColor: 'rgba(255,255,255,0.22)',
+    width: BUTTON_SIZE,
+    height: BUTTON_SIZE,
+    borderRadius: BUTTON_SIZE / 3, 
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 6,
-    shadowColor: '#ffffff42',
+    marginHorizontal: 3,
+    shadowColor: '#000',
     shadowOpacity: 0.10,
     shadowRadius: 8,
-    elevation: 2,
-  },
-  buttonText: {
-    color: '#5c6082',
-    fontSize: 14,
-    fontWeight: 'bold',
-    fontFamily: 'Poppins',
-    textAlign: 'center',
-    marginTop: 6,
   },
   buttonLabel: {
-    color: '#ffffffff',
-    fontSize: 13,
+    fontSize: RF(14),
     fontFamily: 'Poppins',
-    marginTop: 4,
+    marginTop: hp(0.5),
     textAlign: 'center',
   },
 });

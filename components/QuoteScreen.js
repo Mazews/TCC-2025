@@ -115,8 +115,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   subtitle: {
+    fontFamily: 'Poppins',
     fontSize: 32,
-  fontStyle: 'italic',
     marginBottom: 18,
     textAlign: 'center',
     textTransform: 'lowercase',
@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontStyle: 'italic',
     textAlign: 'center',
-    lineHeight: 56,
-    opacity: 0.98,
+    lineHeight: 55,
+    marginBottom: 150
   },
 }); 
 
