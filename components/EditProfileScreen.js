@@ -2,10 +2,12 @@ import React, { useState, useContext } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Image, Dimensions, KeyboardAvoidingView, Platform, ScrollView, ImageBackground } from 'react-native';
 import AppText from './AppText';
 import { ThemeContext } from './ThemeContext';
+import { updateProfile } from './api';
+import { useEffect } from 'react';
 
 const { width } = Dimensions.get('window');
 
-function EditProfileScreen({ navigation }) {
+function EditProfileScreen({ navigation, route }) {
   const { theme } = useContext(ThemeContext);
   const [profilePic, setProfilePic] = useState(null);
   const [nome, setNome] = useState('');
@@ -13,9 +15,28 @@ function EditProfileScreen({ navigation }) {
   const [senha, setSenha] = useState('');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
+  const profile = route?.params?.profile;
+
+  useEffect(() => {
+    if (profile) {
+      setNome(profile.nome || '');
+      setSobrenome(profile.sobrenome || '');
+      setEmail(profile.email || '');
+      setUsername(profile.username || '');
+    }
+  }, [profile]);
 
   const handleSave = () => {
-    alert('Perfil salvo! (integração futura com API)');
+    (async () => {
+      try {
+        const payload = { nome, sobrenome, email, username };
+        await updateProfile(payload);
+        alert('Perfil salvo com sucesso!');
+        navigation.goBack();
+      } catch (e) {
+        alert('Erro ao salvar perfil: ' + (e?.message || 'unknown'));
+      }
+    })();
   };
 
   const handlePickImage = () => {
@@ -84,11 +105,11 @@ function EditProfileScreen({ navigation }) {
             />
 
             {/* Botões */}
-            <TouchableOpacity style={[styles.saveButton, { backgroundColor: theme.button }]} onPress={handleSave}>
-              <AppText style={[styles.saveButtonText, { color: theme.buttonText }]}>salvar</AppText>
+            <TouchableOpacity style={[styles.saveButton, { backgroundColor: theme.card }]} onPress={handleSave}>
+              <AppText style={[styles.saveButtonText, { color: theme.textSecondary }]}>salvar</AppText>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.backButton, { backgroundColor: theme.button }]} onPress={() => navigation.goBack()}>
-              <AppText style={[styles.backButtonText, { color: theme.buttonText }]}>voltar</AppText>
+            <TouchableOpacity style={[styles.backButton, { backgroundColor: theme.card }]} onPress={() => navigation.goBack()}>
+              <AppText style={[styles.backButtonText, { color: theme.textSecondary }]}>voltar</AppText>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -117,6 +138,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 12,
+    borderRadius: 35,
     shadowOffset: { width: 0, height: 6 },
   },
   profilePicContainer: {
@@ -151,14 +173,13 @@ const styles = StyleSheet.create({
   saveButton: {
     width: '90%',
     borderRadius: 22,
-    paddingVertical: 14,
+    paddingVertical: 12,
     alignItems: 'center',
     marginBottom: 12,
   },
   saveButtonText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    fontFamily: 'Poppins',
+    fontSize: 16,
+    fontFamily: 'Poppins-Bold',
   },
   backButton: {
     width: '90%',

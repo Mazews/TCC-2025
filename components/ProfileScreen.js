@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, Dimensions, ScrollView, ImageBackground, Alert } from 'react-native';
 import AppText from './AppText';
 import { ThemeContext } from './ThemeContext';
+import { getProfile } from './api';
+import { useEffect, useState } from 'react';
 
 const { width, height } = Dimensions.get('window');
 
@@ -16,6 +18,23 @@ const ProfileScreen = ({ navigation }) => {
     dataEntrada: '01/01/2024',
     profilePic: require('../assets/profile.png'),
   };
+
+  const [remote, setRemote] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      try {
+        const p = await getProfile();
+        if (p) setRemote(p);
+      } catch (e) {
+        // ignore, will use fallback
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
   const handleLogout = () => {
     Alert.alert(
@@ -41,24 +60,24 @@ const ProfileScreen = ({ navigation }) => {
             <View style={styles.profileHeader}>
               <Image source={profile.profilePic} style={styles.profileIcon} />
               <View style={styles.profileInfo}>
-                <AppText style={[styles.profileName, { color: theme.text }]}>{profile.nome} {profile.sobrenome}</AppText>
-                <AppText style={[styles.profileDate, { color: theme.text }]}>{profile.dataEntrada}</AppText>
-                <AppText style={[styles.profileEmail, { color: theme.text }]}>{profile.email}</AppText>
-                <AppText style={[styles.profileUsername, { color: theme.text }]}>{profile.username}</AppText>
+                  <AppText style={[styles.profileName, { color: theme.text }]}>{remote?.nome || profile.nome} {remote?.sobrenome || profile.sobrenome}</AppText>
+                  <AppText style={[styles.profileDate, { color: theme.text }]}>{remote?.dataEntrada || profile.dataEntrada}</AppText>
+                  <AppText style={[styles.profileEmail, { color: theme.text }]}>{remote?.email || profile.email}</AppText>
+                  <AppText style={[styles.profileUsername, { color: theme.text }]}>{remote?.username || profile.username}</AppText>
               </View>
             </View>
             <View style={styles.buttonList}>
-              <TouchableOpacity style={[styles.button, { color: theme.card }]} onPress={() => navigation.navigate('EditProfileScreen')}>
+              <TouchableOpacity style={[styles.button, { backgroundColor: theme.card }]} onPress={() => navigation.navigate('EditProfileScreen', { profile: remote })}>
                 <AppText style={[styles.buttonText, { color: theme.text }]}>editar perfil</AppText>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, { backgroundColor: theme.button }]} onPress={() => navigation.navigate('Config')}>
+              <TouchableOpacity style={[styles.button, { backgroundColor: theme.card }]} onPress={() => navigation.navigate('Config')}>
                 <AppText style={[styles.buttonText, { color: theme.text }]}>configurações</AppText>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, { backgroundColor: theme.button }]} onPress={handleLogout}>
+              <TouchableOpacity style={[styles.button, { backgroundColor: theme.card }]} onPress={handleLogout}>
                 <AppText style={[styles.buttonText, { color: theme.text }]}>logout</AppText>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity style={[styles.backButton, { backgroundColor: theme.button }]} onPress={() => navigation.goBack()}>
+            <TouchableOpacity style={[styles.backButton, { backgroundColor: theme.card }]} onPress={() => navigation.goBack()}>
               <AppText style={[styles.backButtonText, { color: theme.text }]}>voltar</AppText>
             </TouchableOpacity>
           </View>
