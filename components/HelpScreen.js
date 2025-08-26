@@ -43,7 +43,7 @@ export default function HelpScreen({ navigation }) {
       resizeMode="cover"
     >
       <ScrollView contentContainerStyle={[styles.container]}> 
-        <AppText style={[styles.title, { color: theme.text }]}>
+        <AppText style={[styles.title, { color: theme.textSecondary }]}>
           Contatos úteis para Saúde Mental
         </AppText>
         {CONTACTS.map((contact, idx) => (
@@ -76,26 +76,31 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 26,
-    fontWeight: 'bold',
     marginBottom: 25,
     marginTop: 20,
     textAlign: 'center',
+    fontFamily: 'Poppins-Bold',
   },
   contactBox: {
     borderRadius: 20,
     padding: 18,
     marginBottom: 18,
     width: '100%',
-    shadowColor: '#1e2032',
+    shadowColor: 'rgba(88, 90, 110, 0)',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOpacity: 0,
+    shadowRadius: 0,
     elevation: 2,
    
   },
   contactName: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
+    marginBottom: 10,
+  },
+  contactTitle: {
+    fontSize: 16,
+    marginBottom: 10,
     marginBottom: 6,
   },
   contactDesc: {
@@ -104,7 +109,7 @@ const styles = StyleSheet.create({
   },
   contactPhone: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     textDecorationLine: 'underline',
   },
   button: {
@@ -118,6 +123,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
   },
 });

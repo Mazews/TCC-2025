@@ -73,7 +73,7 @@ export default function HomeScreen({ navigation }) {
         <View style={[styles.header, { backgroundColor: "transparent" }]}>
           <View style={styles.headerLeft}>
             <AppText style={[styles.greeting, { color: theme.text }]}>
-              Olá,
+              Olá, User :)
             </AppText>
 
             <AppText style={[styles.dateText, { color: theme.textSecondary }]}>
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginHorizontal: 30,
     marginBottom: 18,
-    shadowColor: "#ffffff42",
+    shadowColor: "rgba(255, 255, 255, 0)",
     shadowOpacity: 0.1,
     shadowRadius: 12,
     elevation: 2,

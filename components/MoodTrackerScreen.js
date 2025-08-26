@@ -42,11 +42,11 @@ export default function MoodTrackerScreen({ navigation }) {
       resizeMode="cover"
     >
       <View style={{ flex: 1 }}>
-      <TouchableOpacity style={[styles.backButton, { backgroundColor: theme.backButton }]} onPress={() => navigation.goBack()}>
-        <Icon name="chevron-left" size={38} color={theme.text} />
+      <TouchableOpacity style={[styles.backButton, { backgroundColor: theme.card }]} onPress={() => navigation.goBack()}>
+        <Icon name="chevron-left" size={38} color={theme.textSecondary} />
       </TouchableOpacity>
         <View style={[styles.container, { backgroundColor: 'transparent' }]}> 
-          <AppText style={[styles.title, { color: theme.text }]}>Como está se sentindo hoje?</AppText>
+          <AppText style={[styles.title, { color: theme.textSecondary }]}>Como está {"\n"}se sentindo hoje?</AppText>
           <EmojiSelector selected={selected} onSelect={handleSelect} />
           <TextInput
             style={styles.input}
@@ -60,6 +60,7 @@ export default function MoodTrackerScreen({ navigation }) {
             <AppText style={styles.buttonText}>Enviar</AppText>
           </TouchableOpacity>
           <View style={styles.organicShape1} />
+           <View style={styles.organicShape2} />
         </View>
       </View>
     </ImageBackground>
@@ -71,38 +72,40 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'transparent',
     alignItems: 'center',
-    paddingTop: 60,
+    paddingTop: 140,
     position: 'relative',
   },
   title: {
     fontSize: 22,
-    color: '#5c6082',
-    fontWeight: 'bold',
+    color: 'rgba(92, 96, 130, 1)',
+    fontFamily: 'Poppins-Bold',
     marginBottom: 10,
+    marginHorizontal: 20,
   },
   input: {
-    width: '85%',
+    width: '75%',
     minHeight: 60,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'rgba(245, 245, 245, 1)',
     borderRadius: 18,
-    padding: 14,
+    padding: 15,
     fontSize: 16,
-    color: '#5c6082',
+    fontFamily: 'Poppins',
+    color: 'rgba(92, 96, 130, 1)',
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#5c6082',
+    borderColor: 'rgba(92, 96, 130, 1)',
   },
   button: {
-    backgroundColor: '#5c6082',
+    backgroundColor: 'rgba(92, 96, 130, 1)',
     paddingVertical: 14,
     paddingHorizontal: 60,
     borderRadius: 30,
     marginTop: 10,
   },
   buttonText: {
-    color: '#fff',
+    color: 'rgba(255, 255, 255, 1)',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins',
   },
   organicShape1: {
     position: 'absolute',
@@ -110,9 +113,20 @@ const styles = StyleSheet.create({
     left: -120,
     width: 300,
     height: 300,
-    backgroundColor: '#5c6082',
+    backgroundColor: 'rgba(92, 96, 130, 1)',
     borderRadius: 200,
-    opacity: 0.08,
+    opacity: 0.5,
+    zIndex: 0,
+    },
+  organicShape2: {
+    position: 'absolute',
+    bottom: 700,
+    left: 200,
+    width: 300,
+    height: 300,
+    backgroundColor: 'rgba(92, 96, 130, 1)',
+    borderRadius: 200,
+    opacity: 0.5,
     zIndex: 0,
   },
   backButton: {
@@ -120,8 +134,9 @@ const styles = StyleSheet.create({
     top: 40,
     left: 20,
     zIndex: 100,
-    backgroundColor: 'rgba(255,255,255,0.7)',
+    backgroundColor: 'rgba(255, 255, 255, 0)',
     borderRadius: 30,
+    shadowColor: 'rgba(92, 96, 130, 0)',
     padding: 8,
     elevation: 4,
   },

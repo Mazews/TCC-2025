@@ -14,7 +14,7 @@ export default function GuideScreen({ navigation }) {
       resizeMode="cover"
     >
       <ScrollView contentContainerStyle={[styles.container]}> 
-        <AppText style={[styles.title, { color: theme.text }]}>Guia do Usuário</AppText>
+        <AppText style={[styles.title, { color: theme.textSecondary }]}>Guia do Usuário</AppText>
         <View style={[styles.guideBox, { backgroundColor: theme.card }]}> 
           <AppText style={[styles.guideTitle, { color: theme.text }]}>Como registrar seu humor</AppText>
           <AppText style={[styles.guideText, { color: theme.textSecondary }]}>1. Toque no botão "REGISTRE SEU HUMOR" na tela principal do mood tracker. {'\n'}2. Escolha as emoções que está sentindo no momento. {'\n'}3. Salve seu registro.</AppText>
@@ -23,7 +23,7 @@ export default function GuideScreen({ navigation }) {
           <AppText style={[styles.guideTitle, { color: theme.text }]}>Como visualizar o diário de humor</AppText>
           <AppText style={[styles.guideText, { color: theme.textSecondary }]}>1. Toque no botão "DIÁRIO DE HUMOR" na tela principal do mood tracker. {'\n'}2. Veja seus registros recentes e gráficos semanais/mensais.</AppText>
         </View>
-        <TouchableOpacity style={[styles.button, { backgroundColor: theme.switchThumb }]} onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={[styles.button, { backgroundColor: theme.card }]} onPress={() => navigation.goBack()}>
           <AppText style={[styles.buttonText, { color: theme.text }]}>Voltar</AppText>
         </TouchableOpacity>
       </ScrollView>
@@ -33,7 +33,7 @@ export default function GuideScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 24,
+    padding: 30,
     alignItems: 'center',
     flexGrow: 1,
   },
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 25,
-    marginTop: 20,
+    marginTop: 50,
     textAlign: 'center',
   },
   guideBox: {

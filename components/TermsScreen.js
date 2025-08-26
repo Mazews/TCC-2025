@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 26,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     color: '#2d304d',
     marginBottom: 32,
   },
