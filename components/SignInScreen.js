@@ -1,80 +1,97 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ImageBackground, Dimensions, ActivityIndicator, Alert, Platform } from 'react-native';
-import AppText from './AppText';
-import { useTheme } from './ThemeContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  Image,
+  ImageBackground,
+  Dimensions,
+  ActivityIndicator,
+  Alert,
+  Platform,
+} from "react-native";
+import AppText from "./AppText";
+import { useTheme } from "./ThemeContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const { width } = Dimensions.get('window');
-const getSignInBg = (theme) => theme.mode === 'dark'
-  ? require('../assets/bgdark2.png')
-  : require('../assets/loginbg.png');
+const { width } = Dimensions.get("window");
+const getSignInBg = (theme) =>
+  theme.mode === "dark"
+    ? require("../assets/bgdark2.png")
+    : require("../assets/loginbg.png");
 
 export default function SignInScreen({ navigation }) {
-    const { theme } = useTheme();
-    const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
-    const [loading, setLoading] = useState(false);
+  const { theme } = useTheme();
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [loading, setLoading] = useState(false);
 
-    const API_BASE_URL =
-      Platform.OS === 'android'
-        ? 'https://backend-feelflow-core.onrender.com/custumers/login'
-        : 'https://backend-feelflow-core.onrender.com/custumers/login';
+  const API_BASE_URL =
+    Platform.OS === "android"
+      ? "https://backend-feelflow-core.onrender.com"
+      : "https://backend-feelflow-core.onrender.com";
 
-    const handleLogin = async () => {
-      if (!email.trim() || !senha.trim()) {
-        Alert.alert('Erro', 'Por favor, preencha todos os campos');
-        return;
+  const handleLogin = async () => {
+    if (!email.trim() || !senha.trim()) {
+      Alert.alert("Erro", "Por favor, preencha todos os campos");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      console.log(
+        "Enviando requisição para:",
+        `${API_BASE_URL}/custumers/login`
+      );
+
+      const response = await fetch(`${API_BASE_URL}/custumers/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          email: email.trim().toLowerCase(),
+          password: senha,
+          mobile: true,
+        }),
+      });
+
+      console.log("Status da resposta:", response.status);
+
+      const data = await response.json();
+      console.log("Resposta completa da API:", data);
+
+      if (!response.ok) {
+        throw new Error(data.msg || "Erro na autenticação");
       }
 
-      setLoading(true);
-
-      try {
-        console.log('Enviando requisição para:', `${API_BASE_URL}/auth/login`);
-
-        const response = await fetch(`${API_BASE_URL}/auth/login`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-          body: JSON.stringify({
-            email: email.trim().toLowerCase(),
-            password: senha,
-          }),
-        });
-
-        console.log('Status da resposta:', response.status);
-
-        const data = await response.json();
-        console.log('Resposta completa da API:', data);
-
-        if (!response.ok) {
-          throw new Error(data.msg || 'Erro na autenticação');
-        }
-
-        if (data.msg && data.msg.includes('sucesso')) {
-          // Salva o login para persistência
-          await AsyncStorage.setItem('userToken', data.token || email);
-          navigation.replace('Home');
-        } else {
-          Alert.alert('Erro', data.msg || 'Credenciais inválidas');
-        }
-      } catch (error) {
-        console.error('Erro completo:', error);
-        Alert.alert('Erro', error.message || 'Erro de conexão com o servidor');
-      } finally {
-        setLoading(false);
+      if (data.msg && data.msg.includes("sucesso")) {
+        // Salva o login para persistência
+        await AsyncStorage.setItem("userToken", data.token);
+        navigation.replace("Home");
+      } else {
+        Alert.alert("Erro", data.msg || "Credenciais inválidas");
       }
-    };
+    } catch (error) {
+      console.error("Erro completo:", error);
+      Alert.alert("Erro", error.message || "Erro de conexão com o servidor");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return (
-      <ImageBackground
-        source={getSignInBg(theme)}
-        style={styles.background}
-        resizeMode="cover"
-      >
+  return (
+    <ImageBackground
+      source={getSignInBg(theme)}
+      style={styles.background}
+      resizeMode="cover"
+    >
       <View style={styles.topContent}>
-        <Image source={require('../assets/logo.png')} style={styles.logo} />
+        <Image source={require("../assets/logo.png")} style={styles.logo} />
         <AppText style={styles.title}>Bem vindo (a) de{"\n"}volta!</AppText>
       </View>
       <View style={styles.card}>
@@ -99,10 +116,18 @@ export default function SignInScreen({ navigation }) {
         />
       </View>
       <View style={styles.bottomRow}>
-        <TouchableOpacity style={[styles.button, loading && { opacity: 0.7 }]} onPress={() => navigation.goBack()} disabled={loading}>
+        <TouchableOpacity
+          style={[styles.button, loading && { opacity: 0.7 }]}
+          onPress={() => navigation.goBack()}
+          disabled={loading}
+        >
           <AppText style={styles.buttonText}>voltar</AppText>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, loading && { opacity: 0.7 }]} onPress={handleLogin} disabled={loading}>
+        <TouchableOpacity
+          style={[styles.button, loading && { opacity: 0.7 }]}
+          onPress={handleLogin}
+          disabled={loading}
+        >
           {loading ? (
             <ActivityIndicator color="#fff" size="small" />
           ) : (
@@ -117,13 +142,13 @@ export default function SignInScreen({ navigation }) {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    width: "100%",
+    height: "100%",
+    justifyContent: "flex-start",
+    alignItems: "center",
   },
   topContent: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 100,
     marginBottom: 30,
   },
@@ -132,62 +157,62 @@ const styles = StyleSheet.create({
     height: 110,
     marginBottom: 15,
     marginTop: 100,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   title: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 32,
-    fontWeight: '400',
-    textAlign: 'center',
+    fontWeight: "400",
+    textAlign: "center",
     marginBottom: 10,
-    fontFamily: 'Poppins',
+    fontFamily: "Poppins",
   },
   card: {
     width: width > 500 ? 400 : width * 0.75,
-    backgroundColor: 'rgba(255,255,255,0.32)',
+    backgroundColor: "rgba(255,255,255,0.32)",
     borderRadius: 40,
     paddingVertical: 20,
     paddingHorizontal: 16,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: -10,
     marginBottom: 60,
   },
   input: {
-    width: '90%',
-    backgroundColor: 'rgba(255,255,255,0.85)',
+    width: "90%",
+    backgroundColor: "rgba(255,255,255,0.85)",
     borderRadius: 32,
     padding: 16,
     marginBottom: 18,
     fontSize: 18,
-    color: '#7a8ca4',
-    fontWeight: '400',
-    fontFamily: 'Poppins',
+    color: "#7a8ca4",
+    fontWeight: "400",
+    fontFamily: "Poppins",
   },
   bottomRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    position: 'absolute',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    position: "absolute",
     bottom: 40,
     left: 0,
     right: 0,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   button: {
-    width: width > 500 ? 220 : '44%',
-    backgroundColor: 'rgba(255,255,255,0.5)',
+    width: width > 500 ? 220 : "44%",
+    backgroundColor: "rgba(255,255,255,0.5)",
     borderRadius: 32,
     paddingVertical: 20,
-    alignItems: 'center',
+    alignItems: "center",
     marginHorizontal: 10,
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    textTransform: 'lowercase',
-    fontFamily: 'Poppins',
+    fontWeight: "bold",
+    textAlign: "center",
+    textTransform: "lowercase",
+    fontFamily: "Poppins",
   },
 });
