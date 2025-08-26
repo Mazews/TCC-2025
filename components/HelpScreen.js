@@ -59,7 +59,7 @@ export default function HelpScreen({ navigation }) {
             </View>
           </View>
         ))}
-        <TouchableOpacity style={[styles.button, { backgroundColor: theme.switchThumb }]} onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={[styles.button, { backgroundColor: theme.switchThumb2 }]} onPress={() => navigation.goBack()}>
           <AppText style={[styles.buttonText, { color: theme.text }]}>Voltar</AppText>
         </TouchableOpacity>
       </ScrollView>
@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
     padding: 24,
     alignItems: 'center',
     flexGrow: 1,
+    
   },
   title: {
     fontSize: 26,
@@ -85,12 +86,12 @@ const styles = StyleSheet.create({
     padding: 18,
     marginBottom: 18,
     width: '100%',
-    shadowColor: '#000',
+    shadowColor: '#1e2032',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
+    shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
-    opacity: 0.5,
+   
   },
   contactName: {
     fontSize: 18,
@@ -110,9 +111,10 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     paddingVertical: 14,
     paddingHorizontal: 60,
-    marginTop: 20,
+    marginTop: 10,
+    marginBottom: 30,
     alignSelf: 'center',
-    opacity: 0.5,
+
   },
   buttonText: {
     fontSize: 18,

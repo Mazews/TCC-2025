@@ -1,15 +1,15 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, ScrollView, ImageBackground, Alert } from 'react-native';
+import React, { useContext } from 'react';
+import { View, StyleSheet, TouchableOpacity, Image, Dimensions, ScrollView, ImageBackground, Alert } from 'react-native';
 import AppText from './AppText';
 import { ThemeContext } from './ThemeContext';
+import { getProfile } from './api';
+import { useEffect, useState } from 'react';
 
 const { width, height } = Dimensions.get('window');
-const isSmallScreen = width < 370;
 
-  const ProfileScreen = ({ navigation }) => { 
-const { theme } = React.useContext(ThemeContext);
+const ProfileScreen = ({ navigation }) => { 
+  const { theme } = useContext(ThemeContext);
 
-  // Mock de dados do perfil (substituir por dados reais da API futuramente)
   const profile = {
     nome: 'José Maria',
     sobrenome: 'Silva',
@@ -18,6 +18,23 @@ const { theme } = React.useContext(ThemeContext);
     dataEntrada: '01/01/2024',
     profilePic: require('../assets/profile.png'),
   };
+
+  const [remote, setRemote] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      try {
+        const p = await getProfile();
+        if (p) setRemote(p);
+      } catch (e) {
+        // ignore, will use fallback
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
   const handleLogout = () => {
     Alert.alert(
@@ -34,38 +51,37 @@ const { theme } = React.useContext(ThemeContext);
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       <ImageBackground
-        source={theme.mode === 'dark' ? require('../assets/registrobgdark.png') : require('../assets/plainbg.png')}
+        source={theme.mode === 'dark' ? require('../assets/bgdark2.png') : require('../assets/plainbg.png')}
         style={[styles.background, { backgroundColor: theme.background }]}
         imageStyle={{ resizeMode: 'cover' }}
       >
-  <View style={[styles.card, isSmallScreen && styles.cardSmall, { backgroundColor: theme.card }]}> 
-          <View style={styles.profileHeader}>
-            <Image
-              source={profile.profilePic}
-              style={[styles.profileIcon, isSmallScreen && styles.profileIconSmall]}
-            />
-            <View style={styles.profileInfo}>
-              <AppText style={[styles.profileName, isSmallScreen && styles.profileNameSmall, { color: theme.text }]}>{profile.nome} {profile.sobrenome}</AppText>
-              <AppText style={[styles.profileDate, isSmallScreen && styles.profileDateSmall, { color: theme.text }]}>{profile.dataEntrada}</AppText>
-              <AppText style={[styles.profileEmail, { color: theme.text }]}>{profile.email}</AppText>
-              <AppText style={[styles.profileUsername, { color: theme.text }]}>{profile.username}</AppText>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <View style={[styles.card, { backgroundColor: theme.card }]}> 
+            <View style={styles.profileHeader}>
+              <Image source={profile.profilePic} style={styles.profileIcon} />
+              <View style={styles.profileInfo}>
+                  <AppText style={[styles.profileName, { color: theme.text }]}>{remote?.nome || profile.nome} {remote?.sobrenome || profile.sobrenome}</AppText>
+                  <AppText style={[styles.profileDate, { color: theme.text }]}>{remote?.dataEntrada || profile.dataEntrada}</AppText>
+                  <AppText style={[styles.profileEmail, { color: theme.text }]}>{remote?.email || profile.email}</AppText>
+                  <AppText style={[styles.profileUsername, { color: theme.text }]}>{remote?.username || profile.username}</AppText>
+              </View>
             </View>
+            <View style={styles.buttonList}>
+              <TouchableOpacity style={[styles.button, { backgroundColor: theme.card }]} onPress={() => navigation.navigate('EditProfileScreen', { profile: remote })}>
+                <AppText style={[styles.buttonText, { color: theme.text }]}>editar perfil</AppText>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.button, { backgroundColor: theme.card }]} onPress={() => navigation.navigate('Config')}>
+                <AppText style={[styles.buttonText, { color: theme.text }]}>configurações</AppText>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.button, { backgroundColor: theme.card }]} onPress={handleLogout}>
+                <AppText style={[styles.buttonText, { color: theme.text }]}>logout</AppText>
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity style={[styles.backButton, { backgroundColor: theme.card }]} onPress={() => navigation.goBack()}>
+              <AppText style={[styles.backButtonText, { color: theme.text }]}>voltar</AppText>
+            </TouchableOpacity>
           </View>
-          <View style={styles.buttonList}>
-            <TouchableOpacity style={[styles.button, isSmallScreen && styles.buttonSmall, { backgroundColor: theme.button }]} onPress={() => navigation.navigate('EditProfileScreen')}>
-              <AppText style={[styles.buttonText, isSmallScreen && styles.buttonTextSmall, { color: theme.buttonText }]}>editar perfil</AppText>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, isSmallScreen && styles.buttonSmall, { backgroundColor: theme.button }]} onPress={() => navigation.navigate('Config')}>
-              <AppText style={[styles.buttonText, isSmallScreen && styles.buttonTextSmall, { color: theme.buttonText }]}>configurações</AppText>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, isSmallScreen && styles.buttonSmall, { backgroundColor: theme.button }]} onPress={handleLogout}>
-              <AppText style={[styles.buttonText, isSmallScreen && styles.buttonTextSmall, { color: theme.buttonText }]}>logout</AppText>
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity style={[styles.backButton, isSmallScreen && styles.backButtonSmall, { backgroundColor: theme.button }]} onPress={() => navigation.goBack()}>
-            <AppText style={[styles.backButtonText, isSmallScreen && styles.backButtonTextSmall, { color: theme.buttonText }]}>voltar</AppText>
-          </TouchableOpacity>
-        </View>
+        </ScrollView>
       </ImageBackground>
     </View>
   );
@@ -74,151 +90,68 @@ const { theme } = React.useContext(ThemeContext);
 export default ProfileScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  background: {
-    flex: 1,
+  container: { flex: 1 },
+  background: { flex: 1 },
+  scrollContent: {
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingVertical: 40,
   },
   card: {
-    width: width > 500 ? 380 : width * 0.55,
-    backgroundColor: 'rgba(255,255,255,0.5)',
-    borderRadius: 36,
-    paddingVertical: 60,
-    paddingHorizontal: 24,
+    width: width * 0.9,       
+    borderRadius: 24,
+    paddingVertical: 30,
+    paddingHorizontal: 20,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOpacity: 0.10,
-    shadowRadius: 18,
+    shadowRadius: 10,
     shadowOffset: { width: 0, height: 6 },
-    maxWidth: 400,
-  },
-  cardSmall: {
-    width: width * 0.85,
-    borderRadius: 22,
-    paddingVertical: 36,
-    paddingHorizontal: 6,
   },
   profileHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 32,
     width: '100%',
-    justifyContent: 'flex-start',
-    paddingLeft: 18,
   },
   profileIcon: {
-    width: 110,
-    height: 110,
-    borderRadius: 55,
-    borderWidth: 5,
+    width: width * 0.25,       
+    height: width * 0.25,
+    borderRadius: width * 0.125,
+    borderWidth: 3,
     borderColor: '#2d304d',
     resizeMode: 'contain',
     marginRight: 18,
   },
-  profileIconSmall: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    borderWidth: 3,
-    marginRight: 8,
-  },
-  profileInfo: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  profileName: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    color: '#2d304d',
-    textAlign: 'left',
-  },
-  profileNameSmall: {
-    fontSize: 17,
-  },
-  profileDate: {
-    fontSize: 17,
-    color: '#5c6082',
-    marginTop: 2,
-    textAlign: 'left',
-  },
-  profileDateSmall: {
-    fontSize: 13,
-  },
-  buttonList: {
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
+  profileInfo: { flex: 1 },
+  profileName: { fontSize: 22, fontFamily: 'Poppins-Bold', },
+  profileDate: { fontSize: 14, marginTop: 2, fontFamily: 'Poppins', },
+  profileEmail: { fontSize: 14, marginTop: 2, fontFamily: 'Poppins', },
+  profileUsername: { fontSize: 13, marginTop: 2, fontFamily: 'Poppins', },
+  buttonList: { width: '100%', alignItems: 'center', marginBottom: 20 },
   button: {
-    width: '92%',
-    backgroundColor: 'rgba(255,255,255,0.75)',
-    borderRadius: 32,
-    paddingVertical: 20,
-    marginBottom: 18,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    paddingLeft: 32,
-    shadowColor: '#000',
-    shadowOpacity: 0.04,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
-  },
-  buttonSmall: {
-    borderRadius: 18,
-    paddingVertical: 12,
-    paddingLeft: 16,
-    marginBottom: 10,
+    width: '100%',
+    borderRadius: 20,
+    paddingVertical: 16,
+    marginBottom: 12,
+    paddingLeft: 20,
   },
   buttonText: {
-    fontSize: 22,
-    color: '#2d304d',
-    fontWeight: '400',
-  },
-  buttonTextSmall: {
-    fontSize: 15,
-  },
+    fontFamily: 'Poppins',
+     fontSize: 16 
+    },
+
   backButton: {
     width: '60%',
-    backgroundColor: 'rgba(255,255,255,0.9)',
-    borderRadius: 32,
-    paddingVertical: 18,
+    borderRadius: 20,
+    paddingVertical: 14,
     alignItems: 'center',
-    alignSelf: 'center',
     marginTop: 8,
-    marginBottom: 0,
-  },
-  backButtonSmall: {
-    width: '80%',
-    borderRadius: 18,
-    paddingVertical: 10,
   },
   backButtonText: {
-    fontSize: 22,
-    color: '#2d304d',
-    fontWeight: '400',
-  },
-  backButtonTextSmall: {
-    fontSize: 15,
-  },
-  profileEmail: {
-    fontSize: 15,
-    color: '#5c6082',
-    marginTop: 2,
-    textAlign: 'left',
-  },
-  profileUsername: {
-    fontSize: 15,
-    color: '#5c6082',
-    marginTop: 2,
-    textAlign: 'left',
-    fontStyle: 'italic',
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 24,
-  },
+    fontFamily: 'Poppins',
+    fontSize: 16,
+     fontWeight: '500' 
+    },
 });

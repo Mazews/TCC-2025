@@ -12,5 +12,7 @@ export default function AppText({ style, children, ...props }) {
 const styles = StyleSheet.create({
   text: {
     fontFamily: 'Poppins-Regular',
+    fontFamily: 'Poppins-Bold',
+    fontStyle: 'Italic',
   },
 });

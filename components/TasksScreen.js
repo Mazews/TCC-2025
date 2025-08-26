@@ -4,6 +4,7 @@ import AppText from './AppText';
 import { useTheme } from './ThemeContext';
 
 const { width, height } = Dimensions.get('window');
+const getTasksBg = theme => theme.tasksImage || (theme.mode === 'dark' ? require('../assets/bgdark2.png') : require('../assets/loginbg.png'));
 
 export default function TasksScreen({ navigation }) {
   const { theme } = useTheme();
@@ -12,7 +13,7 @@ export default function TasksScreen({ navigation }) {
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       <ImageBackground
-        source={require('../assets/plainbg.png')}
+        source={getTasksBg(theme)}
         style={styles.background}
         imageStyle={{ resizeMode: 'cover' }}
       >
@@ -27,8 +28,8 @@ export default function TasksScreen({ navigation }) {
               </View>
             ))
           )}
-          <TouchableOpacity style={[styles.backButton, { backgroundColor: theme.button }]} onPress={() => navigation.goBack()}>
-            <AppText style={[styles.backButtonText, { color: theme.buttonText }]}>voltar</AppText>
+          <TouchableOpacity style={[styles.backButton, { backgroundColor: theme.switchThumb2 }]} onPress={() => navigation.goBack()}>
+            <AppText style={[styles.backButtonText, { color: theme.text }]}>voltar</AppText>
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -57,11 +58,12 @@ const styles = StyleSheet.create({
     maxWidth: 400,
   },
   title: {
+    fontFamily: 'Poppins-Bold',
     fontSize: 26,
-    fontWeight: 'bold',
     marginBottom: 32,
   },
   emptyText: {
+    fontFamily: 'Poppins',
     fontSize: 18,
     marginBottom: 32,
     textAlign: 'center',
@@ -84,6 +86,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   backButtonText: {
+    fontFamily: 'Poppins',
     fontSize: 22,
     fontWeight: '400',
   },

@@ -5,11 +5,11 @@ import { useTheme } from './ThemeContext';
 import AppText from './AppText';
 import Icon from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { wp, hp, RF } from '../components/responsive'; 
 
 const getHomeBg = (theme) => theme.mode === 'dark'
   ? require('../assets/bgdark.png')
   : require('../assets/plainbg.png');
-
 
 export default function HomeScreen({ navigation }) {
   const { theme } = useTheme();
@@ -37,24 +37,26 @@ export default function HomeScreen({ navigation }) {
       imageStyle={styles.bgImage}
     >
       {/* Header */}
-  <View style={[styles.header, { backgroundColor: 'transparent' }]}>
+      <View style={[styles.header, { backgroundColor: 'transparent' }]}>
         <View style={styles.headerLeft}>
           <AppText style={[styles.greeting, { color: theme.text }]}>Olá User :)</AppText>
-          <AppText style={[styles.dateText, { color: theme.textSecondary }]}>hoje é {diaSemana}, {dataFormatada}</AppText>
+          <AppText style={[styles.dateText, { color: theme.text }]}>
+            hoje é {diaSemana}, {dataFormatada}
+          </AppText>
         </View>
         <View style={styles.headerRight}>
-          <TouchableOpacity style={styles.iconCircle}>
-            <Icon name="bell" size={22} color="#fff" />
+          <TouchableOpacity style={[styles.iconCircle, { backgroundColor: theme.card }]}>
+            <Icon name="bell" size={RF(20)} color={theme.text} />
           </TouchableOpacity>
         </View>
       </View>
 
       {/* Search Bar */}
       <View style={[styles.floatingCard, { backgroundColor: theme.card }]}>
-        <Icon name="search" size={20} color="#fff" style={{ marginRight: 8, opacity: 0.7 }} />
+        <Icon name="search" size={RF(18)} color="#fff" style={{ marginRight: wp(2), opacity: 0.7 }} />
         <TextInput
           placeholder="Pesquisar..."
-          placeholderTextColor="#fff"
+          placeholderTextColor={theme.textSecondary}
           style={styles.searchInput}
         />
       </View>
@@ -62,16 +64,20 @@ export default function HomeScreen({ navigation }) {
       {/* Card de destaque do dia */}
       <View style={[styles.floatingCard, styles.featuredCard, { backgroundColor: theme.card }]}>
         <View style={{ flex: 1 }}>
-          <AppText style={styles.featuredTitle}>Frase do Dia</AppText>
-          <AppText style={styles.featuredDesc}>Descubra algo novo e interessante</AppText>
-          <View style={styles.exploreBtn}><AppText style={styles.exploreText}>Acessar</AppText></View>
+          <AppText style={[styles.featuredTitle, { color: theme.text }]}>Frase do Dia</AppText>
+          <AppText style={[styles.featuredDesc, { color: theme.textSecondary }]}>
+            Descubra algo novo e interessante
+          </AppText>
+          <View style={[styles.exploreBtn, { backgroundColor: theme.card }]}>
+            <AppText style={[styles.exploreText, { color: theme.text }]}>Acessar</AppText>
+          </View>
         </View>
-        <View style={styles.featuredIconBox}>
-          <Icon name="star" size={28} color="#fff" />
+        <View style={[styles.featuredIconBox, { color: theme.card }]}>
+          <Icon name="star" size={RF(24)} color={theme.text} />
         </View>
       </View>
 
-      {/* CircularSlider  estilizado */}
+      {/* CircularSlider estilizado */}
       <View style={styles.sliderContainer}>
         <CircularSlider
           style={styles.slider}
@@ -114,24 +120,30 @@ export default function HomeScreen({ navigation }) {
           }}
         />
       </View>
+
       {/* Atividades Recentes */}
       <View style={styles.activitiesSection}>
-        <AppText style={styles.activitiesTitle}>Atividades Recentes</AppText>
-        <View style={styles.activityCard}>
-          <View style={styles.activityIconA}><AppText style={styles.activityIconText}>A</AppText></View>
-          <View style={{ flex: 1 }}>
-            <AppText style={styles.activityTitle}>Atividade Recente</AppText>
-            <AppText style={styles.activityTime}>Há 2 horas</AppText>
+        <AppText style={[styles.activitiesTitle, { color: theme.text }]}>Atividades Recentes</AppText>
+        <View style={[styles.activityCard, { backgroundColor: theme.card }]}>
+          <View style={[styles.activityIconA]}>
+            <AppText style={[styles.activityIconText, { color: theme.text }]}>A</AppText>
           </View>
-          <View style={styles.activityStatusA} />
+          <View style={{ flex: 1 }}>
+            <AppText style={[styles.activityTitle, { color: theme.text }]}>Atividade Recente</AppText>
+            <AppText style={[styles.activityTime, { color: theme.textSecondary }]}>Há 2 horas</AppText>
+          </View>
+          <View style={[styles.activityStatusA]} />
         </View>
-        <View style={styles.activityCard}>
-          <View style={styles.activityIconB}><AppText style={styles.activityIconText}>B</AppText></View>
-          <View style={{ flex: 1 }}>
-            <AppText style={styles.activityTitle}>Outra Atividade</AppText>
-            <AppText style={styles.activityTime}>Ontem</AppText>
+
+        <View style={[styles.activityCard, { backgroundColor: theme.card }]}>
+          <View style={[styles.activityIconB]}>
+            <AppText style={[styles.activityIconText, { color: theme.text }]}>B</AppText>
           </View>
-          <View style={styles.activityStatusB} />
+          <View style={{ flex: 1 }}>
+            <AppText style={[styles.activityTitle, { color: theme.text }]}>Outra Atividade</AppText>
+            <AppText style={[styles.activityTime, { color: theme.textSecondary }]}>Ontem</AppText>
+          </View>
+          <View style={[styles.activityStatusB]} />
         </View>
       </View>
     </ImageBackground>
@@ -139,209 +151,170 @@ export default function HomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  bg: {
-    flex: 1,
-  },
+  bg: { flex: 1 },
   bgImage: {
-    resizeMode: 'cover',
-    width: '100%',
-    height: '100%',
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255,255,255,0.10)',
-  },
+     resizeMode: 'cover',
+      width: '100%',
+       height: '100%' 
+      },
+
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 30,
-    paddingTop: 60,
-    marginBottom: 18,
+    paddingHorizontal: wp(8),
+    paddingTop: hp(6),
+    marginBottom: hp(2),
   },
-  headerLeft: {
-    flex: 1,
-  },
-  headerRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
+  headerLeft: { flex: 1 },
+  headerRight: { flexDirection: 'row', alignItems: 'center', gap: wp(3) },
+
   iconCircle: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: 'rgba(255,255,255,0.20)',
+    width: wp(14),
+    height: wp(14),
+    borderRadius: wp(7),
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 10,
+    marginLeft: wp(2),
   },
+
   greeting: {
-    fontSize: 36,
+    fontSize: RF(28),
     fontWeight: '400',
-    marginBottom: 4,
-    color: '#fff',
-    fontFamily: 'Poppins',
+    marginBottom: hp(0.5),
+    marginTop: hp(2),
+    fontFamily: 'Poppins-Bold',
     letterSpacing: 0.5,
   },
   dateText: {
-    fontSize: 20,
-    color: '#fff',
-    fontFamily: 'Poppins',
-    opacity: 0.85,
-    marginBottom: 0,
-  },
+     fontSize: RF(16)
+     , opacity: 0.85,
+      fontFamily: 'Poppins' 
+    },
+
   floatingCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.20)',
-    borderRadius: 24,
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    marginHorizontal: 30,
-    marginBottom: 18,
-    shadowColor: '#ffffff42',
-    shadowOpacity: 0.10,
-    shadowRadius: 12,
+    borderRadius: wp(6),
+    paddingVertical: hp(1),
+    paddingHorizontal: wp(5),
+    marginHorizontal: wp(8),
+    marginBottom: hp(2),
+    shadowColor: 'rgba(255, 255, 255, 0)',
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
     elevation: 2,
   },
   searchInput: {
     flex: 1,
-    color: '#fff',
-    fontSize: 18,
+    color: 'rgba(255, 255, 255, 1)',
+    fontSize: RF(16),
     fontFamily: 'Poppins',
-    backgroundColor: 'transparent',
-    borderWidth: 0,
-    padding: 0,
   },
+
   featuredCard: {
-    backgroundColor: 'rgba(255,255,255,0.25)',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 28,
+    marginBottom: hp(3),
+    borderRadius: wp(6),
   },
   featuredTitle: {
-    color: '#fff',
-    fontSize: 22,
-    fontWeight: '600',
-    marginBottom: 4,
-    fontFamily: 'Poppins',
-  },
+     fontSize: RF(20),
+     fontWeight: '600',
+     fontFamily: 'Poppins', 
+    marginTop: hp(1),
+    },
+
   featuredDesc: {
-    color: '#fff',
-    fontSize: 16,
-    opacity: 0.8,
-    marginBottom: 10,
-    fontFamily: 'Poppins',
-  },
+     fontSize: RF(14), 
+     opacity: 0.8, 
+     fontFamily: 'Poppins', 
+    marginBottom: hp(1),
+    },
+
   exploreBtn: {
-    backgroundColor: 'rgba(255,255,255,0.20)',
-    borderRadius: 16,
-    paddingHorizontal: 18,
-    paddingVertical: 6,
+    borderRadius: wp(4),
+    paddingHorizontal: wp(6),
+    paddingVertical: hp(1),
     alignSelf: 'flex-start',
+    marginBottom: hp(1),
   },
   exploreText: {
-    color: '#fff',
-    fontWeight: '500',
-    fontSize: 15,
-    fontFamily: 'Poppins',
-  },
+     fontWeight: '500',
+      fontSize: RF(13),
+       fontFamily: 'Poppins' 
+      },
+
   featuredIconBox: {
-    width: 64,
-    height: 64,
-    borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    width: wp(16),
+    height: wp(16),
+    borderRadius: wp(4),
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 18,
+    marginLeft: wp(4),
   },
+
   sliderContainer: {
-    marginTop: -50,
+    marginTop: -hp(5),
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
   },
-  menuTitle: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 10,
-    marginLeft: 10,
-    fontFamily: 'Poppins',
-  },
+
   activitiesSection: {
-    marginTop: -30,
-    marginBottom: 10,
-    paddingHorizontal: 20,
-  },
+     marginTop: -hp(3),
+      marginBottom: -hp(-3),
+       paddingHorizontal: wp(6) 
+      },
+
   activitiesTitle: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 10,
-    fontFamily: 'Poppins',
-  },
+     fontSize: RF(20),
+      fontWeight: '600',
+       marginBottom: hp(2),
+       marginTop: hp(1),
+        fontFamily: 'Poppins-Bold' 
+      },
+
   activityCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.22)',
-    borderRadius: 20,
-    padding: 16,
-    marginBottom: 14,
-    shadowColor: '#ffffff42',
-    shadowOpacity: 0.10,
-    shadowRadius: 8,
-    elevation: 2,
+    borderRadius: wp(5),
+    padding: wp(5),
+    marginBottom: hp(2),
   },
   activityIconA: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
-    backgroundColor: 'rgba(52, 199, 89, 0.18)',
+    width: wp(12),
+    height: wp(12),
+    borderRadius: wp(6),
+    backgroundColor: 'rgba(26, 139, 55, 0.4)',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 14,
+    marginRight: wp(3),
   },
   activityIconB: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
-    backgroundColor: 'rgba(52, 120, 246, 0.18)',
+    width: wp(12),
+    height: wp(12),
+    borderRadius: wp(6),
+      backgroundColor: 'rgba(52, 120, 246, 0.4)',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 14,
+    marginRight: wp(3),
   },
-  activityIconText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 20,
-    fontFamily: 'Poppins',
-  },
-  activityTitle: {
-    color: '#fff',
-    fontWeight: '600',
-    fontSize: 16,
-    fontFamily: 'Poppins',
-  },
-  activityTime: {
-    color: '#fff',
-    opacity: 0.7,
-    fontSize: 13,
-    fontFamily: 'Poppins',
-  },
-  activityStatusA: {
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    backgroundColor: 'rgba(52, 199, 89, 0.38)',
-    marginLeft: 10,
-  },
-  activityStatusB: {
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    backgroundColor: 'rgba(52, 120, 246, 0.38)',
-    marginLeft: 10,
-  },
+  activityIconText: 
+  { fontWeight: 'bold', fontSize: RF(16), fontFamily: 'Poppins' },
+
+  activityTitle: 
+  { fontWeight: '600', fontSize: RF(14), fontFamily: 'Poppins' },
+
+  activityTime: 
+  { opacity: 0.7, fontSize: RF(12), fontFamily: 'Poppins' },
+
+  activityStatusA: 
+  { width: wp(4), height: wp(4), borderRadius: wp(2), marginLeft: wp(2) },
+  backgroundColor: 'rgba(52, 199, 89, 0.4)',
+
+  activityStatusB: 
+  { width: wp(4), height: wp(4), borderRadius: wp(2), marginLeft: wp(2) },
+  backgroundColor: 'rgba(52, 120, 246, 0.4)',
 });
+

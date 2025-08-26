@@ -158,9 +158,9 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   title: {
+    fontFamily: 'Poppins-Bold',
     fontSize: 28,
     color: '#2e192e',
-    fontWeight: 'bold',
     marginBottom: 10,
     alignSelf: 'center',
   },
@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   toggle: {
+    fontFamily: 'Poppins',
     fontSize: 18,
     color: '#5c6082',
     padding: 8,
@@ -186,11 +187,11 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   subtitle: {
+    fontFamily: 'Poppins',
     fontSize: 18,
     color: '#5c6082',
     marginTop: 20,
     marginBottom: 8,
-    fontWeight: 'bold',
   },
   entry: {
     backgroundColor: '#f5f5f5',
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
   },
   entryDate: {
     color: '#2e192e',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
   },
   entryMoods: {
     color: '#5c6082',
@@ -208,7 +209,8 @@ const styles = StyleSheet.create({
   },
   entryNote: {
     color: '#444',
-    fontStyle: 'italic',
+    fontFamily: 'Poppins',
+    
   },
   button: {
     backgroundColor: '#5c6082',

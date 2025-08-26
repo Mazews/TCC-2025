@@ -11,7 +11,7 @@ function TermsScreen({ navigation }) {
   const { theme } = useContext(ThemeContext);
   return (
     <ImageBackground
-      source={theme.mode === 'dark' ? require('../assets/registrobgdark.png') : require('../assets/plainbg.png')}
+      source={theme.mode === 'dark' ? require('../assets/bgdark2.png') : require('../assets/loginbg.png')}
       style={[styles.background, { backgroundColor: theme.background }]}
       imageStyle={{ resizeMode: 'cover' }}
     >
@@ -20,8 +20,8 @@ function TermsScreen({ navigation }) {
         <ScrollView style={styles.scroll} contentContainerStyle={{paddingBottom: 20}}>
           <AppText style={[styles.termsText, { color: theme.textSecondary }]}>{termsText}</AppText>
         </ScrollView>
-        <TouchableOpacity style={[styles.backButton, { backgroundColor: theme.button }]} onPress={() => navigation.goBack()}>
-          <AppText style={[styles.backButtonText, { color: theme.buttonText }]}>voltar</AppText>
+        <TouchableOpacity style={[styles.backButton, { backgroundColor: theme.backButton }]} onPress={() => navigation.goBack()}>
+          <AppText style={[styles.backButtonText, { color: theme.text }]}>voltar</AppText>
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -35,14 +35,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   card: {
-    width: width > 500 ? 380 : width * 0.55,
+    width: width > 500 ? 380 : width * 0.65,
     backgroundColor: 'rgba(255,255,255,0.5)',
     borderRadius: 36,
     paddingVertical: 60,
     paddingHorizontal: 24,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOpacity: 0.10,
+    shadowOpacity: 0,
     shadowRadius: 18,
     shadowOffset: { width: 0, height: 6 },
     maxWidth: 400,

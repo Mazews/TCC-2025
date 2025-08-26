@@ -17,8 +17,8 @@ export default function SignInScreen({ navigation }) {
 
     const API_BASE_URL =
       Platform.OS === 'android'
-        ? 'https://backend-feelflow-core.onrender.com'
-        : 'https://backend-feelflow-core.onrender.com';
+        ? 'https://backend-feelflow-core.onrender.com/custumers/login'
+        : 'https://backend-feelflow-core.onrender.com/custumers/login';
 
     const handleLogin = async () => {
       if (!email.trim() || !senha.trim()) {
