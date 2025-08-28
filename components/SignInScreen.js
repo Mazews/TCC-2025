@@ -42,43 +42,67 @@ export default function SignInScreen({ navigation }) {
     setLoading(true);
 
     try {
-      console.log(
-        "Enviando requisição para:",
-        `${API_BASE_URL}/custumers/login`
-      );
+      // try a set of common login endpoints (original code used /custumers which may be a typo)
+      const endpoints = [
+        `${API_BASE_URL}/custumers/login`,
+        `${API_BASE_URL}/customers/login`,
+        `${API_BASE_URL}/auth/login`,
+        `${API_BASE_URL}/login`,
+      ];
+      let response = null;
+      for (const ep of endpoints) {
+        try {
+          response = await fetch(ep, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify({
+              email: email.trim().toLowerCase(),
+              password: senha,
+              mobile: true,
+            }),
+          });
+          // if we got any response (even 4xx/5xx) stop trying others
+          if (response) break;
+        } catch (e) {
+          // try next endpoint
+        }
+      }
 
-      const response = await fetch(`${API_BASE_URL}/custumers/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          email: email.trim().toLowerCase(),
-          password: senha,
-          mobile: true,
-        }),
-      });
+      if (!response) throw new Error('Nenhuma resposta do servidor');
 
-      console.log("Status da resposta:", response.status);
+      console.log('Status da resposta:', response.status);
 
-      const data = await response.json();
-      console.log("Resposta completa da API:", data);
+      const text = await response.text();
+      let data = null;
+      try {
+        data = text ? JSON.parse(text) : null;
+      } catch (e) {
+        console.warn('Resposta não é JSON:', text?.slice(0, 200));
+        throw new Error('Resposta inválida do servidor');
+      }
+
+      console.log('Resposta completa da API:', data);
 
       if (!response.ok) {
-        throw new Error(data.msg || "Erro na autenticação");
+        throw new Error(data?.msg || `Erro na autenticação (HTTP ${response.status})`);
       }
 
-      if (data.msg && data.msg.includes("sucesso")) {
-        // Salva o login para persistência
-        await AsyncStorage.setItem("userToken", data.token);
-        navigation.replace("Home");
+      const token = data?.token || data?.accessToken || data?.data?.token;
+      if (token) {
+        await AsyncStorage.setItem('userToken', token);
+        navigation.replace('Home');
+      } else if (data?.msg && data.msg.includes('sucesso')) {
+        await AsyncStorage.setItem('userToken', email);
+        navigation.replace('Home');
       } else {
-        Alert.alert("Erro", data.msg || "Credenciais inválidas");
+        Alert.alert('Erro', data?.msg || 'Credenciais inválidas');
       }
     } catch (error) {
-      console.error("Erro completo:", error);
-      Alert.alert("Erro", error.message || "Erro de conexão com o servidor");
+      console.error('Erro completo:', error);
+      Alert.alert('Erro', error.message || 'Erro de conexão com o servidor');
     } finally {
       setLoading(false);
     }

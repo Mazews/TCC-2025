@@ -1,13 +1,5 @@
 import { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  ImageBackground,
-  TextInput,
-  TouchableOpacity,
-  Platform,
-  Image,
-} from "react-native";
+import {View, StyleSheet,ImageBackground,TextInput,TouchableOpacity,Platform,Image,} from "react-native";
 import CircularSlider from "./CircularSlider";
 import { useTheme } from "./ThemeContext";
 import AppText from "./AppText";
@@ -39,16 +31,17 @@ export default function HomeScreen({ navigation }) {
   const ano = dataAtual.getFullYear();
   const dataFormatada = `${dia}/${mes}/${ano}`;
 
-  const API_BASE_URL =
-    Platform.OS === "android"
-      ? "https://backend-feelflow-core.onrender.com"
-      : "https://backend-feelflow-core.onrender.com";
+  const API_BASE_URL = "https://backend-feelflow-core.onrender.com";
 
   const FetchTOApiVerifyAndSaveUser = async () => {
     try {
       const token = await AsyncStorage.getItem("userToken");
+      console.log(token);
       const response = await fetch(`${API_BASE_URL}/auth/verify`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ token }),
       });
       const data = await response.json();
@@ -73,7 +66,7 @@ export default function HomeScreen({ navigation }) {
         <View style={[styles.header, { backgroundColor: "transparent" }]}>
           <View style={styles.headerLeft}>
             <AppText style={[styles.greeting, { color: theme.text }]}>
-              Olá, User :)
+              Olá, {UserConverted.name.split(" ")[0]} :)
             </AppText>
 
             <AppText style={[styles.dateText, { color: theme.textSecondary }]}>
@@ -115,6 +108,7 @@ export default function HomeScreen({ navigation }) {
             styles.floatingCard,
             styles.featuredCard,
             { backgroundColor: theme.card },
+            
           ]}
         >
           <View style={{ flex: 1 }}>
@@ -122,10 +116,14 @@ export default function HomeScreen({ navigation }) {
             <AppText style={styles.featuredDesc}>
               Descubra algo novo e interessante
             </AppText>
-            <View style={styles.exploreBtn}>
+            <TouchableOpacity
+            style={styles.exploreBtn}
+               onPress={() => navigation.navigate("Quote")}
+>
               <AppText style={styles.exploreText}>Acessar</AppText>
+            </TouchableOpacity>
             </View>
-          </View>
+          
           <View style={styles.featuredIconBox}>
             <Icon name="star" size={28} color="#fff" />
           </View>
@@ -177,7 +175,7 @@ export default function HomeScreen({ navigation }) {
         {/* Atividades Recentes */}
         <View style={styles.activitiesSection}>
           <AppText style={styles.activitiesTitle}>Atividades Recentes</AppText>
-          <View style={styles.activityCard}>
+          <View style={[styles.activityCard, { backgroundColor: theme.card }]}>
             <View style={styles.activityIconA}>
               <AppText style={styles.activityIconText}>A</AppText>
             </View>
@@ -187,7 +185,7 @@ export default function HomeScreen({ navigation }) {
             </View>
             <View style={styles.activityStatusA} />
           </View>
-          <View style={styles.activityCard}>
+          <View style={[styles.activityCard, { backgroundColor: theme.card }]}>
             <View style={styles.activityIconB}>
               <AppText style={styles.activityIconText}>B</AppText>
             </View>

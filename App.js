@@ -29,7 +29,7 @@ export default function App() {
   useEffect(() => {
     const checkLogin = async () => {
       const token = await AsyncStorage.getItem('userToken');
-      setInitialRoute(token ? 'Home' : 'SignIn');
+      setInitialRoute(token ? 'Onboarding' : 'SignIn');
     };
     checkLogin();
   }, []);
@@ -63,7 +63,7 @@ export default function App() {
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
           <Stack.Screen name="Tasks" component={TasksScreen} />
-          <Stack.Screen name="Activity" component={QuoteScreen} />
+          <Stack.Screen name="Quote" component={QuoteScreen} />
           <Stack.Screen name="Config" component={ConfigScreen} />
           <Stack.Screen name="Terms" component={TermsScreen} />
           <Stack.Screen name="SignIn" component={SignInScreen} />

@@ -49,7 +49,7 @@ function EditProfileScreen({ navigation, route }) {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ImageBackground
-        source={theme.mode === 'dark' ? require('../assets/registrobgdark.png') : require('../assets/plainbg.png')}
+        source={theme.mode === 'dark' ? require('../assets/bgdark.png') : require('../assets/plainbg.png')}
         style={[styles.background, { backgroundColor: theme.background }]}
         imageStyle={{ resizeMode: 'cover' }}
       >
@@ -67,21 +67,21 @@ function EditProfileScreen({ navigation, route }) {
             <TextInput
               style={[styles.input, { color: theme.text }]}
               placeholder="nome"
-              placeholderTextColor={theme.textSecondary}
+              placeholderTextColor={theme.text}
               value={nome}
               onChangeText={setNome}
             />
             <TextInput
               style={[styles.input, { color: theme.text }]}
               placeholder="sobrenome"
-              placeholderTextColor={theme.textSecondary}
+              placeholderTextColor={theme.text}
               value={sobrenome}
               onChangeText={setSobrenome}
             />
             <TextInput
               style={[styles.input, { color: theme.text }]}
               placeholder="senha"
-              placeholderTextColor={theme.textSecondary}
+              placeholderTextColor={theme.text}
               value={senha}
               onChangeText={setSenha}
               secureTextEntry
@@ -89,7 +89,7 @@ function EditProfileScreen({ navigation, route }) {
             <TextInput
               style={[styles.input, { color: theme.text }]}
               placeholder="email"
-              placeholderTextColor={theme.textSecondary}
+              placeholderTextColor={theme.text}
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
@@ -97,8 +97,8 @@ function EditProfileScreen({ navigation, route }) {
             />
             <TextInput
               style={[styles.input, { color: theme.text }]}
-              placeholder="nome de usuário"
-              placeholderTextColor={theme.textSecondary}
+              placeholder="apelido"
+              placeholderTextColor={theme.text}
               value={username}
               onChangeText={setUsername}
               autoCapitalize="none"
