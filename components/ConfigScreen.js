@@ -27,7 +27,7 @@ function getBackground(theme, screen) {
       case 'login': return loginbg;
       case 'registro': return registrobg;
       case 'quote': return quotebg;
-      case 'dashboard': return plainbg;
+      case 'dashboard': return loginbg;
       default: return plainbg;
     }
   }

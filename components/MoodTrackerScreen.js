@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'transparent',
     alignItems: 'center',
-    paddingTop: 140,
+    paddingTop: 100,
     position: 'relative',
   },
   title: {

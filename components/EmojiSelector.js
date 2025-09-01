@@ -42,14 +42,15 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'center',
     marginVertical: 20,
-    marginHorizontal: 60,
+    marginHorizontal: 30,
+    
   },
   emojiButton: {
     width: 60,
     height: 60,
     borderRadius: 30,
     backgroundColor: '#fff',
-    margin: 15,
+    margin: 10,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,

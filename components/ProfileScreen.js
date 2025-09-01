@@ -72,7 +72,7 @@ const ProfileScreen = ({ navigation }) => {
           source={
             theme.mode === "dark"
               ? require("../assets/bgdark2.png")
-              : require("../assets/plainbg.png")
+              : require("../assets/loginbg.png")
           }
           style={[styles.background, { backgroundColor: theme.background }]}
           imageStyle={{ resizeMode: "cover" }}

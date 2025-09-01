@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Image, Dimensions, KeyboardAvoidingView, Platform, ScrollView, ImageBackground } from 'react-native';
 import AppText from './AppText';
 import { ThemeContext } from './ThemeContext';
-import { updateProfile } from './api';
+import { getProfile, updateProfile } from './api';
 import { useEffect } from 'react';
 
 const { width } = Dimensions.get('window');
@@ -15,21 +15,32 @@ function EditProfileScreen({ navigation, route }) {
   const [senha, setSenha] = useState('');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
-  const profile = route?.params?.profile;
+  
 
   useEffect(() => {
-    if (profile) {
-      setNome(profile.nome || '');
-      setSobrenome(profile.sobrenome || '');
-      setEmail(profile.email || '');
-      setUsername(profile.username || '');
+  const loadProfile = async () => {
+    try{
+      const data = await getProfile();
+      if (data) {
+        setNome(data.nome || '');
+        setSobrenome(data.sobrenome || '');
+        setEmail(data.email || '');
+        setUsername(data.username || '');
+        setProfilePic(data.profilePic || null);
+      }
+     } catch (e) {
+      console.error('Erro ao carregar perfil:', e);
     }
-  }, [profile]);
+  };
+  loadProfile();
+}, []);
+  
 
   const handleSave = () => {
     (async () => {
       try {
         const payload = { nome, sobrenome, email, username };
+        if (senha) payload.senha = senha;
         await updateProfile(payload);
         alert('Perfil salvo com sucesso!');
         navigation.goBack();
