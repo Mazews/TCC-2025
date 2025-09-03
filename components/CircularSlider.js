@@ -14,7 +14,7 @@ const ICON_SIZE = BUTTON_SIZE * 0.3;
 const BUTTONS = [
   { key: 'Profile', label: 'perfil', icon: 'user' },
   { key: 'Tasks', label: 'tarefas', icon: 'book' },
-  { key: 'Activity', label: 'quotes', icon: 'message-circle' },
+  { key: 'Quote', label: 'quotes', icon: 'message-circle' },
   { key: 'Dashboard', label: 'dash', icon: 'bar-chart-2' },
   { key: 'MoodTracker', label: 'humor', icon: 'smile' },
   { key: 'Config', label: 'config', icon: 'settings' },

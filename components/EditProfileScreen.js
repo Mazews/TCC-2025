@@ -4,6 +4,7 @@ import AppText from './AppText';
 import { ThemeContext } from './ThemeContext';
 import { getProfile, updateProfile } from './api';
 import { useEffect } from 'react';
+import { safeLog, safeError } from './log';
 
 const { width } = Dimensions.get('window');
 
@@ -14,7 +15,6 @@ function EditProfileScreen({ navigation, route }) {
   const [sobrenome, setSobrenome] = useState('');
   const [senha, setSenha] = useState('');
   const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
   
 
   useEffect(() => {
@@ -25,11 +25,10 @@ function EditProfileScreen({ navigation, route }) {
         setNome(data.nome || '');
         setSobrenome(data.sobrenome || '');
         setEmail(data.email || '');
-        setUsername(data.username || '');
         setProfilePic(data.profilePic || null);
       }
      } catch (e) {
-      console.error('Erro ao carregar perfil:', e);
+      safeError('Erro ao carregar perfil:', e);
     }
   };
   loadProfile();
@@ -39,12 +38,15 @@ function EditProfileScreen({ navigation, route }) {
   const handleSave = () => {
     (async () => {
       try {
-        const payload = { nome, sobrenome, email, username };
-        if (senha) payload.senha = senha;
-        await updateProfile(payload);
+  const payload = { nome, sobrenome, email };
+  if (senha) payload.password = senha; // backend commonly expects 'password'
+  safeLog('Enviando payload de perfil:', payload);
+  const res = await updateProfile(payload);
+  safeLog('Resposta updateProfile:', res);
         alert('Perfil salvo com sucesso!');
         navigation.goBack();
       } catch (e) {
+        safeError('Erro update profile:', e);
         alert('Erro ao salvar perfil: ' + (e?.message || 'unknown'));
       }
     })();
@@ -106,14 +108,7 @@ function EditProfileScreen({ navigation, route }) {
               keyboardType="email-address"
               autoCapitalize="none"
             />
-            <TextInput
-              style={[styles.input, { color: theme.text }]}
-              placeholder="apelido"
-              placeholderTextColor={theme.text}
-              value={username}
-              onChangeText={setUsername}
-              autoCapitalize="none"
-            />
+
 
             {/* Botões */}
             <TouchableOpacity style={[styles.saveButton, { backgroundColor: theme.card }]} onPress={handleSave}>

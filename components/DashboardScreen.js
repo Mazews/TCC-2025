@@ -6,29 +6,29 @@ import AppText from './AppText';
 import { ThemeContext } from './ThemeContext';
 import Icon from 'react-native-vector-icons/Feather';
 
-const screenWidth = Dimensions.get('window').width - 20;
+const screenWidth = Dimensions.get('window').width - 10;
 const screenHeight = Dimensions.get('window').height;
 
-// Emoções e cores fixas
+
 const EMOTIONS = [
-  { label: 'Feliz', color: '#FFD700', score: 4 },
-  { label: 'Muito feliz', color: '#FFA500', score: 5 },
-  { label: 'Triste', color: '#1E90FF', score: 2 },
-  { label: 'Muito triste', color: '#4169E1', score: 1 },
-  { label: 'Indiferente', color: '#808080', score: 3 },
-  { label: 'Com raiva', color: '#bd0000ff', score: 2 },
-  { label: 'Furioso', color: '#490000ff', score: 1 },
-  { label: 'Ansioso', color: '#ff7300ff', score: 2 },
-  { label: 'Envergonhado', color: '#d3559aff', score: 2 },
-  { label: 'Péssimo', color: '#0e005aff', score: 1 },
-  { label: 'Cansado', color: '#202020ff', score: 2 },
-  { label: 'Animado', color: '#32CD32', score: 4 },
+  { label: 'Feliz', color: 'rgba(244, 208, 63, 1)', score: 4 },
+  { label: 'Muito feliz', color: 'rgba(243, 156, 18, 1)', score: 5 },
+  { label: 'Triste', color: 'rgba(93, 173, 226, 1)', score: 2 },
+  { label: 'Muito triste', color: 'rgba(52, 152, 219, 1)', score: 1 },
+  { label: 'Indiferente', color: 'rgba(189, 195, 199, 1)', score: 3 },
+  { label: 'Com raiva', color: 'rgba(231, 76, 60, 1)', score: 2 },
+  { label: 'Furioso', color: 'rgba(192, 57, 43, 1)', score: 1 },
+  { label: 'Ansioso', color: 'rgba(241, 148, 138, 1)', score: 2 },
+  { label: 'Envergonhado', color: 'rgba(215, 189, 226, 1)', score: 2 },
+  { label: 'Péssimo', color: 'rgba(91, 44, 135, 1)', score: 1 }, 
+  { label: 'Cansado', color: 'rgba(133, 146, 158, 1)', score: 2 },
+  { label: 'Animado', color: 'rgba(88, 214, 141, 1)', score: 4 },
 ];
 
 // --- Helpers para organizar os dados ---
 
 function getWeekData(data) {
-  const week = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+  const week = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
   const result = EMOTIONS.map(() => Array(7).fill(0));
 
   data.forEach((entry) => {
@@ -77,7 +77,7 @@ function getMonthData(data) {
     }
   });
 
-  // Gerar labels mostrando apenas alguns dias para não ficar muito poluído
+  // Gerar labels mostrando apenas alguns dias para não ficar muito poluí­do
   const labels = Array(daysInMonth).fill('').map((_, i) => {
     const interval = Math.max(Math.floor(daysInMonth / 7), 1);
     if (i % interval === 0 || i === daysInMonth - 1) {
@@ -94,7 +94,7 @@ function getMonthData(data) {
   };
 }
 
-// Nova função para calcular estatísticas
+// Nova função para calcular estatí­sticas
 function getStats(data) {
   if (!data.length) return { totalEntries: 0, avgMoodScore: 0, mostCommon: 'N/A', streak: 0 };
 
@@ -168,7 +168,7 @@ function getWeeklyTrendData(data) {
     });
   });
 
-  const weekKeys = Object.keys(weeks).sort().slice(-8); // Últimas 8 semanas
+  const weekKeys = Object.keys(weeks).sort().slice(-8); // últimas 8 semanas
   
   return {
     labels: weekKeys.map(key => {
@@ -183,7 +183,7 @@ function getWeeklyTrendData(data) {
           : 0;
       }),
       color: (opacity = 1) => `rgba(75, 192, 192, ${opacity})`,
-      strokeWidth: 3
+      strokeWidth: 1
     }]
   };
 }
@@ -209,9 +209,21 @@ function DashboardScreen({ navigation }) {
   const stats = getStats(data);
   const trendData = getWeeklyTrendData(data);
 
-  const chartHeight = view === 'week' ? screenHeight * 0.35 : screenHeight * 0.4;
-  const weekChartWidth = screenWidth * 1.2;
-  const monthChartWidth = screenWidth * 2;
+  
+  const weekLabelsCount = weekData.labels?.length || 7;
+  const monthLabelsCount = monthData.labels?.length || 30;
+
+  // Valores menores para barras mais finas
+  const PER_BAR_WEEK = 12;  
+  const PER_BAR_MONTH = 6;   
+
+  
+  const minWeekWidth = Math.round(screenWidth * 1.2);   
+  const minMonthWidth = Math.round(screenWidth * 1.2);  
+  const weekChartWidth = Math.max(minWeekWidth, weekLabelsCount * PER_BAR_WEEK);
+  const monthChartWidth = Math.max(minMonthWidth, monthLabelsCount * PER_BAR_MONTH);
+
+  const chartHeight = view === 'week' ? Math.min(300, screenHeight * 0.30) : Math.min(380, screenHeight * 0.38); // Altura também reduzida
 
   return (
     <ImageBackground source={theme.image} style={{ flex: 1 }} resizeMode="cover">
@@ -224,7 +236,7 @@ function DashboardScreen({ navigation }) {
       <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 20 }}>
         <AppText style={[styles.title, { color: theme.text }]}>Dashboard</AppText>
         
-        {/* Cards de Estatísticas */}
+        {/* Cards de Estata­stícas */}
         <View style={styles.statsContainer}>
           <View style={[styles.statCard, { backgroundColor: theme.card }]}>
             <AppText style={[styles.statNumber, { color: theme.text }]}>{stats.totalEntries}</AppText>
@@ -305,6 +317,7 @@ function DashboardScreen({ navigation }) {
                       color: (opacity = 1) => `rgba(0,0,0,${opacity})`,
                       labelColor: () => theme.textSecondary,
                       propsForBackgroundLines: { stroke: 'transparent' },
+                      barPercentage: 0.5, // Adiciona espaçamento entre barras
                     }}
                     style={{ marginVertical: 8, borderRadius: 18 }}
                     hideLegend={false}
@@ -327,6 +340,7 @@ function DashboardScreen({ navigation }) {
                       color: (opacity = 1) => `rgba(0,0,0,${opacity})`,
                       labelColor: () => theme.textSecondary,
                       propsForBackgroundLines: { stroke: 'transparent' },
+                      barPercentage: 0.6, // Adiciona espaçamento entre barras
                     }}
                     style={{ marginVertical: 8, borderRadius: 18 }}
                     hideLegend={false}
@@ -427,7 +441,7 @@ function DashboardScreen({ navigation }) {
             <Icon name="bar-chart" size={48} color={theme.textSecondary} />
             <AppText style={[styles.emptyTitle, { color: theme.text }]}>Nenhum registro ainda</AppText>
             <AppText style={[styles.emptyText, { color: theme.textSecondary }]}>
-              Comece registrando seus humores para ver estatísticas aqui!
+              Comece registrando seus humores para ver estatastícas aqui!
             </AppText>
           </View>
         )}

@@ -18,6 +18,7 @@ import TermsScreen from './components/TermsScreen';
 import SignInScreen from './components/SignInScreen';
 import EditProfileScreen from './components/EditProfileScreen';
 import { ThemeProvider } from './components/ThemeContext';
+import { safeError } from './components/log';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
@@ -44,7 +45,7 @@ export default function App() {
           })
         }
         onFinish={() => setFontsLoaded(true)}
-        onError={console.warn}
+  onError={(e) => safeError('FontLoad', e)}
       />
     );
   }

@@ -5,6 +5,7 @@ import { useTheme } from "./ThemeContext";
 import AppText from "./AppText";
 import Icon from "react-native-vector-icons/Feather";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { safeLog, safeError } from './log';
 
 const getHomeBg = (theme) =>
   theme.mode === "dark"
@@ -36,7 +37,7 @@ export default function HomeScreen({ navigation }) {
   const FetchTOApiVerifyAndSaveUser = async () => {
     try {
       const token = await AsyncStorage.getItem("userToken");
-      console.log(token);
+  safeLog('token', token);
       const response = await fetch(`${API_BASE_URL}/auth/verify`, {
         method: "POST",
         headers: {
@@ -49,7 +50,7 @@ export default function HomeScreen({ navigation }) {
       await AsyncStorage.setItem("user", dataConvertToJson);
       setUser(await AsyncStorage.getItem("user"));
     } catch (err) {
-      console.log(err);
+      safeError('FetchTOApiVerifyAndSaveUser error', err);
     }
   };
   FetchTOApiVerifyAndSaveUser();
@@ -141,8 +142,8 @@ export default function HomeScreen({ navigation }) {
                 case "Tasks":
                   navigation.navigate("Tasks");
                   break;
-                case "Activity":
-                  navigation.navigate("Activity");
+                case "Quote":
+                  navigation.navigate("Quote");
                   break;
                 case "Dashboard":
                   navigation.navigate("Dashboard");

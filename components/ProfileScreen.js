@@ -65,7 +65,7 @@ const ProfileScreen = ({ navigation }) => {
   };
 
   if (user) {
-    console.log(user.name);
+  // safeLog not required here; removed stray log
     return (
       <View style={[styles.container, { backgroundColor: theme.background }]}>
         <ImageBackground
