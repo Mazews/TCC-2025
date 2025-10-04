@@ -3,7 +3,7 @@ import {View, StyleSheet,ImageBackground,TextInput,TouchableOpacity,Platform,Ima
 import CircularSlider from "./CircularSlider";
 import { useTheme } from "./ThemeContext";
 import AppText from "./AppText";
-import Icon from "react-native-vector-icons/Feather";
+import { Feather as Icon } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { safeLog, safeError } from './log';
 
@@ -142,8 +142,8 @@ export default function HomeScreen({ navigation }) {
                 case "Tasks":
                   navigation.navigate("Tasks");
                   break;
-                case "Quote":
-                  navigation.navigate("Quote");
+                case "Schedule":
+                  navigation.navigate("Schedule");
                   break;
                 case "Dashboard":
                   navigation.navigate("Dashboard");

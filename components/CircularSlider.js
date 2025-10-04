@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import AppText from './AppText';
-import Icon from 'react-native-vector-icons/Feather';
+import { Feather as Icon } from '@expo/vector-icons';
 import { useTheme } from './ThemeContext';
 import {wp,RF, hp } from './responsive'; 
 
@@ -14,7 +14,7 @@ const ICON_SIZE = BUTTON_SIZE * 0.3;
 const BUTTONS = [
   { key: 'Profile', label: 'perfil', icon: 'user' },
   { key: 'Tasks', label: 'tarefas', icon: 'book' },
-  { key: 'Quote', label: 'quotes', icon: 'message-circle' },
+  { key: 'Schedule', label: 'consultas', icon: 'message-circle' },
   { key: 'Dashboard', label: 'dash', icon: 'bar-chart-2' },
   { key: 'MoodTracker', label: 'humor', icon: 'smile' },
   { key: 'Config', label: 'config', icon: 'settings' },

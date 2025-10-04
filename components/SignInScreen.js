@@ -42,7 +42,7 @@ export default function SignInScreen({ navigation }) {
     setLoading(true);
 
     try {
-      // try a set of common login endpoints (original code used /custumers which may be a typo)
+      
       const endpoints = [
         `${API_BASE_URL}/custumers/login`,
         `${API_BASE_URL}/customers/login`,
@@ -138,27 +138,27 @@ export default function SignInScreen({ navigation }) {
           onChangeText={setSenha}
           editable={!loading}
         />
-      </View>
-      <View style={styles.bottomRow}>
-        <TouchableOpacity
-          style={[styles.button, loading && { opacity: 0.7 }]}
-          onPress={() => navigation.goBack()}
-          disabled={loading}
-        >
-          <AppText style={styles.buttonText}>voltar</AppText>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.button, loading && { opacity: 0.7 }]}
-          onPress={handleLogin}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="#fff" size="small" />
-          ) : (
-            <AppText style={styles.buttonText}>avançar</AppText>
-          )}
-        </TouchableOpacity>
-      </View>
+          <View style={styles.buttonRow}>
+            <TouchableOpacity
+              style={[styles.button, loading && { opacity: 0.8 }]}
+              onPress={() => navigation.goBack()}
+              disabled={loading}
+            >
+              <AppText style={styles.buttonText}>voltar</AppText>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.buttonPrimary, loading && { opacity: 0.8 }]}
+              onPress={handleLogin}
+              disabled={loading}
+            >
+              {loading ? (
+                <ActivityIndicator color="#fff" size="small" />
+              ) : (
+                <AppText style={styles.buttonText}>avançar</AppText>
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
     </ImageBackground>
   );
 }
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     alignItems: "center",
     marginTop: -10,
-    marginBottom: 60,
+  marginBottom: 30,
   },
   input: {
     width: "90%",
@@ -212,24 +212,28 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontFamily: "Poppins",
   },
-  bottomRow: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    position: "absolute",
-    bottom: 40,
-    left: 0,
-    right: 0,
-    alignSelf: "center",
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingHorizontal: 8,
+    marginTop: 8,
   },
   button: {
-    width: width > 500 ? 220 : "44%",
-    backgroundColor: "rgba(255,255,255,0.5)",
-    borderRadius: 32,
-    paddingVertical: 20,
-    alignItems: "center",
-    marginHorizontal: 10,
+    flex: 1,
+    marginHorizontal: 6,
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    borderRadius: 28,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  buttonPrimary: {
+    flex: 1,
+    marginHorizontal: 6,
+    backgroundColor: 'rgba(255,255,255,0.95)',
+    borderRadius: 28,
+    paddingVertical: 14,
+    alignItems: 'center',
   },
   buttonText: {
     color: "#fff",

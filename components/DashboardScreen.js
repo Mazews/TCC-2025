@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackedBarChart, LineChart } from 'react-native-chart-kit';
 import AppText from './AppText';
 import { ThemeContext } from './ThemeContext';
-import Icon from 'react-native-vector-icons/Feather';
+import { Feather as Icon } from '@expo/vector-icons';
 
 const screenWidth = Dimensions.get('window').width - 10;
 const screenHeight = Dimensions.get('window').height;

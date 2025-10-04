@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ImageBackgr
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EmojiSelector from './EmojiSelector';
 import AppText from './AppText';
-import Icon from 'react-native-vector-icons/Feather';
+import { Feather as Icon } from '@expo/vector-icons';
 import { ThemeContext } from './ThemeContext';
 
 

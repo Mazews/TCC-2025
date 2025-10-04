@@ -14,7 +14,7 @@ import {
 import AppText from './AppText';
 import { useTheme } from './ThemeContext';
 import api from './api';
-import Icon from 'react-native-vector-icons/Feather';
+import { Feather as Icon } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 

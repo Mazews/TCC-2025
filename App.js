@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'; // atualizado
 import OnboardingScreen from './components/OnboardingScreen';
@@ -15,6 +15,7 @@ import TasksScreen from './components/TasksScreen';
 import QuoteScreen from './components/QuoteScreen';
 import ConfigScreen from './components/ConfigScreen';
 import TermsScreen from './components/TermsScreen';
+import ScheduleScreen from './components/ScheduleScreen';
 import SignInScreen from './components/SignInScreen';
 import EditProfileScreen from './components/EditProfileScreen';
 import { ThemeProvider } from './components/ThemeContext';
@@ -28,6 +29,11 @@ export default function App() {
   const [initialRoute, setInitialRoute] = useState('Login');
 
   useEffect(() => {
+    // prevent the splash screen from auto-hiding while we load resources
+    SplashScreen.preventAutoHideAsync().catch(() => {});
+  }, []);
+
+  useEffect(() => {
     const checkLogin = async () => {
       const token = await AsyncStorage.getItem('userToken');
       setInitialRoute(token ? 'Onboarding' : 'SignIn');
@@ -36,18 +42,16 @@ export default function App() {
   }, []);
 
   if (!fontsLoaded) {
-    return (
-      <AppLoading
-        startAsync={() =>
-          Font.loadAsync({
-            'Poppins': require('./assets/fonts/Poppins/Poppins-Regular.ttf'),
-            'Poppins-Bold': require('./assets/fonts/Poppins/Poppins-Bold.ttf'),
-          })
-        }
-        onFinish={() => setFontsLoaded(true)}
-  onError={(e) => safeError('FontLoad', e)}
-      />
-    );
+    // load fonts then hide splash
+    Font.loadAsync({
+      'Poppins': require('./assets/fonts/Poppins/Poppins-Regular.ttf'),
+      'Poppins-Bold': require('./assets/fonts/Poppins/Poppins-Bold.ttf'),
+    })
+      .then(() => setFontsLoaded(true))
+      .catch((e) => safeError('FontLoad', e))
+      .finally(() => SplashScreen.hideAsync().catch(() => {}));
+
+    return null;
   }
 
   return (
@@ -68,6 +72,7 @@ export default function App() {
           <Stack.Screen name="Config" component={ConfigScreen} />
           <Stack.Screen name="Terms" component={TermsScreen} />
           <Stack.Screen name="SignIn" component={SignInScreen} />
+          <Stack.Screen name="Schedule" component={ScheduleScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </ThemeProvider>

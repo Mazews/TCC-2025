@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon from 'react-native-vector-icons/Feather';
+import { Feather as Icon } from '@expo/vector-icons';
 import { ThemeContext } from './ThemeContext';
 
 export default function AppIcon({ name, size = 24, color, style }) {
