@@ -345,14 +345,10 @@ export default function TasksScreen({ navigation }) {
             <AppText style={[styles.date, { color: theme.textSecondary }]}>
               {currentDate}
             </AppText>
-            <LinearGradient
-              colors={theme.mode === 'dark' ? ['#ffffff', '#a8edea'] : ['#2d1b69', '#11998e']}
-              style={styles.titleGradient}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-            >
-              <AppText style={styles.modernTitle}>Suas Tarefas</AppText>
-            </LinearGradient>
+            
+              <AppText style={[styles.modernTitle, {color:theme.text }]}>Suas Tarefas
+             </AppText>
+
             <AppText style={[styles.subtitle, { color: theme.textSecondary }]}>
               {stats.pending} tarefas para hoje
             </AppText>
