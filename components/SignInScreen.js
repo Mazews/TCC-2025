@@ -30,8 +30,8 @@ export default function SignInScreen({ navigation }) {
 
   const API_BASE_URL =
     Platform.OS === "android"
-      ? "https://backend-feelflow-core.onrender.com"
-      : "https://backend-feelflow-core.onrender.com";
+  ? "https://backend-fellsystem.vercel.app"
+  : "https://backend-fellsystem.vercel.app";
 
   const handleLogin = async () => {
     if (!email.trim() || !senha.trim()) {

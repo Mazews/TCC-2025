@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import AppText from './AppText';
 
+// Safe emoji selector: checks selected as a string (not calling includes on null)
 const EMOJIS = [
   { label: 'Feliz', emoji: '😊' },
   { label: 'Muito feliz', emoji: '😁' },
@@ -17,16 +18,13 @@ const EMOJIS = [
   { label: 'Animado', emoji: '🔥' },
 ];
 
-export default function EmojiSelector({ selected, onSelect }) {
+export default function EmojiSelector({ selected = null, onSelect = () => {} }) {
   return (
     <View style={styles.grid}>
-      {EMOJIS.map((item, idx) => (
+      {EMOJIS.map((item) => (
         <TouchableOpacity
           key={item.label}
-          style={[
-            styles.emojiButton,
-            selected.includes(item.label) && styles.selected,
-          ]}
+          style={[styles.emojiButton, selected === item.label && styles.selected]}
           onPress={() => onSelect(item.label)}
         >
           <AppText style={styles.emoji}>{item.emoji}</AppText>
@@ -43,7 +41,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: 20,
     marginHorizontal: 30,
-    
   },
   emojiButton: {
     width: 60,
@@ -54,7 +51,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-      borderColor: '#5c6082',
+    borderColor: '#5c6082',
   },
   selected: {
     backgroundColor: '#5c6082',

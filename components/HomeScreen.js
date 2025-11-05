@@ -32,7 +32,7 @@ export default function HomeScreen({ navigation }) {
   const ano = dataAtual.getFullYear();
   const dataFormatada = `${dia}/${mes}/${ano}`;
 
-  const API_BASE_URL = "https://backend-feelflow-core.onrender.com";
+  const API_BASE_URL = "https://backend-fellsystem.vercel.app/";
 
   const FetchTOApiVerifyAndSaveUser = async () => {
     try {
@@ -160,9 +160,7 @@ export default function HomeScreen({ navigation }) {
                 case "Support":
                   navigation.navigate("Help");
                   break;
-                case "Terms":
-                  navigation.navigate("Terms");
-                  break;
+                /* Terms removed */
                 case "Logout":
                   await AsyncStorage.removeItem("userToken");
                   navigation.replace("SignIn");

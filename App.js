@@ -14,7 +14,6 @@ import ProfileScreen from './components/ProfileScreen';
 import TasksScreen from './components/TasksScreen';
 import QuoteScreen from './components/QuoteScreen';
 import ConfigScreen from './components/ConfigScreen';
-import TermsScreen from './components/TermsScreen';
 import ScheduleScreen from './components/ScheduleScreen';
 import SignInScreen from './components/SignInScreen';
 import EditProfileScreen from './components/EditProfileScreen';
@@ -70,7 +69,7 @@ export default function App() {
           <Stack.Screen name="Tasks" component={TasksScreen} />
           <Stack.Screen name="Quote" component={QuoteScreen} />
           <Stack.Screen name="Config" component={ConfigScreen} />
-          <Stack.Screen name="Terms" component={TermsScreen} />
+          {/* Terms screen removed */}
           <Stack.Screen name="SignIn" component={SignInScreen} />
           <Stack.Screen name="Schedule" component={ScheduleScreen} />
         </Stack.Navigator>

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, Dimensions, ImageBackground, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 import AppText from './AppText';
 import { ThemeContext } from './ThemeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,123 +8,154 @@ import { Feather as Icon } from '@expo/vector-icons';
 import { safeLog, safeError } from './log';
 
 const { width } = Dimensions.get('window');
-const API_BASE = 'https://backend-feelflow-core.onrender.com'; // ajuste se necessário
+const API_BASE = 'https://backend-fellsystem.vercel.app';
 
-function ScheduleScreen({ navigation }) {
+// Configuração do calendário em português
+LocaleConfig.locales['pt-br'] = {
+  monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+  monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+  dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+  dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+  today: 'Hoje'
+};
+LocaleConfig.defaultLocale = 'pt-br';
+
+function AvailabilityScreen({ navigation }) {
   const { theme } = useContext(ThemeContext);
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [markedDates, setMarkedDates] = useState({});
 
   useEffect(() => {
     let mounted = true;
-    const fetchAppointments = async () => {
+    const fetchAvailability = async () => {
       setLoading(true);
       try {
         const token = await AsyncStorage.getItem('userToken');
-        const res = await fetch(`${API_BASE}/appointments/pending`, {
-          method: 'GET',
-          headers: token ? { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } : { 'Content-Type': 'application/json' },
+        const res = await fetch(`${API_BASE}/appointments/availability/all`, {
+          method: 'POST',
+          body: JSON.stringify({ token }),
         });
-
-        const text = await res.text();
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch (e) {
-          safeLog('Schedule fetch raw', text?.slice(0, 200));
-          try {
-            const r2 = await fetch(`${API_BASE}/appointments/pending`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ token }),
-            });
-            const t2 = await r2.text();
-            data = JSON.parse(t2);
-          } catch (e2) {
-            safeError('Schedule parse', e2);
-            data = { appointments: [] };
-          }
+        
+        const data = await res.json();
+        safeLog('Availability response:', data);
+        
+        const list = data?.appointments || [];
+        if (mounted) {
+          setAppointments(Array.isArray(list) ? list : []);
+          generateMarkedDates(list);
         }
-
-        const list = data?.appointments || data?.data || data || [];
-        if (mounted) setAppointments(Array.isArray(list) ? list : [list]);
       } catch (err) {
-        safeError('fetchAppointments', err);
+        safeError('fetchAvailability', err);
         if (mounted) setAppointments([]);
       } finally {
         if (mounted) setLoading(false);
       }
     };
 
-    fetchAppointments();
+    fetchAvailability();
     return () => {
       mounted = false;
     };
   }, []);
 
-  const performAction = async (id, type = 'confirm') => {
+  const generateMarkedDates = (appointmentsList) => {
+    const marked = {};
+    appointmentsList.forEach(appt => {
+      const dateKey = formatDateKey(appt.startTime);
+      if (dateKey) {
+        marked[dateKey] = {
+          marked: true,
+          dotColor: '#3ED07A',
+          selected: false,
+        };
+      }
+    });
+    setMarkedDates(marked);
+  };
+
+  const formatDateKey = (dateString) => {
+    try {
+      const d = new Date(dateString);
+      const year = d.getUTCFullYear();
+      const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+      const day = String(d.getUTCDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    } catch {
+      return null;
+    }
+  };
+
+  const handleDayPress = (day) => {
+    const dateKey = day.dateString;
+    setSelectedDate(dateKey);
+    setSelectedAppointment(null);
+    
+    // Atualiza marcações do calendário
+    const newMarked = { ...markedDates };
+    Object.keys(newMarked).forEach(key => {
+      newMarked[key] = { ...newMarked[key], selected: false };
+    });
+    if (newMarked[dateKey]) {
+      newMarked[dateKey] = { ...newMarked[dateKey], selected: true, selectedColor: '#3ED07A' };
+    }
+    setMarkedDates(newMarked);
+  };
+
+  const getAppointmentsForSelectedDate = () => {
+    if (!selectedDate) return [];
+    return appointments.filter(appt => {
+      const apptDateKey = formatDateKey(appt.startTime);
+      return apptDateKey === selectedDate;
+    });
+  };
+
+  const confirmAppointment = async () => {
+    if (!selectedAppointment) {
+      Alert.alert('Atenção', 'Selecione um horário para confirmar.');
+      return;
+    }
+
     if (actionLoading) return;
     setActionLoading(true);
+
     try {
       const token = await AsyncStorage.getItem('userToken');
-      const endpoints =
-        type === 'confirm'
-          ? [
-              `${API_BASE}/appointments/${id}/confirm`,
-              `${API_BASE}/appointments/${id}/status`,
-              `${API_BASE}/appointments/${id}`,
-            ]
-          : [
-              `${API_BASE}/appointments/${id}/cancel`,
-              `${API_BASE}/appointments/${id}/status`,
-              `${API_BASE}/appointments/${id}`,
-            ];
+      const res = await fetch(`${API_BASE}/appointments/schedule`, {
+        method: 'PATCH',
+        headers: { 
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({ token, id: selectedAppointment._id }),
+      });
 
-      let success = false;
-      for (const ep of endpoints) {
-        try {
-          const method = ep.endsWith('/status') || ep.endsWith(`/${id}`) ? 'PATCH' : 'POST';
-          const body = method === 'PATCH' ? JSON.stringify({ status: type === 'confirm' ? 'confirmed' : 'cancelled' }) : JSON.stringify({ token });
-          const res = await fetch(ep, {
-            method,
-            headers: token ? { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } : { 'Content-Type': 'application/json' },
-            body,
-          });
-          const text = await res.text();
-          let parsed;
-          try {
-            parsed = JSON.parse(text);
-          } catch {
-            parsed = { raw: text };
-          }
-          if (res.ok) {
-            safeLog('performAction success', ep, parsed);
-            success = true;
-            break;
-          } else {
-            safeLog('performAction non-ok', ep, res.status, parsed);
-          }
-        } catch (e) {
-          safeError('performAction try', e);
-        }
-      }
+      const data = await res.json();
+      safeLog('Schedule response:', data);
 
-      if (success) {
-        Alert.alert(type === 'confirm' ? 'Agendamento confirmado' : 'Agendamento recusado');
-        setAppointments(prev => prev.filter(a => a.id !== id && a._id !== id && a.appointmentId !== id));
+      if (res.ok) {
+        Alert.alert('Sucesso', 'Agendamento confirmado com sucesso!');
+        // Recarrega disponibilidades
+        setSelectedDate('');
+        setSelectedAppointment(null);
+        // Recarregar dados
+        const updatedList = appointments.filter(a => a._id !== selectedAppointment._id);
+        setAppointments(updatedList);
+        generateMarkedDates(updatedList);
       } else {
-        Alert.alert('Erro', 'Não foi possível completar a ação. Verifique o console.');
+        Alert.alert('Erro', data.message || 'Não foi possível confirmar o agendamento.');
       }
     } catch (err) {
-      safeError('performAction', err);
+      safeError('confirmAppointment', err);
       Alert.alert('Erro', 'Ocorreu um erro. Tente novamente.');
     } finally {
       setActionLoading(false);
     }
   };
 
-  const appt = appointments && appointments.length ? appointments[0] : null;
+  const availableSlots = getAppointmentsForSelectedDate();
 
   return (
     <ImageBackground
@@ -131,110 +163,170 @@ function ScheduleScreen({ navigation }) {
       style={[styles.background, { backgroundColor: theme.background }]}
       imageStyle={{ resizeMode: 'cover' }}
     >
-      <View style={[styles.wrapper]}>
-        <View style={[styles.card, { backgroundColor: theme.card }]}>
-          <View style={[styles.iconCircle, { backgroundColor: withAlpha(theme.card, 0.16), borderColor: withAlpha(theme.card, 0.25) }] }>
-            <Icon name="clock" size={26} color={theme.textSecondary} />
-          </View>
+      <ScrollView 
+        style={styles.scrollContainer}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.wrapper}>
+          <View style={[styles.card, { backgroundColor: theme.card }]}>
+            <View style={[styles.iconCircle, { backgroundColor: withAlpha(theme.card, 0.16), borderColor: withAlpha(theme.card, 0.25) }]}>
+              <Icon name="calendar" size={26} color={theme.textSecondary} />
+            </View>
 
-          <AppText style={[styles.title, { color: theme.text }]}>Agendamento</AppText>
-          <AppText style={[styles.subtitle, { color: theme.textSecondary }]}> {appt ? (appt.status ? String(appt.status).replace('_', ' ') : 'Pendente de confirmação') : 'Pendente de confirmação'}</AppText>
+            <AppText style={[styles.title, { color: theme.text }]}>Agendar Consulta</AppText>
+            <AppText style={[styles.subtitle, { color: theme.textSecondary }]}>
+              Selecione uma data disponível
+            </AppText>
 
-          <ScrollView style={styles.scroll} contentContainerStyle={{ paddingBottom: 8 }}>
             {loading ? (
-              <ActivityIndicator size="large" color={theme.text} style={{ marginTop: 24 }} />
-            ) : appt ? (
-              <>
-                <View style={[styles.infoBox, { backgroundColor: withAlpha(theme.card, 0.14) }]}>
-                  <View style={styles.infoRow}>
-                    <View style={styles.iconWrap}>
-                      <Icon name="calendar" size={18} color={theme.text} />
-                    </View>
-                    <View style={styles.infoText}>
-                      <AppText style={[styles.infoLabel, { color: theme.textSecondary }]}>Data</AppText>
-                      <AppText style={[styles.infoValue, { color: theme.text }]}>{formatDate(appt.date || appt.scheduledAt || appt.datetime)}</AppText>
-                    </View>
-                  </View>
-
-                  <View style={[styles.infoRow, { marginTop: 12 }]}>
-                    <View style={styles.iconWrap}>
-                      <Icon name="clock" size={18} color={theme.text} />
-                    </View>
-                    <View style={styles.infoText}>
-                      <AppText style={[styles.infoLabel, { color: theme.textSecondary }]}>Horário</AppText>
-                      <AppText style={[styles.infoValue, { color: theme.text }]}>{formatTime(appt.time || appt.hour || appt.scheduledTime || appt.datetime)}</AppText>
-                    </View>
-                  </View>
-                </View>
-
-                <View style={[styles.infoBox, { marginTop: 12, backgroundColor: withAlpha(theme.card, 0.14) }]}>
-                  <View style={styles.infoRow}>
-                    <View style={styles.iconWrap}>
-                      <Icon name="user" size={18} color={theme.text} />
-                    </View>
-                    <View style={styles.infoText}>
-                      <AppText style={[styles.infoLabel, { color: theme.textSecondary }]}>Profissional</AppText>
-                      <AppText style={[styles.infoValue, { color: theme.text }]}>{appt.doctor?.name || appt.doctorName || appt.provider || appt.professional || '—'}</AppText>
-                      <AppText style={[styles.infoSubtitle, { color: theme.textSecondary }]}>{appt.doctor?.specialty || appt.specialty || ''}</AppText>
-                    </View>
-                  </View>
-                </View>
-
-                <View style={[styles.infoBox, { marginTop: 12, backgroundColor: withAlpha(theme.card, 0.14) }]}>
-                  <View style={styles.infoRow}>
-                    <View style={styles.iconWrap}>
-                      <Icon name="map-pin" size={18} color={theme.text} />
-                    </View>
-                    <View style={styles.infoText}>
-                      <AppText style={[styles.infoLabel, { color: theme.textSecondary }]}>Local</AppText>
-                      <AppText style={[styles.infoValue, { color: theme.text }]}>{appt.clinic?.name || appt.clinicName || appt.location || '—'}</AppText>
-                      <AppText style={[styles.infoSubtitle, { color: theme.textSecondary }]}>{appt.clinic?.address || appt.address || ''}</AppText>
-                    </View>
-                  </View>
-                </View>
-              </>
+              <ActivityIndicator size="large" color={theme.text} style={{ marginTop: 24, marginBottom: 24 }} />
             ) : (
-              <AppText style={[styles.emptyText, { color: theme.textSecondary }]}>Nenhum agendamento pendente.</AppText>
+              <>
+                <View style={styles.calendarContainer}>
+                  <Calendar
+                    current={new Date().toISOString().split('T')[0]}
+                    minDate={new Date().toISOString().split('T')[0]}
+                    onDayPress={handleDayPress}
+                    markedDates={markedDates}
+                    theme={{
+                      backgroundColor: 'transparent',
+                      calendarBackground: 'transparent',
+                      textSectionTitleColor: theme.text,
+                      selectedDayBackgroundColor: '#3ED07A',
+                      selectedDayTextColor: '#ffffff',
+                      todayTextColor: '#3ED07A',
+                      dayTextColor: theme.text,
+                      textDisabledColor: withAlpha(theme.textSecondary, 0.3),
+                      dotColor: '#3ED07A',
+                      selectedDotColor: '#ffffff',
+                      arrowColor: theme.text,
+                      monthTextColor: theme.text,
+                      textDayFontFamily: 'Poppins-Regular',
+                      textMonthFontFamily: 'Poppins-Bold',
+                      textDayHeaderFontFamily: 'Poppins-Regular',
+                      textDayFontSize: 14,
+                      textMonthFontSize: 16,
+                      textDayHeaderFontSize: 12,
+                    }}
+                  />
+                </View>
+
+                {selectedDate && (
+                  <>
+                    <AppText style={[styles.sectionTitle, { color: theme.text }]}>
+                      Horários Disponíveis
+                    </AppText>
+
+                    {availableSlots.length === 0 ? (
+                      <AppText style={[styles.emptyText, { color: theme.textSecondary }]}>
+                        Nenhum horário disponível para esta data.
+                      </AppText>
+                    ) : (
+                      <View style={styles.slotsContainer}>
+                        {availableSlots.map((appt) => (
+                          <TouchableOpacity
+                            key={appt._id}
+                            style={[
+                              styles.slotCard,
+                              { backgroundColor: withAlpha(theme.card, 0.14) },
+                              selectedAppointment?._id === appt._id && styles.slotCardSelected
+                            ]}
+                            onPress={() => setSelectedAppointment(appt)}
+                          >
+                            <View style={styles.slotHeader}>
+                              <Icon 
+                                name="clock" 
+                                size={18} 
+                                color={selectedAppointment?._id === appt._id ? '#3ED07A' : theme.text} 
+                              />
+                              <AppText style={[
+                                styles.slotTime, 
+                                { color: selectedAppointment?._id === appt._id ? '#3ED07A' : theme.text }
+                              ]}>
+                                {formatTime(appt.startTime)} - {formatTime(appt.endTime)}
+                              </AppText>
+                            </View>
+
+                            {appt.duration && (
+                              <View style={styles.slotInfo}>
+                                <Icon name="activity" size={14} color={theme.textSecondary} />
+                                <AppText style={[styles.slotInfoText, { color: theme.textSecondary }]}>
+                                  Duração: {appt.duration} minutos
+                                </AppText>
+                              </View>
+                            )}
+
+                            {appt.createdBy && (
+                              <View style={styles.slotInfo}>
+                                <Icon name="user" size={14} color={theme.textSecondary} />
+                                <AppText style={[styles.slotInfoText, { color: theme.textSecondary }]}>
+                                  {appt.createdBy.name || 'Profissional'}
+                                </AppText>
+                              </View>
+                            )}
+
+                            {appt.organization && (
+                              <View style={styles.slotInfo}>
+                                <Icon name="map-pin" size={14} color={theme.textSecondary} />
+                                <AppText style={[styles.slotInfoText, { color: theme.textSecondary }]}>
+                                  {appt.organization.name || 'Organização'}
+                                </AppText>
+                              </View>
+                            )}
+
+                            {selectedAppointment?._id === appt._id && (
+                              <View style={styles.selectedBadge}>
+                                <Icon name="check" size={14} color="#fff" />
+                              </View>
+                            )}
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                    )}
+
+                    {selectedAppointment && (
+                      <TouchableOpacity
+                        disabled={actionLoading}
+                        style={[
+                          styles.confirmButton, 
+                          { opacity: actionLoading ? 0.6 : 1 }
+                        ]}
+                        onPress={() =>
+                          Alert.alert(
+                            'Confirmar Agendamento', 
+                            `Confirmar consulta para ${formatDate(selectedAppointment.startTime)} das ${formatTime(selectedAppointment.startTime)} às ${formatTime(selectedAppointment.endTime)}${selectedAppointment.duration ? ` (${selectedAppointment.duration} minutos)` : ''}?`,
+                            [
+                              { text: 'Cancelar', style: 'cancel' },
+                              { text: 'Confirmar', onPress: confirmAppointment },
+                            ]
+                          )
+                        }
+                      >
+                        {actionLoading ? (
+                          <ActivityIndicator size="small" color="#fff" />
+                        ) : (
+                          <>
+                            <Icon name="check-circle" size={20} color="#fff" />
+                            <AppText style={styles.confirmButtonText}>Confirmar Agendamento</AppText>
+                          </>
+                        )}
+                      </TouchableOpacity>
+                    )}
+                  </>
+                )}
+              </>
             )}
-          </ScrollView>
 
-          <AppText style={[styles.confirmText, { color: theme.text }]}>Confirmar consulta?</AppText>
-
-          <View style={styles.actionsRow}>
-            <TouchableOpacity
-              disabled={!appt || actionLoading}
-              style={[styles.actionBtn, styles.confirmBtn, { opacity: !appt || actionLoading ? 0.6 : 1 }]}
-              onPress={() =>
-                Alert.alert('Confirmar', 'Confirmar este agendamento?', [
-                  { text: 'Cancelar', style: 'cancel' },
-                  { text: 'Confirmar', onPress: () => performAction(appt?.id || appt?._id || appt?.appointmentId, 'confirm') },
-                ])
-              }
+            <TouchableOpacity 
+              style={[styles.backButton, { backgroundColor: theme.backButton }]} 
+              onPress={() => navigation.goBack()}
             >
-              <Icon name="thumbs-up" size={20} color="#fff" />
-              <AppText style={styles.actionText}>Confirmar</AppText>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              disabled={!appt || actionLoading}
-              style={[styles.actionBtn, styles.cancelBtn, { opacity: !appt || actionLoading ? 0.6 : 1 }]}
-              onPress={() =>
-                Alert.alert('Recusar', 'Recusar este agendamento?', [
-                  { text: 'Cancelar', style: 'cancel' },
-                  { text: 'Recusar', onPress: () => performAction(appt?.id || appt?._id || appt?.appointmentId, 'cancel') },
-                ])
-              }
-            >
-              <Icon name="thumbs-down" size={20} color="#fff" />
-              <AppText style={styles.actionText}>Recusar</AppText>
+              <AppText style={[styles.backButtonText, { color: theme.text }]}>voltar</AppText>
             </TouchableOpacity>
           </View>
-
-          <TouchableOpacity style={[styles.backButton, { backgroundColor: theme.backButton }]} onPress={() => navigation.goBack()}>
-            <AppText style={[styles.backButtonText, { color: theme.text }]}>voltar</AppText>
-          </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </ImageBackground>
   );
 }
@@ -243,18 +335,20 @@ function formatDate(value) {
   if (!value) return '—';
   try {
     const d = new Date(value);
-    return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' });
+    return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' });
   } catch {
     return String(value);
   }
 }
+
 function formatTime(value) {
   if (!value) return '—';
   try {
     const d = new Date(value);
+    d.setHours(d.getHours() - 3);
     return d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
   } catch {
-    return String(value).slice(0, 5);
+    return '—';
   }
 }
 
@@ -275,14 +369,21 @@ function withAlpha(hexOrColor, alpha) {
 
 const styles = StyleSheet.create({
   background: { 
-    flex: 1, 
-    justifyContent: 'center', 
-    alignItems: 'center' },
+    flex: 1,
+  },
+  scrollContainer: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
   wrapper: { 
     width: '100%', 
-    alignItems: 'center', 
-    paddingTop: 40, 
-    paddingBottom: 32 },
+    alignItems: 'center',
+  },
   card: {
     width: width > 500 ? 380 : width * 0.86,
     borderRadius: 20,
@@ -307,84 +408,94 @@ const styles = StyleSheet.create({
   title: { 
     fontSize: 22, 
     fontFamily: 'Poppins-Bold', 
-    marginTop: 6 },
+    marginTop: 6 
+  },
   subtitle: { 
     fontSize: 13, 
     marginTop: 4, 
-    marginBottom: 6 },
-  scroll: { 
-    width: '100%', 
-    maxHeight: 320, 
-    marginTop: 8, 
-    marginBottom: 10 },
-  infoBox: { 
-    borderRadius: 12, 
-    padding: 14, 
-    backgroundColor: 'rgba(255,255,255,0.2)' },
-  infoRow: { 
-    lexDirection: 'row', 
-    alignItems: 'center' 
+    marginBottom: 16 
   },
-  iconWrap: {
-    width: 44,
-    height: 44,
+  calendarContainer: {
+    width: '100%',
+    marginBottom: 16,
     borderRadius: 12,
+    overflow: 'hidden',
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontFamily: 'Poppins-Bold',
+    marginTop: 8,
+    marginBottom: 12,
+    alignSelf: 'flex-start',
+  },
+  slotsContainer: {
+    width: '100%',
+    marginBottom: 12,
+  },
+  slotCard: {
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 10,
+    position: 'relative',
+  },
+  slotCardSelected: {
+    backgroundColor: 'rgba(62, 208, 122, 0.15)',
+    borderWidth: 2,
+    borderColor: '#3ED07A',
+  },
+  slotHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  slotTime: {
+    fontSize: 18,
+    fontFamily: 'Poppins-Bold',
+    marginLeft: 8,
+  },
+  slotInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  slotInfoText: {
+    fontSize: 13,
+    fontFamily: 'Poppins-Regular',
+    marginLeft: 6,
+  },
+  selectedBadge: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#3ED07A',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    marginRight: 12,
-    margintop: 20,
   },
-  infoText: { 
-    flex: 1 
+  confirmButton: {
+    width: '100%',
+    backgroundColor: '#3ED07A',
+    borderRadius: 14,
+    paddingVertical: 16,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 4,
+    marginBottom: 12,
   },
-  infoLabel: { 
-    fontSize: 12, 
-    marginBottom: 4, 
-    fontFamily: 'Poppins-Regular' 
-  },
-  infoValue: { 
-    fontSize: 16, 
-    fontFamily: 'Poppins-Bold' 
-  },
-  infoSubtitle: { 
-    fontSize: 13, 
-    marginTop: 6 
+  confirmButtonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontFamily: 'Poppins-Bold',
+    marginLeft: 8,
   },
   emptyText: { 
-    paddingVertical: 30, 
-    textAlign: 'center' 
+    paddingVertical: 20, 
+    textAlign: 'center',
+    fontSize: 14,
   },
-  confirmText: { 
-    marginTop: 12, 
-    fontSize: 16, 
-    fontFamily: 'Poppins-Bold' 
-  },
-  actionsRow: { 
-    flexDirection: 'row', 
-    width: '100%', 
-    justifyContent: 'space-between', 
-    marginTop: 12 
-  },
-  actionBtn: {
-    flex: 1,
-    height: 76,
-    borderRadius: 14,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 6,
-    flexDirection: 'row',
-    paddingHorizontal: 12,
-  },
-  confirmBtn: { 
-    backgroundColor: 'rgba(62, 208, 122, 1)' },
-  cancelBtn: { 
-    backgroundColor: 'rgba(243, 122, 119, 1)' },
-  actionText: { 
-    color: 'rgba(255, 255, 255, 1)', 
-    fontSize: 16, 
-    marginLeft: 8, 
-    fontFamily: 'Poppins-Bold' },
   backButton: {
     width: '50%',
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
@@ -396,7 +507,8 @@ const styles = StyleSheet.create({
   },
   backButtonText: { 
     fontSize: 16, 
-    fontWeight: '600' },
+    fontWeight: '600' 
+  },
 });
 
-export default ScheduleScreen;
+export default AvailabilityScreen;

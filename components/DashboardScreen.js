@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, Dimensions } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, Dimensions, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackedBarChart, LineChart } from 'react-native-chart-kit';
 import AppText from './AppText';
@@ -8,7 +8,6 @@ import { Feather as Icon } from '@expo/vector-icons';
 
 const screenWidth = Dimensions.get('window').width - 10;
 const screenHeight = Dimensions.get('window').height;
-
 
 const EMOTIONS = [
   { label: 'Feliz', color: 'rgba(244, 208, 63, 1)', score: 4 },
@@ -25,7 +24,17 @@ const EMOTIONS = [
   { label: 'Animado', color: 'rgba(88, 214, 141, 1)', score: 4 },
 ];
 
-// --- Helpers para organizar os dados ---
+// Função para transformar dados da API no formato do dashboard
+function transformApiData(moodDiary) {
+  if (!moodDiary || !Array.isArray(moodDiary)) return [];
+  
+  return moodDiary.map(entry => ({
+    date: new Date(entry.createdAt).toISOString().split('T')[0],
+    moods: [entry.emotion], // Agora é apenas uma emoção
+    note: entry.description || '',
+    intensity: entry.intensity
+  }));
+}
 
 function getWeekData(data) {
   const week = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
@@ -58,7 +67,6 @@ function getMonthData(data) {
   
   const result = EMOTIONS.map(() => Array(daysInMonth).fill(0));
 
-  // Filtrar apenas dados do mês atual
   const currentMonthData = data.filter((entry) => {
     const d = new Date(entry.date);
     return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
@@ -77,7 +85,6 @@ function getMonthData(data) {
     }
   });
 
-  // Gerar labels mostrando apenas alguns dias para não ficar muito poluí­do
   const labels = Array(daysInMonth).fill('').map((_, i) => {
     const interval = Math.max(Math.floor(daysInMonth / 7), 1);
     if (i % interval === 0 || i === daysInMonth - 1) {
@@ -94,7 +101,6 @@ function getMonthData(data) {
   };
 }
 
-// Nova função para calcular estatí­sticas
 function getStats(data) {
   if (!data.length) return { totalEntries: 0, avgMoodScore: 0, mostCommon: 'N/A', streak: 0 };
 
@@ -119,7 +125,6 @@ function getStats(data) {
     moodCount[a] > moodCount[b] ? a : b, Object.keys(moodCount)[0] || 'N/A'
   );
 
-  // Calcular streak de dias consecutivos
   const sortedData = [...data].sort((a, b) => new Date(b.date) - new Date(a.date));
   let streak = 0;
   let currentDate = new Date();
@@ -140,9 +145,7 @@ function getStats(data) {
   return { totalEntries, avgMoodScore, mostCommon, streak };
 }
 
-// Nova função para gráfico de linha da média semanal
 function getWeeklyTrendData(data) {
-  const weeklyAverages = [];
   const sortedData = [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
   
   if (sortedData.length === 0) return { labels: [], datasets: [{ data: [] }] };
@@ -168,7 +171,7 @@ function getWeeklyTrendData(data) {
     });
   });
 
-  const weekKeys = Object.keys(weeks).sort().slice(-8); // últimas 8 semanas
+  const weekKeys = Object.keys(weeks).sort().slice(-8);
   
   return {
     labels: weekKeys.map(key => {
@@ -188,42 +191,86 @@ function getWeeklyTrendData(data) {
   };
 }
 
-// --- Tela principal ---
-
 function DashboardScreen({ navigation }) {
   const { theme } = React.useContext(ThemeContext);
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [view, setView] = useState('week');
-  const [chartType, setChartType] = useState('bar'); // 'bar' ou 'trend'
+  const [chartType, setChartType] = useState('bar');
 
   useEffect(() => {
-    (async () => {
-      let d = await AsyncStorage.getItem('moodData');
-      d = d ? JSON.parse(d) : [];
-      setData(d);
-    })();
+    fetchMoodData();
   }, []);
+
+  const fetchMoodData = async () => {
+    try {
+      setLoading(true);
+      const token = await AsyncStorage.getItem('userToken');
+      
+      if (!token) {
+        console.log('Token não encontrado');
+        setLoading(false);
+        return;
+      }
+
+  const response = await fetch('https://backend-fellsystem.vercel.app/customers/get/mood-diary', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({}) // Body vazio, o backend pega o userId do token para role "patient"
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Dados do humor:', result);
+        
+        if (result.mood_diary && Array.isArray(result.mood_diary)) {
+          const transformedData = transformApiData(result.mood_diary);
+          console.log('Dados transformados:', transformedData);
+          setData(transformedData);
+        }
+      } else {
+        console.error('Erro ao buscar dados:', response.status);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar dados do humor:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <ImageBackground source={theme.image} style={{ flex: 1 }} resizeMode="cover">
+        <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+          <ActivityIndicator size="large" color="#5c6082" />
+          <AppText style={[styles.title, { color: theme.text, marginTop: 20 }]}>
+            Carregando...
+          </AppText>
+        </View>
+      </ImageBackground>
+    );
+  }
 
   const weekData = getWeekData(data);
   const monthData = getMonthData(data);
   const stats = getStats(data);
   const trendData = getWeeklyTrendData(data);
 
-  
   const weekLabelsCount = weekData.labels?.length || 7;
   const monthLabelsCount = monthData.labels?.length || 30;
 
-  // Valores menores para barras mais finas
   const PER_BAR_WEEK = 12;  
   const PER_BAR_MONTH = 6;   
 
-  
   const minWeekWidth = Math.round(screenWidth * 1.2);   
   const minMonthWidth = Math.round(screenWidth * 1.2);  
   const weekChartWidth = Math.max(minWeekWidth, weekLabelsCount * PER_BAR_WEEK);
   const monthChartWidth = Math.max(minMonthWidth, monthLabelsCount * PER_BAR_MONTH);
 
-  const chartHeight = view === 'week' ? Math.min(300, screenHeight * 0.30) : Math.min(380, screenHeight * 0.38); // Altura também reduzida
+  const chartHeight = view === 'week' ? Math.min(300, screenHeight * 0.30) : Math.min(380, screenHeight * 0.38);
 
   return (
     <ImageBackground source={theme.image} style={{ flex: 1 }} resizeMode="cover">
@@ -236,7 +283,6 @@ function DashboardScreen({ navigation }) {
       <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 20 }}>
         <AppText style={[styles.title, { color: theme.text }]}>Dashboard</AppText>
         
-        {/* Cards de Estata­stícas */}
         <View style={styles.statsContainer}>
           <View style={[styles.statCard, { backgroundColor: theme.card }]}>
             <AppText style={[styles.statNumber, { color: theme.text }]}>{stats.totalEntries}</AppText>
@@ -252,7 +298,6 @@ function DashboardScreen({ navigation }) {
           </View>
         </View>
 
-        {/* Emoção mais frequente */}
         <View style={[styles.frequentMoodCard, { backgroundColor: theme.card }]}>
           <Icon name="trending-up" size={24} color={theme.text} style={{ marginRight: 10 }} />
           <View>
@@ -261,7 +306,6 @@ function DashboardScreen({ navigation }) {
           </View>
         </View>
 
-        {/* Toggle para tipo de gráfico */}
         <View style={styles.chartTypeRow}>
           <TouchableOpacity onPress={() => setChartType('bar')}>
             <View style={[styles.chartTypeButton, chartType === 'bar' && styles.chartTypeSelected]}>
@@ -317,7 +361,7 @@ function DashboardScreen({ navigation }) {
                       color: (opacity = 1) => `rgba(0,0,0,${opacity})`,
                       labelColor: () => theme.textSecondary,
                       propsForBackgroundLines: { stroke: 'transparent' },
-                      barPercentage: 0.5, // Adiciona espaçamento entre barras
+                      barPercentage: 0.5,
                     }}
                     style={{ marginVertical: 8, borderRadius: 18 }}
                     hideLegend={false}
@@ -340,7 +384,7 @@ function DashboardScreen({ navigation }) {
                       color: (opacity = 1) => `rgba(0,0,0,${opacity})`,
                       labelColor: () => theme.textSecondary,
                       propsForBackgroundLines: { stroke: 'transparent' },
-                      barPercentage: 0.6, // Adiciona espaçamento entre barras
+                      barPercentage: 0.6,
                     }}
                     style={{ marginVertical: 8, borderRadius: 18 }}
                     hideLegend={false}
@@ -382,7 +426,6 @@ function DashboardScreen({ navigation }) {
           </View>
         )}
 
-        {/* Resumo semanal */}
         {data.length > 0 && (
           <View style={[styles.summaryCard, { backgroundColor: theme.card }]}>
             <AppText style={[styles.summaryTitle, { color: theme.text }]}>Resumo da Semana</AppText>
@@ -426,7 +469,7 @@ function DashboardScreen({ navigation }) {
               </View>
             </View>
             <AppText style={[styles.entryMoods, { color: theme.textSecondary }]}>
-              {entry.moods.join(', ')}
+              {entry.moods.join(', ')} {entry.intensity !== undefined && `(${entry.intensity}/10)`}
             </AppText>
             {entry.note && (
               <AppText style={[styles.entryNote, { color: theme.textSecondary }]}>
@@ -441,7 +484,7 @@ function DashboardScreen({ navigation }) {
             <Icon name="bar-chart" size={48} color={theme.textSecondary} />
             <AppText style={[styles.emptyTitle, { color: theme.text }]}>Nenhum registro ainda</AppText>
             <AppText style={[styles.emptyText, { color: theme.textSecondary }]}>
-              Comece registrando seus humores para ver estatastícas aqui!
+              Comece registrando seus humores para ver estatísticas aqui!
             </AppText>
           </View>
         )}

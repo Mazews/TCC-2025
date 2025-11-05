@@ -1,38 +1,78 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ImageBackground, Image } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ImageBackground, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import EmojiSelector from './EmojiSelector';
+// Inline emoji selector (merged to avoid includes/null mismatch)
+const EMOJIS = [
+  { label: 'Feliz', emoji: '😊' },
+  { label: 'Muito feliz', emoji: '😁' },
+  { label: 'Triste', emoji: '😢' },
+  { label: 'Muito triste', emoji: '😭' },
+  { label: 'Indiferente', emoji: '😐' },
+  { label: 'Com raiva', emoji: '😠' },
+  { label: 'Furioso', emoji: '😡' },
+  { label: 'Ansioso', emoji: '😰' },
+  { label: 'Envergonhado', emoji: '😳' },
+  { label: 'Péssimo', emoji: '💩' },
+  { label: 'Cansado', emoji: '😩' },
+  { label: 'Animado', emoji: '🔥' },
+];
 import AppText from './AppText';
 import { Feather as Icon } from '@expo/vector-icons';
 import { ThemeContext } from './ThemeContext';
 
-
 export default function MoodTrackerScreen({ navigation }) {
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [intensity, setIntensity] = useState(5);
   const [text, setText] = useState('');
   const { theme } = useContext(ThemeContext);
 
   const handleSelect = (label) => {
-    setSelected((prev) =>
-      prev.includes(label) ? prev.filter((l) => l !== label) : [...prev, label]
-    );
+    setSelected(label);
   };
 
   const handleSubmit = async () => {
-    if (selected.length === 0) {
-      Alert.alert('Selecione pelo menos uma emoção!');
+    if (!selected) {
+      Alert.alert('Atenção', 'Selecione pelo menos uma emoção!');
       return;
     }
-    const today = new Date().toISOString().split('T')[0];
-    const entry = { date: today, moods: selected, note: text };
-    let data = await AsyncStorage.getItem('moodData');
-    data = data ? JSON.parse(data) : [];
-    data.push(entry);
-    await AsyncStorage.setItem('moodData', JSON.stringify(data));
-    setSelected([]);
-    setText('');
-    Alert.alert('Humor registrado!');
-    navigation.navigate('Home');
+
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      
+      if (!token) {
+        Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
+        navigation.navigate('Login');
+        return;
+      }
+
+  const response = await fetch('https://backend-fellsystem.vercel.app/customers/set/mood-diary', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          emotion: selected,
+          intensity: intensity,
+          description: text
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        Alert.alert('Sucesso', 'Humor registrado com sucesso!');
+        setSelected(null);
+        setIntensity(5);
+        setText('');
+        navigation.navigate('Home');
+      } else {
+        Alert.alert('Erro', data.error || 'Erro ao registrar humor');
+      }
+    } catch (error) {
+      console.error('Erro ao enviar dados:', error);
+      Alert.alert('Erro', 'Não foi possível conectar ao servidor');
+    }
   };
 
   return (
@@ -41,13 +81,62 @@ export default function MoodTrackerScreen({ navigation }) {
       style={{ flex: 1 }}
       resizeMode="cover"
     >
-      <View style={{ flex: 1 }}>
-      <TouchableOpacity style={[styles.backButton, { backgroundColor: theme.card }]} onPress={() => navigation.goBack()}>
-        <Icon name="chevron-left" size={38} color={theme.textSecondary} />
-      </TouchableOpacity>
+      <ScrollView style={{ flex: 1 }}>
+        <TouchableOpacity 
+          style={[styles.backButton, { backgroundColor: theme.card }]} 
+          onPress={() => navigation.goBack()}
+        >
+          <Icon name="chevron-left" size={38} color={theme.textSecondary} />
+        </TouchableOpacity>
+        
         <View style={[styles.container, { backgroundColor: 'transparent' }]}> 
-          <AppText style={[styles.title, { color: theme.textSecondary }]}>Como está {"\n"}se sentindo hoje?</AppText>
-          <EmojiSelector selected={selected} onSelect={handleSelect} />
+          <AppText style={[styles.title, { color: theme.textSecondary }]}>
+            Como está {"\n"}se sentindo hoje?
+          </AppText>
+          
+          {/* Inline Emoji grid to avoid external dependency and null.includes crash */}
+          <View style={styles.grid}>
+            {EMOJIS.map((item) => (
+              <TouchableOpacity
+                key={item.label}
+                style={[
+                  styles.emojiButton,
+                  selected === item.label && styles.selected,
+                ]}
+                onPress={() => handleSelect(item.label)}
+              >
+                <AppText style={styles.emoji}>{item.emoji}</AppText>
+              </TouchableOpacity>
+            ))}
+          </View>
+          
+          {selected && (
+            <View style={styles.intensityContainer}>
+              <AppText style={[styles.intensityLabel, { color: theme.textSecondary }]}>
+                Intensidade: {intensity}
+              </AppText>
+              <View style={styles.intensitySlider}>
+                {[...Array(11)].map((_, i) => (
+                  <TouchableOpacity
+                    key={i}
+                    style={[
+                      styles.intensityButton,
+                      intensity === i && styles.intensityButtonSelected
+                    ]}
+                    onPress={() => setIntensity(i)}
+                  >
+                    <AppText style={[
+                      styles.intensityText,
+                      intensity === i && styles.intensityTextSelected
+                    ]}>
+                      {i}
+                    </AppText>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          )}
+          
           <TextInput
             style={styles.input}
             placeholder="O que te fez sentir assim?"
@@ -56,13 +145,15 @@ export default function MoodTrackerScreen({ navigation }) {
             onChangeText={setText}
             multiline
           />
+          
           <TouchableOpacity style={styles.button} onPress={handleSubmit}>
             <AppText style={styles.buttonText}>Enviar</AppText>
           </TouchableOpacity>
+          
           <View style={styles.organicShape1} />
-           <View style={styles.organicShape2} />
+          <View style={styles.organicShape2} />
         </View>
-      </View>
+      </ScrollView>
     </ImageBackground>
   );
 }
@@ -73,6 +164,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     alignItems: 'center',
     paddingTop: 100,
+    paddingBottom: 40,
     position: 'relative',
   },
   title: {
@@ -81,6 +173,44 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Bold',
     marginBottom: 10,
     marginHorizontal: 20,
+    textAlign: 'center',
+  },
+  intensityContainer: {
+    width: '85%',
+    marginVertical: 20,
+    alignItems: 'center',
+  },
+  intensityLabel: {
+    fontSize: 18,
+    fontFamily: 'Poppins-Bold',
+    marginBottom: 15,
+  },
+  intensitySlider: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingHorizontal: 5,
+  },
+  intensityButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(245, 245, 245, 1)',
+    borderWidth: 2,
+    borderColor: 'rgba(92, 96, 130, 1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  intensityButtonSelected: {
+    backgroundColor: 'rgba(92, 96, 130, 1)',
+  },
+  intensityText: {
+    fontSize: 14,
+    fontFamily: 'Poppins',
+    color: 'rgba(92, 96, 130, 1)',
+  },
+  intensityTextSelected: {
+    color: 'rgba(255, 255, 255, 1)',
   },
   input: {
     width: '75%',
@@ -117,7 +247,7 @@ const styles = StyleSheet.create({
     borderRadius: 200,
     opacity: 0.5,
     zIndex: 0,
-    },
+  },
   organicShape2: {
     position: 'absolute',
     bottom: 700,
@@ -140,9 +270,28 @@ const styles = StyleSheet.create({
     padding: 8,
     elevation: 4,
   },
-  backIcon: {
-    width: 32,
-    height: 32,
-    resizeMode: 'contain',
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginVertical: 20,
+    marginHorizontal: 30,
+  },
+  emojiButton: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#fff',
+    margin: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#5c6082',
+  },
+  selected: {
+    backgroundColor: '#5c6082',
+  },
+  emoji: {
+    fontSize: 30,
   },
 });

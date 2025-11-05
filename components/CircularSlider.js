@@ -20,7 +20,6 @@ const BUTTONS = [
   { key: 'Config', label: 'config', icon: 'settings' },
   { key: 'Guide', label: 'guia', icon: 'compass' },
   { key: 'Support', label: 'ajuda', icon: 'help-circle' },
-  { key: 'Terms', label: 'termos', icon: 'file-text' },
   { key: 'Logout', label: 'sair', icon: 'log-out' },
 ];
 
