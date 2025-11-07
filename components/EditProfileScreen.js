@@ -195,7 +195,6 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 16,
-    fontWeight: '500',
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Medium',
   },
 });

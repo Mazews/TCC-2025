@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 22,
     marginBottom: 40,
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
     textAlign: 'center',
   },
   buttonPrimary: {
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
   buttonPrimaryText: {
     fontSize: 26,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'center',
   },
   buttonSecondary: {
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
   buttonSecondaryText: {
     fontSize: 26,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'center',
   },
   

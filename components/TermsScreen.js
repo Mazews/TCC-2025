@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   backButtonText: {
     fontSize: 22,
     color: 'rgba(45, 48, 77, 1)',
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
 },
 });
 

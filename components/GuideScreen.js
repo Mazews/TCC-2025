@@ -15,14 +15,53 @@ export default function GuideScreen({ navigation }) {
     >
       <ScrollView contentContainerStyle={[styles.container]}> 
         <AppText style={[styles.title, { color: theme.textSecondary }]}>Guia do Usuário</AppText>
+        
         <View style={[styles.guideBox, { backgroundColor: theme.card }]}> 
-          <AppText style={[styles.guideTitle, { color: theme.text }]}>Como registrar seu humor</AppText>
-          <AppText style={[styles.guideText, { color: theme.textSecondary }]}>1. Toque no botão "REGISTRE SEU HUMOR" na tela principal do mood tracker. {'\n'}2. Escolha as emoções que está sentindo no momento. {'\n'}3. Salve seu registro.</AppText>
+          <AppText style={[styles.guideTitle, { color: theme.text }]}>1. Registrar e Acompanhar seu Humor</AppText>
+          <AppText style={[styles.guideText, { color: theme.textSecondary }]}>
+            • Na tela inicial, toque em "Mood Tracker"{'\n'}
+            • Use "REGISTRE SEU HUMOR" para adicionar uma entrada{'\n'}
+            • Selecione as emoções que melhor descrevem como você está{'\n'}
+            • Opcional: adicione uma nota sobre seu dia{'\n'}
+            • Visualize seu histórico no "DIÁRIO DE HUMOR"{'\n'}
+            • Acompanhe tendências nos gráficos semanais e mensais
+          </AppText>
         </View>
+
         <View style={[styles.guideBox, { backgroundColor: theme.card }]}> 
-          <AppText style={[styles.guideTitle, { color: theme.text }]}>Como visualizar o diário de humor</AppText>
-          <AppText style={[styles.guideText, { color: theme.textSecondary }]}>1. Toque no botão "DIÁRIO DE HUMOR" na tela principal do mood tracker. {'\n'}2. Veja seus registros recentes e gráficos semanais/mensais.</AppText>
+          <AppText style={[styles.guideTitle, { color: theme.text }]}>2. Gerenciar Tarefas e Rotinas</AppText>
+          <AppText style={[styles.guideText, { color: theme.textSecondary }]}>
+            • Acesse "Tarefas" no menu principal{'\n'}
+            • Crie novas tarefas com o botão "+"{'\n'}
+            • Defina título, descrição, data e prioridade{'\n'}
+            • Organize por categorias para melhor visualização{'\n'}
+            • Marque tarefas concluídas{'\n'}
+            • Use o calendário para planejamento futuro
+          </AppText>
         </View>
+
+        <View style={[styles.guideBox, { backgroundColor: theme.card }]}> 
+          <AppText style={[styles.guideTitle, { color: theme.text }]}>3. Personalizar sua Experiência</AppText>
+          <AppText style={[styles.guideText, { color: theme.textSecondary }]}>
+            • Acesse seu perfil para editar informações{'\n'}
+            • Configure notificações nas configurações{'\n'}
+            • Alterne entre tema claro e escuro{'\n'}
+            • Personalize seu avatar e nome de usuário{'\n'}
+            • Ajuste lembretes e alertas conforme sua rotina
+          </AppText>
+        </View>
+
+        <View style={[styles.guideBox, { backgroundColor: theme.card }]}> 
+          <AppText style={[styles.guideTitle, { color: theme.text }]}>4. Recursos Adicionais</AppText>
+          <AppText style={[styles.guideText, { color: theme.textSecondary }]}>
+            • Encontre frases inspiradoras na seção "Quotes"{'\n'}
+            • Use o calendário para visualizar compromissos{'\n'}
+            • Acesse dicas de bem-estar na seção "Ajuda"{'\n'}
+            • Exporte seus dados de progresso se necessário{'\n'}
+            • Entre em contato pelo suporte se precisar de ajuda
+          </AppText>
+        </View>
+
         <TouchableOpacity style={[styles.button, { backgroundColor: theme.card }]} onPress={() => navigation.goBack()}>
           <AppText style={[styles.buttonText, { color: theme.text }]}>Voltar</AppText>
         </TouchableOpacity>
@@ -39,7 +78,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 26,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     marginBottom: 25,
     marginTop: 50,
     textAlign: 'center',
@@ -57,11 +96,12 @@ const styles = StyleSheet.create({
   },
   guideTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     marginBottom: 6,
   },
   guideText: {
     fontSize: 15,
+    fontFamily: 'Poppins-Regular',
     marginBottom: 8,
     lineHeight: 22,
   },
@@ -70,10 +110,11 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 60,
     marginTop: 20,
+    marginBottom: 30,
     alignSelf: 'center',
   },
   buttonText: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
   },
 }); 

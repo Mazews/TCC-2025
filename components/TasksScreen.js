@@ -1088,8 +1088,7 @@ const styles = StyleSheet.create({
   },
   date: {
     fontSize: 14,
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     marginBottom: 8,
   },
   modernTitle: {
@@ -1100,8 +1099,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 16,
-    fontFamily: 'Poppins',
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
   },
   statsContainer: {
     flexDirection: 'row',
@@ -1126,9 +1124,8 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 12,
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Medium',
     color: 'rgba(255, 255, 255, 0.7)',
-    fontWeight: '500',
   },
   sectionHeader: {
     flexDirection: 'row',

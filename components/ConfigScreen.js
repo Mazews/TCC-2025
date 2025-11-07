@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 26,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     marginBottom: 32,
   },
   switchRow: {
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
   switchLabel: {
     fontSize: 20,
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
   },
   backButton: {
     width: '60%',
@@ -118,6 +118,6 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 22,
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
   },
 });

@@ -186,10 +186,9 @@ const styles = StyleSheet.create({
   title: {
     color: "#fff",
     fontSize: 32,
-    fontWeight: "400",
     textAlign: "center",
     marginBottom: 10,
-    fontFamily: "Poppins",
+    fontFamily: "Poppins-Regular",
   },
   card: {
     width: width > 500 ? 400 : width * 0.75,
@@ -209,8 +208,7 @@ const styles = StyleSheet.create({
     marginBottom: 18,
     fontSize: 18,
     color: "#7a8ca4",
-    fontWeight: "400",
-    fontFamily: "Poppins",
+    fontFamily: "Poppins-Regular",
   },
   buttonRow: {
     flexDirection: 'row',
@@ -238,9 +236,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 24,
-    fontWeight: "bold",
     textAlign: "center",
     textTransform: "lowercase",
-    fontFamily: "Poppins",
+    fontFamily: "Poppins-Bold",
   },
 });

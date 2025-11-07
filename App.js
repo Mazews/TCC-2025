@@ -20,6 +20,7 @@ import EditProfileScreen from './components/EditProfileScreen';
 import { ThemeProvider } from './components/ThemeContext';
 import { safeError } from './components/log';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fontFiles } from './config/fonts';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,18 +41,26 @@ export default function App() {
     checkLogin();
   }, []);
 
-  if (!fontsLoaded) {
-    // load fonts then hide splash
-    Font.loadAsync({
-      'Poppins': require('./assets/fonts/Poppins/Poppins-Regular.ttf'),
-      'Poppins-Bold': require('./assets/fonts/Poppins/Poppins-Bold.ttf'),
-    })
-      .then(() => setFontsLoaded(true))
-      .catch((e) => safeError('FontLoad', e))
-      .finally(() => SplashScreen.hideAsync().catch(() => {}));
+  // Load fonts once on mount
+  useEffect(() => {
+    let mounted = true;
+    async function loadFonts() {
+      try {
+        await Font.loadAsync(fontFiles);
+        if (mounted) setFontsLoaded(true);
+      } catch (e) {
+        safeError('FontLoad', e);
+      } finally {
+        SplashScreen.hideAsync().catch(() => {});
+      }
+    }
+    loadFonts();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
-    return null;
-  }
+  if (!fontsLoaded) return null;
 
   return (
     <ThemeProvider>

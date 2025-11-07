@@ -243,16 +243,15 @@ const styles = StyleSheet.create({
   greeting: {
     marginTop: 10,
     fontSize: 36,
-    fontWeight: "400",
+    fontFamily: "Poppins-Regular",
     marginBottom: 4,
     color: "#fff",
-    fontFamily: "Poppins",
     letterSpacing: 0.5,
   },
   dateText: {
     fontSize: 20,
     color: "#fff",
-    fontFamily: "Poppins",
+    fontFamily: "Poppins-Regular",
     opacity: 0.85,
     marginBottom: 0,
   },
@@ -273,7 +272,7 @@ const styles = StyleSheet.create({
     flex: 1,
     color: "#fff",
     fontSize: 18,
-    fontFamily: "Poppins",
+    fontFamily: "Poppins-Regular",
     backgroundColor: "transparent",
     borderWidth: 0,
     padding: 0,
@@ -287,16 +286,15 @@ const styles = StyleSheet.create({
   featuredTitle: {
     color: "#fff",
     fontSize: 22,
-    fontWeight: "600",
+    fontFamily: "Poppins-SemiBold",
     marginBottom: 4,
-    fontFamily: "Poppins",
   },
   featuredDesc: {
     color: "#fff",
     fontSize: 16,
     opacity: 0.8,
     marginBottom: 10,
-    fontFamily: "Poppins",
+    fontFamily: "Poppins-Regular",
   },
   exploreBtn: {
     backgroundColor: "rgba(255,255,255,0.20)",
@@ -307,9 +305,8 @@ const styles = StyleSheet.create({
   },
   exploreText: {
     color: "#fff",
-    fontWeight: "500",
     fontSize: 15,
-    fontFamily: "Poppins",
+    fontFamily: "Poppins-Medium",
   },
   featuredIconBox: {
     width: 64,
@@ -329,10 +326,9 @@ const styles = StyleSheet.create({
   menuTitle: {
     color: "#fff",
     fontSize: 18,
-    fontWeight: "600",
+    fontFamily: "Poppins-SemiBold",
     marginBottom: 10,
     marginLeft: 10,
-    fontFamily: "Poppins",
   },
   activitiesSection: {
     marginTop: -30,
@@ -342,9 +338,8 @@ const styles = StyleSheet.create({
   activitiesTitle: {
     color: "#fff",
     fontSize: 18,
-    fontWeight: "600",
+    fontFamily: "Poppins-SemiBold",
     marginBottom: 10,
-    fontFamily: "Poppins",
   },
   activityCard: {
     flexDirection: "row",
@@ -377,21 +372,19 @@ const styles = StyleSheet.create({
   },
   activityIconText: {
     color: "#fff",
-    fontWeight: "bold",
     fontSize: 20,
-    fontFamily: "Poppins",
+    fontFamily: "Poppins-Bold",
   },
   activityTitle: {
     color: "#fff",
-    fontWeight: "600",
     fontSize: 16,
-    fontFamily: "Poppins",
+    fontFamily: "Poppins-SemiBold",
   },
   activityTime: {
     color: "#fff",
     opacity: 0.7,
     fontSize: 13,
-    fontFamily: "Poppins",
+    fontFamily: "Poppins-Regular",
   },
   activityStatusA: {
     width: 18,

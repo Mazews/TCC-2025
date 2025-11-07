@@ -658,9 +658,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   entryNote: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Italic',
     fontSize: 14,
-    fontStyle: 'italic',
     lineHeight: 18,
   },
   emptyState: {

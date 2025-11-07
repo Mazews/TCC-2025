@@ -210,8 +210,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   backButtonText: {
-    fontFamily: "Poppins",
+    fontFamily: "Poppins-Medium",
     fontSize: 16,
-    fontWeight: "500",
   },
 });

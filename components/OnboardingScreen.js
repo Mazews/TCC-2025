@@ -48,12 +48,11 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: '#413a4a',
     textAlign: 'left',
-    fontWeight: 'bold',
     marginBottom: 20,
     width: '90%',
     alignSelf: 'flex-start',
     marginLeft: 0,
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Bold',
   },
   button: {
     position: 'absolute',
@@ -69,9 +68,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 22,
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'left',
-    fontWeight: 'bold',
   },
   subtitle: {
     fontFamily: 'Poppins',
